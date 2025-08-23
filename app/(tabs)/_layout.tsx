@@ -12,23 +12,31 @@ import { HomeIcon,
 } from "@/constants/icons";
 import { useAuth } from '@/hooks/use-auth';
 import { Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 
 const Layout = () => {
 
 	const { isLoggedIn, user } = useAuth();
+	const insets = useSafeAreaInsets();
 
 	return (
 		<Tabs
 			screenOptions={{
-				headerShown: false,
-				tabBarShowLabel: false,
-				tabBarStyle: {
-					backgroundColor : "#0a0a0a",
-					borderTopWidth: 0,
-					paddingTop : 5
-				},
-			}}
+                headerShown: false,
+                tabBarShowLabel: false,
+                tabBarStyle: {
+                    backgroundColor: "#0a0a0a",
+                    borderTopWidth: 0,
+                    height: 60 + insets.bottom,
+                    paddingBottom: insets.bottom,
+                    paddingTop: 8,
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                },
+            }}
 		>
 			<Tabs.Screen 
 				name="home" 
