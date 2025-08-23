@@ -13,9 +13,12 @@ import { Input } from '@/components/input';
 import GoogleOauth from '@/ui/auth/google-oauth';
 import { useMutation } from '@tanstack/react-query';
 import { AUTH_BASE_URL } from '@/constants/api.config';
+import { User } from '@/types/auth.types';
+import { useAuth } from '@/hooks/use-auth';
 
 const SignIn = () => {
 
+    const { setUser } = useAuth();
     const [form, setForm] = useState({
         email : "",
         password : ""
@@ -27,9 +30,9 @@ const SignIn = () => {
             return response.data;
         },
         // TODO add toast notifications
-        onSuccess(data) {
+        onSuccess(data : User) {
             alert("User logged in successfully!");
-            console.log("User logged in successfully:", data);
+            setUser(data);
             router.replace("/(tabs)/home")
         },
         onError(error) {
