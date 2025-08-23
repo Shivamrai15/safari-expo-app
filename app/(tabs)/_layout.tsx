@@ -24,6 +24,12 @@ const Layout = () => {
           title: 'Search',
         }}
       />
+      <Tabs.Screen 
+        name="browse" 
+        options={{ 
+          title: 'Browse',
+        }}
+      />
     </Tabs>
   )
 }
