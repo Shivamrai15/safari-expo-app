@@ -29,7 +29,8 @@ const Welcome = () => {
                                 </View>
                                 <Button
                                     onPress={() => router.push("/(auth)/sign-up")}
-                                    className='rounded-full h-14 bg-red-600'
+                                    variant='theme'
+                                    className='rounded-full'
                                 >
                                     <Text className='font-semibold text-white text-lg'>Get Started</Text>
                                 </Button>
