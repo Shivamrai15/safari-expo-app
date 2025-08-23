@@ -1,11 +1,12 @@
-import { Text, View } from "react-native";
+import { Redirect } from 'expo-router';
+import { Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function Index() {
-  return (
-    <View
-      className="flex-1 justify-center items-center bg-neutral-900"
-    >
-      <Text className="text-blue-400">Edit app/index.tsx to edit this screen.</Text>
-    </View>
-  );
+const Index = () => {
+
+    return (
+        <Redirect href="/(tabs)/home" />
+    )
 }
+
+export default Index;
