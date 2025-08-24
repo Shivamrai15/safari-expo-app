@@ -2,7 +2,6 @@ import { Button } from "@/components/button";
 import { useAuth } from "@/hooks/use-auth";
 import { RecommendedAlbums } from "@/ui/carousel/recommended-albums";
 import TrendingSongs from "@/ui/carousel/trending-songs";
-import { Trending } from "@/ui/song/trending";
 import { router } from "expo-router";
 import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";

@@ -133,6 +133,14 @@ const Layout = () => {
 					}
 				}}
 			/>
+			<Tabs.Screen 
+				name="album/[albumId]" 
+				options={{
+					tabBarIcon : ()=>null,
+					href : null
+				}} 
+				
+			/>
 		</Tabs>
 	)
 }

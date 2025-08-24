@@ -6,6 +6,11 @@ import BrowseIcon from "@/assets/icons/browse.png";
 import BrowseOutlineIcon from "@/assets/icons/browse-outline.png";
 import PlaylistIcon from "@/assets/icons/playlist.png";
 import PlaylistOutlineIcon from "@/assets/icons/playlist-outline.png";
+import PlayIcon from "@/assets/icons/play.png";
+import PauseIcon from "@/assets/icons/pause.png";
+import ShuffleIcon from "@/assets/icons/shuffle.png";
+import PlayDarkIcon from "@/assets/icons/play-dark.png";
+import PauseDarkIcon from "@/assets/icons/pause-dark.png";
 
 export {
     HomeIcon,
@@ -15,5 +20,10 @@ export {
     BrowseIcon,
     BrowseOutlineIcon,
     PlaylistIcon,
-    PlaylistOutlineIcon
+    PlaylistOutlineIcon,
+    PlayIcon,
+    PauseIcon,
+    ShuffleIcon,
+    PlayDarkIcon,
+    PauseDarkIcon
 };

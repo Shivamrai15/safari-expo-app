@@ -23,4 +23,15 @@ export type Song = {
     artistIds: string[];
 };
 
+export type Label = {
+    id: string;
+    name: string;
+    image?: string;
+    color: string;
+};
+
 export type TrendingSong = Song & { album : Album };
+
+export type SongResponse = Song & { album : Album , artists : Artist[] };
+
+export type AlbumResponse = Album & { songs : SongResponse[], label : Label|null };

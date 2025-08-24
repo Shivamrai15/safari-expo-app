@@ -1,8 +1,9 @@
 import { Image } from 'expo-image';
 import { Button } from '@/components/button';
-import { Text,View } from 'react-native';
+import { Text, View, Pressable } from 'react-native';
 import Entypo from '@expo/vector-icons/Entypo';
 import { Album } from '@/types/response.types';
+import { router } from 'expo-router';
 
 interface Props {
     album : Album;
@@ -10,8 +11,14 @@ interface Props {
 
 export const Card = ({ album }: Props) => {
     return (
-        <View
+        <Pressable
             className="relative w-44 flex flex-col"
+            onPress={()=>router.push({
+                pathname : "/(tabs)/album/[albumId]",
+                params : {
+                    albumId : album.id
+                }
+            })}
         >
             <View className="h-1 mx-4 rounded-t-lg" style={{backgroundColor : `${album.color}5e`}} />
             <View className="h-1 mx-2 rounded-t-lg" style={{backgroundColor : `${album.color}`}} />
@@ -30,13 +37,7 @@ export const Card = ({ album }: Props) => {
                         {album.name}
                     </Text>
                 </View>
-                <Button 
-                    className="absolute rounded-full p-0 w-12 h-12 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                    variant="theme"
-                >
-                    <Entypo name="controller-play" size={24} color="white" />
-                </Button>
             </View>
-        </View>
+        </Pressable>
     )
 }
