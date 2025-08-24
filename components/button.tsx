@@ -26,7 +26,7 @@ export const Button = ({ children, onPress, disabled, className, variant }: Prop
         disabled={disabled}
         className={cn(
           variantStyles[variant || "primary"],
-          "h-12 rounded-xl flex flex-row items-center gap-x-2 justify-center px-2 py-1",
+          "h-12 rounded-xl flex flex-row items-center gap-x-2 justify-center px-4 py-1",
           className
         )}
         activeOpacity={0.8}
