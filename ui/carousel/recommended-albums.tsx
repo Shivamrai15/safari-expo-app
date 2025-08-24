@@ -1,16 +1,18 @@
-import axios from "axios"
 import { FlatList, Text, View } from "react-native";
 import { useQuery } from "@tanstack/react-query"
-import { PUBLIC_BASE_URL } from "@/constants/api.config"
 import { Card } from "../album/card";
+import { fetcher } from "@/lib/fetcher";
 
 
 export const RecommendedAlbums = () => {
 
     const { data, isPending, error } = useQuery({
         queryFn : async()=>{
-            const response = await axios.get(`${PUBLIC_BASE_URL}/api/v2/album/recommended`);
-            return response.data.data;
+            const data = await fetcher({
+                prefix : "PUBLIC_BASE_URL",
+                suffix : "api/v2/album/recommended"
+            });
+            return data.data;
         },
         queryKey : ["recommended-albums"]
     });

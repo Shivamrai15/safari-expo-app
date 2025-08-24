@@ -1,5 +1,3 @@
-import axios from "axios";
-import { PUBLIC_BASE_URL } from "@/constants/api.config";
 import { LinearGradient } from "expo-linear-gradient";
 import { AlbumResponse } from "@/types/response.types";
 import { useQuery } from "@tanstack/react-query";
@@ -10,6 +8,7 @@ import Loader from "@/components/loader";
 import { Header } from "@/ui/album/header";
 import { List } from "@/ui/album/list";
 import { AlbumLabel } from "@/ui/album/label";
+import { fetcher } from "@/lib/fetcher";
 
 
 const AlbumPage = () => {
@@ -17,8 +16,11 @@ const AlbumPage = () => {
 
     const { data, isPending, error } = useQuery({
         queryFn : async()=>{
-            const response = await axios.get(`${PUBLIC_BASE_URL}/api/v2/album/${albumId}`)
-            return response.data.data as AlbumResponse;
+            const data = await fetcher({
+                prefix : "PUBLIC_BASE_URL",
+                suffix : `api/v2/album/${albumId}`
+            });
+            return data.data as AlbumResponse;
         },
         queryKey: ["album", albumId]
     });
