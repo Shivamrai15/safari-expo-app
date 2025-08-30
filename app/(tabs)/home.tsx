@@ -12,11 +12,12 @@ import { Button } from "@/components/button";
 import { Link, router } from "expo-router";
 import { Image } from "expo-image";
 import { ListenAgainCarousel } from "@/ui/carousel/listen-again";
+import { ArtistCarousel } from "@/ui/carousel/artist";
 
 const Home = () => {
     const { user, setUser } = useAuth();
-    
-    const [ trendingSongs, recommendedAlbums, newAlbums, listenAgainSongs ] = useQueries({
+
+    const [ trendingSongs, recommendedAlbums, newAlbums, listenAgainSongs, favoriteArtists ] = useQueries({
         queries:[
             {
                 queryFn : async()=>{
@@ -61,15 +62,26 @@ const Home = () => {
                     return data.data;
                 },
                 queryKey : ["listen-again"]
+            },
+            {
+                queryFn : async()=>{
+                    const data = await fetcher({
+                        prefix : "PROTECTED_BASE_URL",
+                        suffix : "api/v2/artist/favorites",
+                        token : user?.token
+                    });
+                    return data.data;
+                },
+                queryKey : ["favorite-artists"]
             }
         ]
     });
 
-    if (trendingSongs.isLoading || recommendedAlbums.isLoading || newAlbums.isLoading || listenAgainSongs.isLoading) {
+    if (trendingSongs.isLoading || recommendedAlbums.isLoading || newAlbums.isLoading || listenAgainSongs.isLoading || favoriteArtists.isLoading) {
         return <Loader />;
     }
 
-    if (trendingSongs.error || recommendedAlbums.error || newAlbums.error || listenAgainSongs.error) {
+    if (trendingSongs.error || recommendedAlbums.error || newAlbums.error || listenAgainSongs.error || favoriteArtists.error) {
         return (
             <Error />
         );
@@ -77,7 +89,7 @@ const Home = () => {
 
     return (
         <SafeAreaView className="flex-1 bg-background">
-            <ScrollView className="p-6 pt-10 pb-20">
+            <ScrollView className="p-4 pt-10 pb-20">
                 <View className="flex flex-row items-center justify-end gap-x-6">
                     <Button
                         className="px-4 rounded-full"
@@ -140,6 +152,10 @@ const Home = () => {
                 <AlbumCarousel
                     data={recommendedAlbums.data}
                     slug="Recommended Albums"
+                />
+                <ArtistCarousel
+                    data={favoriteArtists.data}
+                    slug="Your favorite artists"
                 />
                 <View className="h-40" />
             </ScrollView>

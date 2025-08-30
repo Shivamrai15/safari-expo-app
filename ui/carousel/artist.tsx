@@ -1,10 +1,10 @@
 import { Link, Href } from "expo-router";
 import { FlatList, Text, View } from "react-native";
-import { Album } from "@/types/response.types";
-import { Card } from "../album/card";
+import { Artist } from "@/types/response.types";
+import { Card } from "../artist/card";
 
 interface Props {
-    data : Album[];
+    data : Artist[];
     slug ?: string;
     link ?: {
         title: string;
@@ -12,7 +12,7 @@ interface Props {
     }
 }
 
-export const AlbumCarousel = ({ data, slug, link }: Props) => {
+export const ArtistCarousel = ({ data, slug, link }: Props) => {
     return (
         <View className="flex flex-col gap-y-4 pt-10">
             {
@@ -39,7 +39,7 @@ export const AlbumCarousel = ({ data, slug, link }: Props) => {
                 showsHorizontalScrollIndicator={false}
                 ItemSeparatorComponent={() => <View style={{ width: 12 }} />}
                 renderItem={({ item, index })=>(
-                    <Card album={item} key={index} />
+                    <Card data={item} key={index} />
                 )}
             />
         </View>

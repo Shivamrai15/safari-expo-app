@@ -30,6 +30,20 @@ export type Label = {
     color: string;
 };
 
+export type PlayList = {
+    id: string;
+    name: string;
+    image: string | null;
+    isArchived: boolean;
+    description: string | null;
+    color: string | null;
+    userId: string;
+    private: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+    archivedAt: Date | null;
+}
+
 export type TrendingSong = Song & { album : Album };
 
 export type SongResponse = Song & { album : Album , artists : Artist[] };

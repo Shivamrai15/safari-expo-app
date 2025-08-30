@@ -20,7 +20,7 @@ export const FlatCard = ({ song }: Props) => {
             />
             <View className="flex-1">
                 <Text className="text-white font-semibold" numberOfLines={1} ellipsizeMode="tail" >{song.name}</Text>
-                <Text className="text-neutral-400 font-medium text-sm" numberOfLines={1} ellipsizeMode="tail" >{song.artists.map(artist => artist.name).join(", ")}</Text>
+                <Text className="text-neutral-300 font-medium text-sm" numberOfLines={1} ellipsizeMode="tail" >{song.artists.map(artist => artist.name).join(", ")}</Text>
             </View>
         </Pressable>
     )
