@@ -16,7 +16,7 @@ export const List = ({ data }: Props) => {
                         <Text className="w-8 text-white text-xl font-bold">#</Text>
                         <Text className="text-white text-xl font-semibold">Title</Text>
                     </View>
-                    <View className="flex items-center w-14 justify-center mr-12">
+                    <View className="flex items-center w-14 justify-center">
                         <Feather name="clock" size={24} color="white" />
                     </View>
                 </View>

@@ -1,4 +1,4 @@
-import { ScrollView, View } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useQueries } from "@tanstack/react-query";
 
@@ -8,11 +8,15 @@ import { Error } from "@/components/error";
 import Loader from "@/components/loader";
 import { AlbumCarousel } from "@/ui/carousel/album";
 import { TrendingSongs } from "@/ui/carousel/trending-songs";
+import { Button } from "@/components/button";
+import { Link, router } from "expo-router";
+import { Image } from "expo-image";
+import { ListenAgainCarousel } from "@/ui/carousel/listen-again";
 
 const Home = () => {
-    const { user, isLoggedIn } = useAuth();
+    const { user, setUser } = useAuth();
     
-    const [ trendingSongs, recommendedAlbums, newAlbums ] = useQueries({
+    const [ trendingSongs, recommendedAlbums, newAlbums, listenAgainSongs ] = useQueries({
         queries:[
             {
                 queryFn : async()=>{
@@ -46,15 +50,26 @@ const Home = () => {
                     return data.data;
                 },
                 queryKey : ["new-albums"]
+            },
+            {
+                queryFn : async()=>{
+                    const data = await fetcher({
+                        prefix : "PROTECTED_BASE_URL",
+                        suffix : "api/v2/song/listen-again",
+                        token : user?.token
+                    });
+                    return data.data;
+                },
+                queryKey : ["listen-again"]
             }
         ]
     });
 
-    if (trendingSongs.isLoading || recommendedAlbums.isLoading || newAlbums.isLoading) {
+    if (trendingSongs.isLoading || recommendedAlbums.isLoading || newAlbums.isLoading || listenAgainSongs.isLoading) {
         return <Loader />;
     }
 
-    if (trendingSongs.error || recommendedAlbums.error || newAlbums.error) {
+    if (trendingSongs.error || recommendedAlbums.error || newAlbums.error || listenAgainSongs.error) {
         return (
             <Error />
         );
@@ -63,6 +78,58 @@ const Home = () => {
     return (
         <SafeAreaView className="flex-1 bg-background">
             <ScrollView className="p-6 pt-10 pb-20">
+                <View className="flex flex-row items-center justify-end gap-x-6">
+                    <Button
+                        className="px-4 rounded-full"
+                        onPress={()=>{
+                            setUser(null);
+                            router.replace("/(auth)/sign-in")
+                        }}
+                    >
+                        <Text className="font-bold">Logout</Text>
+                    </Button>
+                </View>
+                <View className="flex flex-row items-center gap-x-6 mt-16">
+                    <Image
+                        source={ user?.user?.image ? { uri: user?.user.image } : require('@/assets/images/user.png') }
+                        style={{ height: 72, width: 72, borderRadius: "100%" }}
+                    />
+                    <View className="flex flex-col gap-y-0.5">
+                        <Text className="text-xl font-bold text-zinc-400">{user?.user.name}</Text>
+                        <Text className="text-3xl text-white font-extrabold">Listen Again</Text>
+                    </View>
+                </View>
+                <View className="pt-10 flex flex-col gap-y-4">
+                    <Pressable
+                        onPress={() => router.push("/(tabs)/browse")}
+                        className="w-full flex flex-row items-center gap-x-4 bg-neutral-800 rounded-md overflow-hidden"
+                    >
+                        <Image
+                            source={require('@/assets/images/liked-thumb.png')}
+                            style={{ width: 56, height: 56 }}
+                            contentFit="contain"
+                        />
+                        <Text className="text-lg font-semibold text-white">
+                            Liked Songs
+                        </Text>
+                    </Pressable>
+                    <Pressable
+                        onPress={() => router.push("/(tabs)/browse")}
+                        className="w-full flex flex-row items-center gap-x-4 bg-neutral-800 rounded-md overflow-hidden"
+                    >
+                        <Image
+                            source={require('@/assets/images/history.avif')}
+                            style={{ width: 56, height: 56 }}
+                            contentFit="contain"
+                        />
+                        <Text className="text-lg font-semibold text-white">
+                            History
+                        </Text>
+                    </Pressable>
+                </View>
+                <ListenAgainCarousel
+                    data={listenAgainSongs.data}
+                />
                 <TrendingSongs
                     data={trendingSongs.data}
                 />

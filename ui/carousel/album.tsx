@@ -14,7 +14,7 @@ interface Props {
 
 export const AlbumCarousel = ({ data, slug, link }: Props) => {
     return (
-        <View className="flex flex-col gap-y-6 pt-10">
+        <View className="flex flex-col gap-y-4 pt-10">
             {
                 slug && (
                     <View className="flex flex-row justify-between items-center">

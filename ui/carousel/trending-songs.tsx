@@ -10,7 +10,7 @@ interface Props {
 export const TrendingSongs = ({ data }: Props) => {
 
     return (
-        <View className="flex flex-col gap-y-6 pt-10">
+        <View className="flex flex-col gap-y-4 pt-10">
             <View className="flex flex-row justify-between items-center">
                 <Text className="text-white font-bold text-2xl block">
                     Trending Songs

@@ -51,9 +51,6 @@ export const Item = ({ song, index }: Props) => {
                             { albumDuration(song.duration) }
                         </Text>
                     </View>
-                    <View className="w-12 flex flex-row items-center justify-center">
-
-                    </View>
                 </View>
             </View>
         </Pressable>

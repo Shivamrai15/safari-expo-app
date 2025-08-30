@@ -32,7 +32,7 @@ export const Card = ({ album }: Props) => {
                         height: 156,
                     }}
                 />
-                <View className="p-4 bg-neutral-900">
+                <View className="p-4 bg-neutral-800">
                     <Text className="text-white font-semibold line-clamp-1">
                         {album.name}
                     </Text>

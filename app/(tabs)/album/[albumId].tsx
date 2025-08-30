@@ -40,13 +40,13 @@ const AlbumPage = () => {
 
     return (
         <SafeAreaView className="flex-1 bg-background">
-            <ScrollView className="w-full flex-1">
+            <ScrollView className="w-full h-full">
                 <LinearGradient
                     colors={['#111111', `${data.color}5a`]}
                     locations={[0.8, 1.0]}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 0, y: 1 }}
-                    style={{ flex: 1 }}
+                    style={{ height: "100%", width: "100%" }}
                 >
                     <Header data={data} />
                     <List data={data.songs} />
@@ -55,8 +55,8 @@ const AlbumPage = () => {
                             <AlbumLabel label={data.label} releaseDate={data.release} />
                         )
                     }
-                    <View className="h-20" />
                 </LinearGradient>
+                <View className="h-40" />
             </ScrollView>
         </SafeAreaView>
     )

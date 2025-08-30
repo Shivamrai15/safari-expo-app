@@ -26,7 +26,7 @@ const Layout = () => {
                 headerShown: false,
                 tabBarShowLabel: false,
                 tabBarStyle: {
-                    backgroundColor: "#0a0a0a",
+                    backgroundColor: "#111111",
                     borderTopWidth: 0,
                     height: 60 + insets.bottom,
                     paddingBottom: insets.bottom,
