@@ -35,7 +35,7 @@ export const Header = ({ data }: Props) => {
                         />
                     </View>
                     <View className="flex flex-col gap-y-2 mt-4 text-center">
-                        <Text className="text-white text-4xl font-extrabold line-clamp-1 py-1 overflow-hidden">
+                        <Text className="text-white text-center text-4xl font-extrabold line-clamp-1 py-1 overflow-hidden">
                             {data.name}
                         </Text>
                         <View className="flex flex-row items-center justify-center">

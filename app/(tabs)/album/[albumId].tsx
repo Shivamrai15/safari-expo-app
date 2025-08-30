@@ -9,16 +9,20 @@ import { Header } from "@/ui/album/header";
 import { List } from "@/ui/album/list";
 import { AlbumLabel } from "@/ui/album/label";
 import { fetcher } from "@/lib/fetcher";
+import { Error } from "@/components/error";
+import { useAuth } from "@/hooks/use-auth";
 
 
 const AlbumPage = () => {
+    const { user } = useAuth();
     const { albumId } = useLocalSearchParams();
 
     const { data, isPending, error } = useQuery({
         queryFn : async()=>{
             const data = await fetcher({
                 prefix : "PUBLIC_BASE_URL",
-                suffix : `api/v2/album/${albumId}`
+                suffix : `api/v2/album/${albumId}`,
+                token : user?.token
             });
             return data.data as AlbumResponse;
         },
@@ -31,7 +35,7 @@ const AlbumPage = () => {
     }
 
     if (!data || error) {
-        return null;
+        return <Error />;
     }
 
     return (

@@ -1,7 +1,6 @@
 import { Text, View } from "react-native";
 import { Album, Artist, Song } from "@/types/response.types";
 import Feather from '@expo/vector-icons/Feather';
-import { FlatList } from "react-native";
 import { Item } from "./items";
 
 interface Props {
@@ -22,7 +21,7 @@ export const List = ({ data }: Props) => {
                     </View>
                 </View>
                 <View className="bg-zinc-600 h-0.5 w-full rounded-full"/>
-                <View className="flex flex-col gap-y-4">
+                <View className="flex flex-col gap-y-5">
                     {
                         data.map((item, index) => (
                             <Item key={item.id} song={item} index={index} />

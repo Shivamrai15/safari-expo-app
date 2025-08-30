@@ -26,7 +26,13 @@ export const Item = ({ song, index }: Props) => {
                     <View className="line-clamp-1 font-normal overflow-hidden flex flex-row gap-x-2">
                         {
                             song.artists.map((artist, idx)=>(
-                                <Link key={artist.id} href={`/`}>
+                                <Link
+                                    key={artist.id} 
+                                    href={{
+                                        pathname : "/(tabs)/artist/[artistId]",
+                                        params : { artistId : artist.id }
+                                    }}
+                                >
                                     <Text
                                         className="text-sm text-zinc-300 flex-1"
                                         numberOfLines={1}
@@ -41,7 +47,7 @@ export const Item = ({ song, index }: Props) => {
                 </View>
                 <View className="flex flex-row items-center">
                     <View className="flex flex-row items-center w-14 justify-center">
-                        <Text className="text-white font-medium text-lg">
+                        <Text className="text-white font-medium">
                             { albumDuration(song.duration) }
                         </Text>
                     </View>

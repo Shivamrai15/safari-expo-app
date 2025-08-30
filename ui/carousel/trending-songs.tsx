@@ -1,29 +1,13 @@
-import axios from "axios";
 import { Link } from "expo-router";
 import { Text, View, FlatList } from "react-native";
-import { useQuery } from "@tanstack/react-query";
 import { Trending } from "../song/trending";
-import { PUBLIC_BASE_URL } from "@/constants/api.config";
-import { fetcher } from "@/lib/fetcher";
+import { TrendingSong } from "@/types/response.types";
 
+interface Props {
+    data : TrendingSong[];
+}
 
-const TrendingSongs = () => {
-    
-    const { data, isPending, error } = useQuery({
-        queryFn : async()=>{
-            const data = await fetcher({
-                prefix : "PUBLIC_BASE_URL",
-                suffix : "api/v2/song/trending"
-            });
-            return data.items;
-        },
-        queryKey : ["trending-songs"]
-    });
-    
-    if (error || isPending) {
-        return null;
-    }
-
+export const TrendingSongs = ({ data }: Props) => {
 
     return (
         <View className="flex flex-col gap-y-6 pt-10">
@@ -49,5 +33,3 @@ const TrendingSongs = () => {
         </View>
     )
 }
-
-export default TrendingSongs;

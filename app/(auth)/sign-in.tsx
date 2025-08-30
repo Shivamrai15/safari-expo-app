@@ -27,7 +27,7 @@ const SignIn = () => {
     const { mutate, isPending } = useMutation({
         mutationFn : async(data: { email: string; password: string; })=> {
             const response = await axios.post(`${AUTH_BASE_URL}/api/auth/login`, data);
-            return response.data;
+            return response.data.data;
         },
         // TODO add toast notifications
         onSuccess(data : User) {
