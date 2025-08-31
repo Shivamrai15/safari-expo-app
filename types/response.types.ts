@@ -42,10 +42,37 @@ export type PlayList = {
     createdAt: Date;
     updatedAt: Date;
     archivedAt: Date | null;
+};
+
+export type TrendingSong = Song & { album: Album };
+
+export type SongResponse = Song & { album: Album; artists: Artist[] };
+
+export type AlbumResponse = Album & {
+  songs: SongResponse[];
+  label: Label | null;
+};
+
+export type ArtistResponse = {
+    name: string;
+    id: string;
+    image: string;
+    thumbnail: string | null;
+    about: string;
+} & {
+    songs: SongResponse[];
+    _count: {
+        followers: number;
+    };
+};
+
+
+export type ArtistProfileResponse = {
+    name: string;
+    id: string;
+    image: string;
+    _count: {
+        songs: number;
+        followers: number;
+    };
 }
-
-export type TrendingSong = Song & { album : Album };
-
-export type SongResponse = Song & { album : Album , artists : Artist[] };
-
-export type AlbumResponse = Album & { songs : SongResponse[], label : Label|null };

@@ -1,0 +1,32 @@
+import { albumDuration, cn } from "@/lib/utils";
+import { SongResponse } from "@/types/response.types";
+import { Image } from "expo-image";
+import { Text, TouchableOpacity, View } from "react-native";
+
+interface Props {
+    className?: string;
+    data : SongResponse;
+}
+
+export const SongItem = ({ className, data }: Props) => {
+    return (
+        <TouchableOpacity 
+            className={cn(
+                "w-full flex flex-row items-center justify-between gap-x-4",
+                className
+            )}
+            activeOpacity={0.7}
+        >
+            <Image
+                source={{ uri: data.image }}
+                style={{ width: 48, height: 48, borderRadius: 8 }}
+                contentFit="contain"
+            />
+            <View className="flex-1 flex flex-col gap-y-0.5">
+                <Text className="text-white font-semibold" numberOfLines={1} ellipsizeMode="tail" >{data.name}</Text>
+                <Text className="text-neutral-300 font-medium text-sm" numberOfLines={1} ellipsizeMode="tail" >{data.album.name}</Text>
+            </View>
+            <Text className="font-medium w-12 text-white" >{albumDuration(data.duration)}</Text>
+        </TouchableOpacity>
+    )
+}

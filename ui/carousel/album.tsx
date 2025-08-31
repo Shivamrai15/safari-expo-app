@@ -18,7 +18,7 @@ export const AlbumCarousel = ({ data, slug, link }: Props) => {
             {
                 slug && (
                     <View className="flex flex-row justify-between items-center">
-                        <Text className="text-white font-bold text-2xl block">
+                        <Text className="text-white font-bold text-2xl">
                             {slug}
                         </Text>
                         {

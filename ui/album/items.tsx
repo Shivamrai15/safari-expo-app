@@ -17,7 +17,7 @@ export const Item = ({ song, index }: Props) => {
                 </Text>
                 <View className="w-full flex-1 shrink overflow-hidden">
                     <Text
-                        className="text-white font-medium text-lg"
+                        className="text-white font-semibold"
                         numberOfLines={1}
                         ellipsizeMode="tail"
                     >

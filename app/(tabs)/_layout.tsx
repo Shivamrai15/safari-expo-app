@@ -147,6 +147,13 @@ const Layout = () => {
 					href : null
 				}}
 			/>
+			<Tabs.Screen 
+				name="artist-songs/[artistId]" 
+				options={{
+					tabBarIcon : ()=>null,
+					href : null
+				}}
+			/>
 		</Tabs>
 	)
 }

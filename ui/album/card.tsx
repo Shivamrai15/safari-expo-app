@@ -1,7 +1,5 @@
 import { Image } from 'expo-image';
-import { Button } from '@/components/button';
-import { Text, View, Pressable } from 'react-native';
-import Entypo from '@expo/vector-icons/Entypo';
+import { Text, View, Pressable, TouchableOpacity } from 'react-native';
 import { Album } from '@/types/response.types';
 import { router } from 'expo-router';
 
@@ -11,7 +9,7 @@ interface Props {
 
 export const Card = ({ album }: Props) => {
     return (
-        <Pressable
+        <TouchableOpacity
             className="relative w-44 flex flex-col"
             onPress={()=>router.push({
                 pathname : "/(tabs)/album/[albumId]",
@@ -19,6 +17,7 @@ export const Card = ({ album }: Props) => {
                     albumId : album.id
                 }
             })}
+            activeOpacity={0.7}
         >
             <View className="h-1 mx-4 rounded-t-lg" style={{backgroundColor : `${album.color}5e`}} />
             <View className="h-1 mx-2 rounded-t-lg" style={{backgroundColor : `${album.color}`}} />
@@ -38,6 +37,6 @@ export const Card = ({ album }: Props) => {
                     </Text>
                 </View>
             </View>
-        </Pressable>
+        </TouchableOpacity>
     )
 }

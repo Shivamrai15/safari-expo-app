@@ -3,7 +3,7 @@ import { Artist } from '@/types/response.types'
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
-import { View, Text, Pressable } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 
 interface Props {
     data : Artist;
@@ -12,7 +12,7 @@ interface Props {
 
 export const Card = ({ data, className }: Props) => {
     return (
-        <Pressable 
+        <TouchableOpacity 
             className={(cn(
                 "relative w-44 aspect-[3/4] flex flex-col rounded-lg overflow-hidden",
                 className
@@ -21,6 +21,7 @@ export const Card = ({ data, className }: Props) => {
                 pathname : "/(tabs)/artist/[artistId]",
                 params : { artistId : data.id }
             })}
+            activeOpacity={0.7}
         >
             <Image
                 source={{ uri: data.image }}
@@ -47,6 +48,6 @@ export const Card = ({ data, className }: Props) => {
                     </View>
                 </LinearGradient>
             </View>
-        </Pressable>
+        </TouchableOpacity>
     )
 }

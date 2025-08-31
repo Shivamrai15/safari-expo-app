@@ -39,7 +39,7 @@ export const PlayButton = ({ songs, id, className }: Props) => {
     return (
         <Button
             className={cn(
-                "rounded-full size-14",
+                "rounded-full size-12",
                 className
             )}
             onPress={() => handlePlay()}
