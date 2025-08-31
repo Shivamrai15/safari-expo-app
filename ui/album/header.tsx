@@ -56,8 +56,6 @@ export const Header = ({ data }: Props) => {
                             <ShuffleButton />
                             {/* 
                                 TODO :
-                                1. PlayButton
-                                2. Shuffle Button
                                 3. Options Button
                             */}
                         </View>

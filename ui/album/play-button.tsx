@@ -14,7 +14,7 @@ interface Props {
         album : Album,
         artists : Artist[]
     })[];
-    id : string;
+    id? : string;
     className? : string
 }
 

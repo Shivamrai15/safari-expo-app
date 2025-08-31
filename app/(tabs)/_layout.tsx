@@ -154,6 +154,13 @@ const Layout = () => {
 					href : null
 				}}
 			/>
+			<Tabs.Screen 
+				name="liked-songs" 
+				options={{
+					tabBarIcon : ()=>null,
+					href : null
+				}}
+			/>
 		</Tabs>
 	)
 }

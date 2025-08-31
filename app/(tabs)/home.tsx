@@ -1,4 +1,6 @@
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { router } from "expo-router";
+import { Image } from "expo-image";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useQueries } from "@tanstack/react-query";
 
@@ -9,8 +11,6 @@ import Loader from "@/components/loader";
 import { AlbumCarousel } from "@/ui/carousel/album";
 import { TrendingSongs } from "@/ui/carousel/trending-songs";
 import { Button } from "@/components/button";
-import { Link, router } from "expo-router";
-import { Image } from "expo-image";
 import { ListenAgainCarousel } from "@/ui/carousel/listen-again";
 import { ArtistCarousel } from "@/ui/carousel/artist";
 
@@ -112,9 +112,10 @@ const Home = () => {
                     </View>
                 </View>
                 <View className="pt-10 flex flex-col gap-y-4">
-                    <Pressable
-                        onPress={() => router.push("/(tabs)/browse")}
+                    <TouchableOpacity
+                        onPress={() => router.push("/(tabs)/liked-songs")}
                         className="w-full flex flex-row items-center gap-x-4 bg-neutral-800 rounded-md overflow-hidden"
+                        activeOpacity={0.7}
                     >
                         <Image
                             source={require('@/assets/images/liked-thumb.png')}
@@ -124,10 +125,11 @@ const Home = () => {
                         <Text className="text-lg font-semibold text-white">
                             Liked Songs
                         </Text>
-                    </Pressable>
-                    <Pressable
+                    </TouchableOpacity>
+                    <TouchableOpacity
                         onPress={() => router.push("/(tabs)/browse")}
                         className="w-full flex flex-row items-center gap-x-4 bg-neutral-800 rounded-md overflow-hidden"
+                        activeOpacity={0.7}
                     >
                         <Image
                             source={require('@/assets/images/history.avif')}
@@ -137,7 +139,7 @@ const Home = () => {
                         <Text className="text-lg font-semibold text-white">
                             History
                         </Text>
-                    </Pressable>
+                    </TouchableOpacity>
                 </View>
                 <ListenAgainCarousel
                     data={listenAgainSongs.data}

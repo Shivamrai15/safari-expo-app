@@ -76,3 +76,12 @@ export type ArtistProfileResponse = {
         followers: number;
     };
 }
+
+export type LikedSongTracksResponse = {
+    id: string;
+    songId: string;
+    userId: string;
+    createdAt: string;
+    updatedAt: string;
+    song: SongResponse;
+};

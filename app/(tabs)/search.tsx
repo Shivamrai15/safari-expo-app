@@ -13,15 +13,10 @@ const Search = () => {
             <Text className="text-white">Search</Text>
             <Button
                 variant='secondary'
-                onPress={() => router.push({
-                    pathname : "/(tabs)/artist-songs/[artistId]",
-                    params : {
-                        artistId : "65f4859bb0b9f038aaccce75"
-                    }
-                })}
+                onPress={() => router.push("/(tabs)/liked-songs")}
             >
                 <Text className="text-white">
-                    Artist
+                    Liked Songs
                 </Text>
             </Button>
         </SafeAreaView>
