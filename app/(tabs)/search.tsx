@@ -13,7 +13,7 @@ const Search = () => {
             <Text className="text-white">Search</Text>
             <Button
                 variant='secondary'
-                onPress={() => router.push("/(tabs)/liked-songs")}
+                onPress={() => router.push("/history")}
             >
                 <Text className="text-white">
                     Liked Songs

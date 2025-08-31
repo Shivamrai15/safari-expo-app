@@ -161,6 +161,13 @@ const Layout = () => {
 					href : null
 				}}
 			/>
+			<Tabs.Screen 
+				name="history" 
+				options={{
+					tabBarIcon : ()=>null,
+					href : null
+				}}
+			/>
 		</Tabs>
 	)
 }

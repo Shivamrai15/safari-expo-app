@@ -52,7 +52,7 @@ const Playlist = () => {
 
     return (
         <SafeAreaView className="flex-1 bg-background">
-            <ScrollView className="p-4 py-10 pb-20 flex flex-col gap-y-10">
+            <ScrollView className="p-4 py-6 pb-10 flex flex-col gap-y-10">
                 <View className='flex flex-col gap-y-6'>
                     <Text className="text-white font-bold text-2xl block">Playlists</Text>
                     <View className='w-full flex flex-row justify-between gap-y-4 flex-wrap'>

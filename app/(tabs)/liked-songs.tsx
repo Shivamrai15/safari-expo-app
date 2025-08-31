@@ -9,6 +9,7 @@ import { fetcher } from '@/lib/fetcher';
 import { LikedSongTracksResponse } from '@/types/response.types';
 import Loader from '@/components/loader';
 import { Error } from '@/components/error';
+import Feather from '@expo/vector-icons/Feather';
 
 const LikedSongs = () => {
 
@@ -50,11 +51,24 @@ const LikedSongs = () => {
                         totalSongs={songs.length}
                         songs={songs}
                     />
-                    <View className='px-4 mt-10 flex flex-col gap-y-5'>
-                        {songs.map(song => (
-                            <SongItem key={song.id} data={song} />
-                        ))}
+                    <View className="w-full flex flex-col gap-y-6 px-6">
+                        <View className="w-full flex flex-row items-center justify-between gap-4">
+                            <View className="flex flex-row items-center gap-4 font-semibold text-lg">
+                                <Text className="w-14 text-white text-xl font-bold text-center">#</Text>
+                                <Text className="text-white text-xl font-semibold">Title</Text>
+                            </View>
+                            <View className="flex items-center w-14 justify-center">
+                                <Feather name="clock" size={20} color="white" />
+                            </View>
+                        </View>
+                        <View className="bg-zinc-600 h-0.5 w-full rounded-full"/>
+                        <View className='flex flex-col gap-y-5'>
+                            {songs.map(song => (
+                                <SongItem key={song.id} data={song} />
+                            ))}
+                        </View>
                     </View>
+                    
                 </LinearGradient>
                 <View className="h-40" />
             </ScrollView>

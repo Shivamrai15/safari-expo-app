@@ -127,7 +127,7 @@ const Home = () => {
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={() => router.push("/(tabs)/browse")}
+                        onPress={() => router.push("/(tabs)/history")}
                         className="w-full flex flex-row items-center gap-x-4 bg-neutral-800 rounded-md overflow-hidden"
                         activeOpacity={0.7}
                     >

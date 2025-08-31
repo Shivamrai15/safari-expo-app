@@ -85,3 +85,12 @@ export type LikedSongTracksResponse = {
     updatedAt: string;
     song: SongResponse;
 };
+
+export type HistoryItem = {
+    id: string;
+    songId: string;
+    userId: string;
+    createdAt: Date | string;
+    updatedAt: Date | string;
+    song: SongResponse;
+};

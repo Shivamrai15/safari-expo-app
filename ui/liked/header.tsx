@@ -42,7 +42,7 @@ export const Header = ({ totalSongs, songs }: Props) => {
                             15 Songs
                         </Text>
                         <View className="flex flex-row justify-center items-center gap-6 pt-2">
-                            <PlayButton />
+                            <PlayButton songs={songs} />
                             <ShuffleButton />
                         </View>
                     </View>
