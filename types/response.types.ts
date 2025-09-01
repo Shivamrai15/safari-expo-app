@@ -104,3 +104,8 @@ export type AllSearchResponse = {
     songs: SongResponse[];
     artists: Artist[] | undefined;
 }
+
+export type AlbumSearchResponse = {
+    query : string;
+    albums: Album[];
+}

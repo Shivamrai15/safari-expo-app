@@ -2,15 +2,20 @@ import { Image } from 'expo-image';
 import { Text, View, Pressable, TouchableOpacity } from 'react-native';
 import { Album } from '@/types/response.types';
 import { router } from 'expo-router';
+import { cn } from '@/lib/utils';
 
 interface Props {
     album : Album;
+    className? : string;
 }
 
-export const Card = ({ album }: Props) => {
+export const Card = ({ album, className }: Props) => {
     return (
         <TouchableOpacity
-            className="relative w-44 flex flex-col"
+            className={cn(
+                "relative w-44 flex flex-col",
+                className
+            )}
             onPress={()=>router.push({
                 pathname : "/(tabs)/album/[albumId]",
                 params : {
