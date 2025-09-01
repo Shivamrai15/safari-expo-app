@@ -90,7 +90,7 @@ const Search = () => {
                     {
                         currentTab === "SONG" && query && <SongTab currentTab={currentTab} query={query} />
                     }
-                    <View className='h-40'/>
+                    <View className='h-28'/>
                 </ScrollView>
             </KeyboardAvoidingView>
         </SafeAreaView>

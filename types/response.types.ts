@@ -109,3 +109,13 @@ export type AlbumSearchResponse = {
     query : string;
     albums: Album[];
 }
+
+export type SongSearchResponse = {
+    query : string;
+    songs: SongResponse[];
+}
+
+export type ArtistSearchResponse = {
+    query : string;
+    artists: Artist[];
+}
