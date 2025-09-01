@@ -11,6 +11,10 @@ import PauseIcon from "@/assets/icons/pause.png";
 import ShuffleIcon from "@/assets/icons/shuffle.png";
 import PlayDarkIcon from "@/assets/icons/play-dark.png";
 import PauseDarkIcon from "@/assets/icons/pause-dark.png";
+import UserIcon from "@/assets/icons/user.png";
+import HistoryIcon from "@/assets/icons/history.png";
+import PlaylistRecoverIcon from "@/assets/icons/add-list.png";
+import ReceiptIcon from "@/assets/icons/receipt.png"; 
 
 export {
     HomeIcon,
@@ -25,5 +29,9 @@ export {
     PauseIcon,
     ShuffleIcon,
     PlayDarkIcon,
-    PauseDarkIcon
+    PauseDarkIcon,
+    UserIcon,
+    HistoryIcon,
+    PlaylistRecoverIcon,
+    ReceiptIcon
 };
