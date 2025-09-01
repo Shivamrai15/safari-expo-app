@@ -94,3 +94,13 @@ export type HistoryItem = {
     updatedAt: Date | string;
     song: SongResponse;
 };
+
+export type Tab = "DEFAULT" | "ALBUM" | "SONG" | "ARTIST";
+
+export type AllSearchResponse = {
+    query: string;
+    topResult: SongResponse | Album | Artist | null | undefined;
+    albums: Album[] | undefined;
+    songs: SongResponse[];
+    artists: Artist[] | undefined;
+}
