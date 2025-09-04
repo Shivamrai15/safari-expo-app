@@ -119,3 +119,23 @@ export type ArtistSearchResponse = {
     query : string;
     artists: Artist[];
 }
+
+export type GenreResponse = {
+    name: string;
+    id: string;
+    image: string;
+    color: string;
+    video: {
+        id: string;
+        image: string;
+        url: string;
+        genreId: string;
+    } | null;
+}
+
+export type Mood = {
+    id: string;
+    image: string;
+    color: string;
+    name: string;
+}

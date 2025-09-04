@@ -155,6 +155,13 @@ const Layout = () => {
 				}}
 			/>
 			<Tabs.Screen 
+				name="account/profile" 
+				options={{
+					tabBarIcon : ()=>null,
+					href : null
+				}}
+			/>
+			<Tabs.Screen 
 				name="liked-songs" 
 				options={{
 					tabBarIcon : ()=>null,

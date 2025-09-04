@@ -50,7 +50,7 @@ const Account = () => {
                                 className='flex flex-row gap-x-4'
                                 activeOpacity={0.7}
                             >
-                                <Image 
+                                <Image
                                     source={route.icon}
                                     style={{ width: route.width, height: route.height}}
                                 />
