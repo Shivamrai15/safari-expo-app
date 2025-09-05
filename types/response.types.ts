@@ -139,3 +139,9 @@ export type Mood = {
     color: string;
     name: string;
 }
+
+export type MoodResponse = Mood & {
+    _count: {
+        metadata: number;
+    };
+} | null | undefined;

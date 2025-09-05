@@ -1,4 +1,3 @@
-
 import { Tabs } from 'expo-router';
 import { Image } from 'expo-image';
 import { HomeIcon,
@@ -149,6 +148,20 @@ const Layout = () => {
 			/>
 			<Tabs.Screen 
 				name="artist-songs/[artistId]" 
+				options={{
+					tabBarIcon : ()=>null,
+					href : null
+				}}
+			/>
+			<Tabs.Screen 
+				name="mood-songs/[moodId]" 
+				options={{
+					tabBarIcon : ()=>null,
+					href : null
+				}}
+			/>
+			<Tabs.Screen 
+				name="genre-songs/[genreId]" 
 				options={{
 					tabBarIcon : ()=>null,
 					href : null

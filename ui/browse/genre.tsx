@@ -6,6 +6,7 @@ import { fetcher } from '@/lib/fetcher';
 import Loader from '@/components/loader';
 import { GenreResponse } from '@/types/response.types';
 import { Image } from 'expo-image';
+import { router } from 'expo-router';
 
 export const Genre = () => {
 
@@ -39,6 +40,10 @@ export const Genre = () => {
                         key={genre.id}
                         className='w-[46%] flex flex-col gap-y-3'
                         activeOpacity={0.7}
+                        onPress={()=>router.push({
+                            pathname : "/genre-songs/[genreId]",
+                            params : { genreId : genre.id }
+                        })}
                     >
                         <View className='aspect-[3/4] rounded-3xl overflow-hidden'>
                             <Image

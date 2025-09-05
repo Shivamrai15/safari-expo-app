@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { Fragment, useEffect } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Error } from '@/components/error';
@@ -54,6 +55,10 @@ export const Moods = ({ isAtEnd }: Props) => {
                                     }}
                                     key={mood.id}
                                     activeOpacity={0.7}
+                                    onPress={()=>router.push({
+                                        pathname : "/mood-songs/[moodId]",
+                                        params : { moodId : mood.id }
+                                    })}
                                 >
                                     <Text className='text-white font-semibold text-center'>
                                         {mood.name}
