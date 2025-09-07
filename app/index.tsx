@@ -7,12 +7,7 @@ const Index = () => {
 
     if (isLoggedIn) {
         // return <Redirect href="/(tabs)/home" />;
-        return <Redirect href={{
-            pathname: "/(tabs)/mood-songs/[moodId]",
-            params : {
-                moodId: "68316dc4050e6023f992d1a7"
-            }
-        }} />;
+        return <Redirect href="/(tabs)/account" />;
     }
     return (
         <Redirect href="/(auth)/welcome" />

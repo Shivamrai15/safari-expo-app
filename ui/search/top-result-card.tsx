@@ -23,12 +23,12 @@ export const TopResultCard = ({ data }: Props) => {
                         contentFit="cover"
                     />
                 </View>
-                <View className="flex flex-col gap-y-4 items-start">
+                <View className="flex flex-col gap-y-4 items-start flex-1">
                     {
                         'release' in data && (
                             <Fragment>
-                                <View className="flex flex-col items-start gap-y-2">
-                                    <Text className="text-2xl text-white font-bold text-center">
+                                <View className="flex flex-col items-start gap-y-2 flex-1">
+                                    <Text className="text-2xl text-white font-bold text-left text-wrap">
                                         {data.name}
                                     </Text>
                                     <View className="flex flex-row gap-x-2 items-center justify-start">    
@@ -63,8 +63,8 @@ export const TopResultCard = ({ data }: Props) => {
                     {
                         "album" in data && (
                             <Fragment>
-                                <View className="flex flex-col items-start gap-y-2">
-                                    <Text className="text-2xl text-white font-bold text-center">
+                                <View className="flex flex-col items-start gap-y-2 flex-1">
+                                    <Text className="text-2xl text-white font-bold text-left text-wrap">
                                         {data.name}
                                     </Text>
                                     <View className="flex flex-row items-center justify-start">    
@@ -101,8 +101,8 @@ export const TopResultCard = ({ data }: Props) => {
                     {
                         ( !('release' in data) && (!('album' in data)) ) && (
                             <Fragment>
-                                <View className="flex flex-col items-start gap-y-2">
-                                    <Text className="text-2xl text-white font-bold text-center">
+                                <View className="flex flex-col items-start gap-y-2 flex-1">
+                                    <Text className="text-2xl text-white font-bold text-left text-wrap">
                                         {data.name}
                                     </Text>
                                     <Text className="text-zinc-300 text-left font-medium">

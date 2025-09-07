@@ -15,6 +15,11 @@ import UserIcon from "@/assets/icons/user.png";
 import HistoryIcon from "@/assets/icons/history.png";
 import PlaylistRecoverIcon from "@/assets/icons/add-list.png";
 import ReceiptIcon from "@/assets/icons/receipt.png"; 
+import PlusIcon from "@/assets/icons/add.png";
+import MicIcon from "@/assets/icons/mic.png";
+import HotsPot from "@/assets/icons/hotspot.png";
+import MusicQueueIcon from "@/assets/icons/music.png";
+import DiscIcon from "@/assets/icons/album.png";
 
 export {
     HomeIcon,
@@ -33,5 +38,10 @@ export {
     UserIcon,
     HistoryIcon,
     PlaylistRecoverIcon,
-    ReceiptIcon
+    ReceiptIcon,
+    PlusIcon,
+    MicIcon,
+    HotsPot,
+    MusicQueueIcon,
+    DiscIcon
 };

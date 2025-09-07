@@ -1,3 +1,5 @@
+import { useOptions } from "@/hooks/use-options";
+import { useQueue } from "@/hooks/use-queue";
 import { Album, Artist, Song } from "@/types/response.types";
 import { Image } from "expo-image";
 import { Pressable, Text, View, TouchableOpacity } from "react-native";
@@ -7,10 +9,16 @@ interface Props {
 }
 
 export const FlatCard = ({ song }: Props) => {
+
+    const { priorityEnqueue } = useQueue();
+    const { openOptions } = useOptions();
+
     return (
         <TouchableOpacity
             className="w-full p-2 flex flex-row items-center gap-x-4 bg-neutral-800 rounded-md overflow-hidden"
             activeOpacity={0.7}
+            onPress={()=>priorityEnqueue([song])}
+            onLongPress={()=>openOptions(song)}
         >
             <Image
                 source={{

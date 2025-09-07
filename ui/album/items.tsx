@@ -2,6 +2,8 @@ import { Link } from "expo-router";
 import { Pressable, Text, View } from "react-native";
 import { albumDuration } from "@/lib/utils";
 import { SongResponse } from "@/types/response.types"
+import { useQueue } from "@/hooks/use-queue";
+import { useOptions } from "@/hooks/use-options";
 
 interface Props {
     song : SongResponse;
@@ -9,8 +11,15 @@ interface Props {
 }
 
 export const Item = ({ song, index }: Props) => {
+
+    const { priorityEnqueue } = useQueue();
+    const { openOptions } = useOptions();
+
     return (
-        <Pressable>
+        <Pressable
+            onPress={() => priorityEnqueue([song])}
+            onLongPress={() => openOptions(song)}
+        >
             <View className="flex flex-row items-center gap-x-4 font-semibold text-lg px-4">
                 <Text className="w-8 text-white text-lg shrink-0 font-medium">
                     {index + 1}

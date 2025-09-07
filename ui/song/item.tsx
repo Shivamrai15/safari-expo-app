@@ -1,7 +1,9 @@
-import { albumDuration, cn } from "@/lib/utils";
-import { SongResponse } from "@/types/response.types";
 import { Image } from "expo-image";
 import { Text, TouchableOpacity, View } from "react-native";
+import { useQueue } from "@/hooks/use-queue";
+import { albumDuration, cn } from "@/lib/utils";
+import { SongResponse } from "@/types/response.types";
+import { useOptions } from "@/hooks/use-options";
 
 interface Props {
     className?: string;
@@ -9,6 +11,10 @@ interface Props {
 }
 
 export const SongItem = ({ className, data }: Props) => {
+
+    const { priorityEnqueue } = useQueue();
+    const { openOptions } = useOptions();
+
     return (
         <TouchableOpacity 
             className={cn(
@@ -16,6 +22,8 @@ export const SongItem = ({ className, data }: Props) => {
                 className
             )}
             activeOpacity={0.7}
+            onPress={()=>priorityEnqueue([data])}
+            onLongPress={()=>openOptions(data)}
         >
             <Image
                 source={{ uri: data.image }}
@@ -30,3 +38,5 @@ export const SongItem = ({ className, data }: Props) => {
         </TouchableOpacity>
     )
 }
+
+
