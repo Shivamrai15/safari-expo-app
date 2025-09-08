@@ -3,11 +3,60 @@ import { useQueue } from '@/hooks/use-queue';
 import { Progress } from '@/components/progress';
 import { Image } from 'expo-image';
 import { PauseIcon, PlayIcon } from '@/constants/icons';
+import { audioPlayer } from '@/services/audio';
+import { useEffect, useState } from 'react';
+import { AVPlaybackStatus } from 'expo-av';
 
 export const Player = () => {
+    const { current, deQueue } = useQueue();
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [position, setPosition] = useState(0);
+    const [duration, setDuration] = useState(0);
+    const [progress, setProgress] = useState(0);
 
-    const { current } = useQueue();
-	const isPlaying = true;
+    // Handle playback status updates
+    useEffect(() => {
+        audioPlayer.onStatusUpdate((status: AVPlaybackStatus) => {
+            if (status.isLoaded) {
+                setIsPlaying(status.isPlaying);
+                setPosition(status.positionMillis || 0);
+                setDuration(status.durationMillis || 0);
+                
+                // Calculate progress percentage
+                if (status.durationMillis && status.positionMillis) {
+                    const progressPercent = (status.positionMillis / status.durationMillis) * 100;
+                    setProgress(progressPercent);
+                }
+            }
+        });
+
+        audioPlayer.onLoad(() => {
+			// TODO View and History POST API CALL
+        });
+
+        audioPlayer.onEnd(() => {
+            setIsPlaying(false);
+            setProgress(0);
+			deQueue();
+        });
+    }, []);
+
+    // Load song when current changes
+    useEffect(() => {
+        if (current && current !== audioPlayer.getCurrentSong()) {
+            audioPlayer.loadSong(current);
+        }
+    }, [current]);
+
+    const handlePlayPause = async () => {
+        if (!current) return;
+
+        if (isPlaying) {
+            await audioPlayer.pause();
+        } else {
+            await audioPlayer.play();
+        }
+    };
 
     if (!current) return null;
 
@@ -19,7 +68,7 @@ export const Player = () => {
 			}}
 		>
             <Progress
-				value={50}
+				value={progress}
 				variant='danger'
 				size='sm'
 			/>
@@ -46,6 +95,7 @@ export const Player = () => {
 				</View>
 				<TouchableOpacity
 					activeOpacity={0.7}
+					onPress={handlePlayPause}
 				>
 					{
 						isPlaying ? (
@@ -61,8 +111,8 @@ export const Player = () => {
 							<Image
 								source={PlayIcon}
 								style={{
-									width: 24,
-									height: 24,
+									width: 20,
+									height: 20,
 								}}
 								contentFit='contain'
 							/>
