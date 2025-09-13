@@ -1,5 +1,9 @@
+import axios from 'axios';
 import { Audio as ExpoAudio, AVPlaybackSource, AVPlaybackStatus, InterruptionModeIOS, InterruptionModeAndroid } from 'expo-av';
 import { Album, Song } from '@/types/response.types';
+import { fetcher } from '@/lib/fetcher';
+import { PROTECTED_BASE_URL } from '@/constants/api.config';
+import { ADS } from '@/constants/ads';
 
 export class Audio {
     private sound: ExpoAudio.Sound | null = null;
@@ -9,9 +13,37 @@ export class Audio {
     private onLoadCallback?: () => void;
     private onEndCallback?: () => void;
     private onPlaybackStatusUpdate?: (status: AVPlaybackStatus) => void;
+    private ads = ADS;
 
     constructor() {
         this.setupAudio();
+    }
+
+    private async incrementView(songId: string, token?: string) {
+        try {   
+            await fetcher({
+                prefix : "PROTECTED_BASE_URL",
+                suffix : `api/v2/song/${songId}/view`,
+                token
+            });
+        } catch (error) {
+            console.error('Error incrementing view count:', error);
+        }
+    }
+
+
+    private async addToHistory(songId: string, token?: string) {
+        try {
+            await axios.post(`${PROTECTED_BASE_URL}/api/v2/user/history`, {
+                songId
+            }, {
+                headers : {
+                    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+                }
+            });
+        } catch (error) {
+            console.error('Error adding to history:', error);
+        }
     }
 
     // Setup audio mode for background playback
@@ -32,7 +64,7 @@ export class Audio {
     }
 
     // Load a song
-    async loadSong(song: Song & { album: Album }): Promise<boolean> {
+    async loadSong(song: Song & { album: Album }, token?: string): Promise<boolean> {
         try {
         // Unload previous sound
         if (this.sound) {
@@ -60,6 +92,8 @@ export class Audio {
         }
 
         this.play();
+        // await this.incrementView(song.id, token);
+        // await this.addToHistory(song.id, token);
 
         return true;
         } catch (error) {
@@ -73,17 +107,17 @@ export class Audio {
     // Handle playback status updates
     private handlePlaybackStatusUpdate(status: AVPlaybackStatus) {
         if (status.isLoaded) {
-        this.isPlaying = status.isPlaying;
-        
-        // Call custom status update callback
-        if (this.onPlaybackStatusUpdate) {
-            this.onPlaybackStatusUpdate(status);
-        }
+            this.isPlaying = status.isPlaying;
+            
+            // Call custom status update callback
+            if (this.onPlaybackStatusUpdate) {
+                this.onPlaybackStatusUpdate(status);
+            }
 
-        // Handle song end
-        if (status.didJustFinish && this.onEndCallback) {
-            this.onEndCallback();
-        }
+            // Handle song end
+            if (status.didJustFinish && this.onEndCallback) {
+                this.onEndCallback();
+            }
         } else if (status.error) {
             console.error('Audio playback error:', status.error);
         }
@@ -137,15 +171,14 @@ export class Audio {
         }
     }
 
-    // Seek to a specific position (in seconds)
-    async seek(seconds: number): Promise<boolean> {
+    // Seek to a specific position (in milliseconds)
+    async seek(milliseconds: number): Promise<boolean> {
         if (!this.sound || !this.isLoaded) {
             return false;
         }
 
         try {
-            const positionMillis = seconds * 1000;
-            await this.sound.setPositionAsync(positionMillis);
+            await this.sound.setPositionAsync(milliseconds);
             return true;
         } catch (error) {
             console.error('Error seeking:', error);
@@ -202,6 +235,7 @@ export class Audio {
     async unload(): Promise<boolean> {
         if (this.sound) {
         try {
+            await this.sound.stopAsync();
             await this.sound.unloadAsync();
             this.sound = null;
             this.isLoaded = false;

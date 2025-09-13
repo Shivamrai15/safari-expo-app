@@ -26,19 +26,7 @@ const Layout = () => {
 		<>
 			{
 				current && (
-					<View
-						style={{
-							position: 'absolute',
-							bottom: 72 + insets.bottom,
-							left: 0,
-							right: 0,
-							zIndex: 80,
-							height: 48,
-							padding: 6
-						}}
-					>
-						<Player />
-					</View>
+					<Player bottom={insets.bottom} />
 				)
 			}
 			<Tabs

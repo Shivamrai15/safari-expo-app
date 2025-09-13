@@ -9,3 +9,12 @@ export type User = {
         createdAt : string;
     }
 }
+
+export type Ad = {
+    id : string
+    name : string
+    color : string
+    image : string
+    url : string
+    duration : number
+}

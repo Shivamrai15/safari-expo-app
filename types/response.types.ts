@@ -145,3 +145,16 @@ export type MoodResponse = Mood & {
         metadata: number;
     };
 } | null | undefined;
+
+
+export type SettingsResponse = {
+    subscription: {
+        isActive: boolean;
+        currentPeriodEnd: Date | null;
+        priceId: string | null;
+    };
+    id: string;
+    name: string;
+    showRecommendations: boolean;
+    privateSession: boolean;
+}

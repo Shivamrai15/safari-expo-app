@@ -1,9 +1,11 @@
 import { useAuth } from '@/hooks/use-auth';
+import { useSettingsSync } from '@/hooks/use-settings';
 import { Redirect } from 'expo-router';
 
 const Index = () => {
 
-    const { isLoggedIn } = useAuth();
+    const { isLoggedIn, user } = useAuth();
+    useSettingsSync(user?.token)
 
     if (isLoggedIn) {
         // return <Redirect href="/(tabs)/home" />;

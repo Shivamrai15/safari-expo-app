@@ -46,11 +46,7 @@ export const PlayButton = ({ songs, id, className }: Props) => {
             )}
             onPress={() => handlePlay()}
         >
-            {
-                isPlaying ?
-                <Image source={PauseDarkIcon} style={{ width: 22, height: 22 }} />
-                : <Image source={PlayDarkIcon} style={{ width: 20, height: 20 }} />
-            }
+            <Image source={isPlaying ? PauseDarkIcon : PlayDarkIcon} style={{ width: 22, height: 22 }} />
         </Button>
     )
 }

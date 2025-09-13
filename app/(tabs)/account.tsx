@@ -1,8 +1,9 @@
+import { Image } from 'expo-image';
 import { Href, router } from 'expo-router';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { HistoryIcon, PlaylistRecoverIcon, ReceiptIcon, UserIcon } from '@/constants/icons';
-import { Image } from 'expo-image';
+
 
 const Account = () => {
 
@@ -59,6 +60,7 @@ const Account = () => {
                         ))
                     }
                 </View>
+                
             </ScrollView>
         </SafeAreaView>
     );

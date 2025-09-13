@@ -6,8 +6,12 @@ import BrowseIcon from "@/assets/icons/browse.png";
 import BrowseOutlineIcon from "@/assets/icons/browse-outline.png";
 import PlaylistIcon from "@/assets/icons/playlist.png";
 import PlaylistOutlineIcon from "@/assets/icons/playlist-outline.png";
-import PlayIcon from "@/assets/icons/play.png";
-import PauseIcon from "@/assets/icons/pause.png";
+import PlayIcon from "@/assets/icons/play.svg";
+import PauseIcon from "@/assets/icons/pause.svg";
+import PlayCircleIcon from "@/assets/icons/play-circle.svg";
+import PauseCircleIcon from "@/assets/icons/pause-circle.svg";
+import ForwardStepIcon from "@/assets/icons/forward-step.svg";
+import BackwardStepIcon from "@/assets/icons/backward-step.svg";
 import ShuffleIcon from "@/assets/icons/shuffle.png";
 import PlayDarkIcon from "@/assets/icons/play-dark.png";
 import PauseDarkIcon from "@/assets/icons/pause-dark.png";
@@ -20,6 +24,12 @@ import MicIcon from "@/assets/icons/mic.png";
 import HotsPot from "@/assets/icons/hotspot.png";
 import MusicQueueIcon from "@/assets/icons/music.png";
 import DiscIcon from "@/assets/icons/album.png";
+import RepeatIcon from "@/assets/icons/repeat.svg";
+import RepeatOneIcon from "@/assets/icons/repeat-active.svg";
+import AiShuffleIcon from "@/assets/icons/ai-shuffle.svg";
+import AiShuffleActiveIcon from "@/assets/icons/ai-shuffle-active.svg";
+import ThumbIcon from "@/assets/icons/thumb.svg";
+import ThumbActiveIcon from "@/assets/icons/thumb-active.svg";
 
 export {
     HomeIcon,
@@ -43,5 +53,15 @@ export {
     MicIcon,
     HotsPot,
     MusicQueueIcon,
-    DiscIcon
+    DiscIcon,
+    PlayCircleIcon,
+    PauseCircleIcon,
+    ForwardStepIcon,
+    BackwardStepIcon,
+    RepeatIcon,
+    RepeatOneIcon,
+    AiShuffleIcon,
+    AiShuffleActiveIcon,
+    ThumbIcon,
+    ThumbActiveIcon
 };
