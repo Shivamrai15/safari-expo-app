@@ -30,6 +30,7 @@ import AiShuffleIcon from "@/assets/icons/ai-shuffle.svg";
 import AiShuffleActiveIcon from "@/assets/icons/ai-shuffle-active.svg";
 import ThumbIcon from "@/assets/icons/thumb.svg";
 import ThumbActiveIcon from "@/assets/icons/thumb-active.svg";
+import DownloadIcon from "@/assets/icons/download.png";
 
 export {
     HomeIcon,
@@ -63,5 +64,6 @@ export {
     AiShuffleIcon,
     AiShuffleActiveIcon,
     ThumbIcon,
-    ThumbActiveIcon
+    ThumbActiveIcon,
+    DownloadIcon
 };

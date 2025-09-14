@@ -1,14 +1,17 @@
 import { View, Text } from 'react-native';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useOptions } from '@/hooks/use-options';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Image } from 'expo-image';
 import { Button } from '@/components/button';
-import { DiscIcon, HotsPot, MicIcon, MusicQueueIcon, PlaylistRecoverIcon, PlusIcon } from '@/constants/icons';
+import { DiscIcon, DownloadIcon, HotsPot, MicIcon, MusicQueueIcon, PlaylistRecoverIcon, PlusIcon } from '@/constants/icons';
 import { useQueue } from '@/hooks/use-queue';
 import { router } from 'expo-router';
+import { useSettings } from '@/hooks/use-settings';
+import { DownloadManager } from '@/services/download';
+import { useDownloads } from '@/hooks/use-downloads';
 
 export const Options = () => {
 
@@ -17,12 +20,76 @@ export const Options = () => {
     const snapPoints = useMemo(() => ['70%'], ['100%']);
     const { data, closeOptions } = useOptions();
     const { enQueue, priorityEnqueue } = useQueue();
+    const { settings } = useSettings();
+    const { getSongById } = useDownloads();
+    
+    // Download state
+    const [isDownloading, setIsDownloading] = useState(false);
+    const [downloadProgress, setDownloadProgress] = useState(0);
+    
+    const downloadManager = DownloadManager.getInstance();
+    
+    // Check if song is already downloaded or downloading
+    const downloadedSong = data ? getSongById(data.id) : null;
+    const isAlreadyDownloaded = downloadedSong?.isDownloaded || false;
+    const isCurrentlyDownloading = downloadedSong?.isDownloading || false;
 
     useEffect(()=>{
         if (data && sheetRef.current) {
             sheetRef.current.expand();
         }
     }, [data]);
+
+    const handleDownload = async () => {
+        if (!data || !settings?.subscription.isActive) return;
+        
+        setIsDownloading(true);
+        try {
+            await downloadManager.downloadSong(data, (progress) => {
+                setDownloadProgress(progress.progress);
+                console.log(`Download progress: ${progress.progress}%`);
+            });
+        } catch (error) {
+            console.error('Download failed:', error);
+        } finally {
+            setIsDownloading(false);
+            setDownloadProgress(0);
+        }
+    };
+
+    const handleCancelDownload = () => {
+        if (data) {
+            downloadManager.cancelDownload(data.id);
+            setIsDownloading(false);
+            setDownloadProgress(0);
+        }
+    };
+
+    const getDownloadButtonContent = () => {
+        if (isAlreadyDownloaded) {
+            return {
+                text: "Downloaded",
+                disabled: true
+            };
+        }
+        
+        if (isCurrentlyDownloading || isDownloading) {
+            const progress = downloadedSong?.downloadProgress || downloadProgress;
+            return {
+                text: `Downloading... ${Math.round(progress)}%`,
+                disabled: false,
+                onPress: handleCancelDownload
+            };
+        }
+        
+        return {
+            text: "Download",
+            disabled: false,
+            onPress: handleDownload
+        };
+    };
+
+    const downloadButtonContent = getDownloadButtonContent();
 
     return (
         <View
@@ -80,7 +147,7 @@ export const Options = () => {
                             >   
                                 <Image
                                     source={MusicQueueIcon}
-                                    style={{ width: 24, height: 24 }}
+                                    style={{ width: 22, height: 22 }}
                                 />
                                 <Text className='text-zinc-100 text-lg'>Add to queue</Text>
                             </Button>
@@ -101,6 +168,24 @@ export const Options = () => {
                                     style={{ width: 24, height: 24 }}
                                 />
                                 <Text className='text-zinc-100 text-lg'>Play next</Text>
+                            </Button>
+                            <Button
+                                variant='ghost'
+                                className='justify-start gap-x-6'
+                                onPress={downloadButtonContent.onPress || handleDownload}
+                                disabled={downloadButtonContent.disabled || (settings ? !settings.subscription.isActive : true)}
+                            >   
+                                <Image
+                                    source={DownloadIcon}
+                                    style={{ 
+                                        width: 24, 
+                                        height: 24,
+                                        opacity: downloadButtonContent.disabled ? 0.5 : 1 
+                                    }}
+                                />
+                                <Text className={`text-lg ${downloadButtonContent.disabled ? 'text-zinc-500' : 'text-zinc-100'}`}>
+                                    {downloadButtonContent.text}
+                                </Text>
                             </Button>
                             <Button
                                 variant='ghost'

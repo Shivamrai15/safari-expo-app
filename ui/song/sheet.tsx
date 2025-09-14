@@ -91,6 +91,7 @@ export const Sheet = ({
             <BottomSheetScrollView
                 showsVerticalScrollIndicator={true}
                 contentInsetAdjustmentBehavior="automatic"
+                nestedScrollEnabled={true}
             >
                 <View
                     style={{

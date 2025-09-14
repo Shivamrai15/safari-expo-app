@@ -2,7 +2,7 @@ import { Image } from 'expo-image';
 import { Href, router } from 'expo-router';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { HistoryIcon, PlaylistRecoverIcon, ReceiptIcon, UserIcon } from '@/constants/icons';
+import { DownloadIcon, HistoryIcon, PlaylistRecoverIcon, ReceiptIcon, UserIcon } from '@/constants/icons';
 
 
 const Account = () => {
@@ -33,6 +33,13 @@ const Account = () => {
             name : "Transaction history",
             path : "/",
             icon : ReceiptIcon,
+            height: 24,
+            width: 24
+        },
+        {
+            name : "Downloads",
+            path : "/downloads",
+            icon : DownloadIcon,
             height: 24,
             width: 24
         }
