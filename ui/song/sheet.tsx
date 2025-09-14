@@ -18,27 +18,29 @@ import { albumDuration } from '@/lib/utils';
 import Slider from "@react-native-community/slider";
 import { LikeButton } from '@/ui/liked/like-button';
 import {
+    AiShuffleActiveIcon,
     AiShuffleIcon,
     BackwardStepIcon,
     ForwardStepIcon,
     PauseCircleIcon,
     PlayCircleIcon,
     RepeatIcon,
+    RepeatOneIcon,
     ShuffleIcon
 } from '@/constants/icons';
 import { useQueue } from '@/hooks/use-queue';
+import usePlayerSettings from '@/hooks/use-player-settings';
+import { Lyrics } from './lyrics';
 
 interface Props {
     data : Song & { album: Album };
     isOpen: boolean;
-    duration: number;
     position: number;
     isPlaying: boolean;
     isSubscribed?: boolean;
     onClose: () => void;
     handlePlayPause: () => void;
     onSeek: (value: number) => void;
-    setPosition: React.Dispatch<React.SetStateAction<number>>
 }
 
 const { height: screenHeight } = Dimensions.get('window');
@@ -46,22 +48,21 @@ const { height: screenHeight } = Dimensions.get('window');
 export const Sheet = ({
     data,
     isOpen,
-    duration,
     position,
     isPlaying,
     isSubscribed,
     onSeek,
     onClose,
-    setPosition,
     handlePlayPause,
 }: Props) => {
     
     const safeAreaHeight = screenHeight;
-    
+
     const insets = useSafeAreaInsets();
     const { pop, deQueue, shuffle } = useQueue();
     const snapPoints = useMemo(() => ["100%"], []);
     const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+    const { isLooped, isAiShuffled, setAiShuffled, setLooped } = usePlayerSettings();
 
     useEffect(() => {
         if (isOpen) {
@@ -70,6 +71,8 @@ export const Sheet = ({
             bottomSheetModalRef.current?.dismiss();
         }
     }, [isOpen]);
+
+    
 
     return (
         <BottomSheetModal
@@ -144,11 +147,8 @@ export const Sheet = ({
                                             minimumValue={0}
                                             tapToSeek={true}
                                             value={position}
-                                            onSlidingComplete={(number)=>{
-                                                setPosition(number);
-                                                onSeek(number);
-                                            }}
-                                            maximumValue={data.duration*1000}
+                                            onSlidingComplete={onSeek}
+                                            maximumValue={data.duration}
                                             style={{ padding: 0, margin: 0, width: '100%' }}
                                             minimumTrackTintColor="#ef4444"
                                             maximumTrackTintColor="#D3D3D3"
@@ -157,7 +157,7 @@ export const Sheet = ({
                                         />
                                         <View className='flex flex-row items-center justify-between px-4'>
                                             <Text className='text-zinc-300 text-sm'>
-                                                {albumDuration(Math.floor(position / 1000))}
+                                                {albumDuration(Math.floor(position))}
                                             </Text>
                                             <Text className='text-zinc-300 text-sm'>
                                                 {albumDuration(data.duration)}
@@ -170,9 +170,10 @@ export const Sheet = ({
                                                 className='h-7 aspect-square'
                                                 activeOpacity={0.7}
                                                 disabled={!isSubscribed}
+                                                onPress={() => setAiShuffled(!isAiShuffled)}
                                             >
                                                 <Image
-                                                    source={AiShuffleIcon}
+                                                    source={isAiShuffled ? AiShuffleActiveIcon : AiShuffleIcon}
                                                     style={{ width: "100%", height: "100%" }}
                                                     contentFit='contain'
                                                 />
@@ -222,9 +223,10 @@ export const Sheet = ({
                                             <TouchableOpacity
                                                 className='h-7 aspect-square'
                                                 activeOpacity={0.7}
+                                                onPress={() => setLooped(!isLooped)}
                                             >
                                                 <Image
-                                                    source={RepeatIcon}
+                                                    source={isLooped ? RepeatOneIcon : RepeatIcon}
                                                     style={{ width: "100%", height: "100%" }}
                                                     contentFit='contain'
                                                 />
@@ -241,8 +243,22 @@ export const Sheet = ({
                         minHeight: safeAreaHeight,
                         width: '100%',
                         backgroundColor: '#111111',
+                        padding: 24
                     }}
+
                 >
+                    <View 
+                        className='rounded-3xl bg-neutral-800 relative overflow-hidden'
+                        style={{
+                            height : 600
+                        }}
+                    >
+                        <Lyrics
+                            songId={data.id}
+                            position={position}
+                            onSeek={onSeek}
+                        />
+                    </View>
                 </View>
             </BottomSheetScrollView>
         </BottomSheetModal>

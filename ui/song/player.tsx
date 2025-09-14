@@ -1,14 +1,18 @@
-import { View, Text, TouchableOpacity, Pressable } from 'react-native';
+import {
+	View,
+	Text,
+	Pressable,
+	TouchableOpacity,
+} from 'react-native';
+import { Image } from 'expo-image';
 import { useQueue } from '@/hooks/use-queue';
 import { Progress } from '@/components/progress';
-import { Image } from 'expo-image';
 import { PauseIcon, PlayIcon } from '@/constants/icons';
-import { audioPlayer } from '@/services/audio';
-import { useEffect, useState } from 'react';
-import { AVPlaybackStatus } from 'expo-av';
-import { useAuth } from '@/hooks/use-auth';
-import { useSettings } from '@/hooks/use-settings';
+import { useAudioPlayer, useAudioPlayerStatus, setAudioModeAsync } from 'expo-audio';
+import { useEffect, useRef, useState } from 'react';
 import { Sheet } from './sheet';
+import { useSettings } from '@/hooks/use-settings';
+import usePlayerSettings from '@/hooks/use-player-settings';
 
 
 interface Props {
@@ -16,80 +20,75 @@ interface Props {
 }
 
 export const Player = ({ bottom }: Props) => {
-	const { user } = useAuth();
-    const { settings } = useSettings();
-    const { current, deQueue } = useQueue();
-	const [isPlaying, setIsPlaying] = useState(false);
-    const [position, setPosition] = useState(0);
-    const [duration, setDuration] = useState(0);
-    const [progress, setProgress] = useState(0);
-	const [isSheetOpen, setIsSheetOpen] = useState(false);
 
+	const { current, queue, deQueue } = useQueue();
+	const { settings } = useSettings();
+	const [isOpen, setIsOpen] = useState(false);
+	const { isLooped } = usePlayerSettings();
+	
+	const player = useAudioPlayer(current?.url || '');
+	const status = useAudioPlayerStatus(player);
+	
+	const hasAutoPlayed = useRef(false);
+	const currentSongUrl = useRef<string | null>(null);
 
-    // Handle playback status updates
-    useEffect(() => {
-        audioPlayer.onStatusUpdate((status: AVPlaybackStatus) => {
-            if (status.isLoaded) {
-                setIsPlaying(status.isPlaying);
-                setPosition(status.positionMillis || 0);
-                setDuration(status.durationMillis || 0);
-                
-                // Calculate progress percentage
-                if (status.durationMillis && status.positionMillis) {
-                    const progressPercent = (status.positionMillis / status.durationMillis) * 100;
-                    setProgress(progressPercent);
-                }
-            }
-        });
+	// Configure audio session for background playback
+	useEffect(() => {
+		const configureAudio = async () => {
+			try {
+				await setAudioModeAsync({
+					shouldPlayInBackground: true,
+					interruptionMode : "doNotMix",
+					interruptionModeAndroid : "doNotMix",
+					shouldRouteThroughEarpiece : false
+				});
+			} catch (error) {
+				console.error('Failed to configure audio session:', error);
+			}
+		};
+		
+		configureAudio();
+	}, []);
 
-        audioPlayer.onLoad(() => {
-			setDuration(0);
-			setPosition(0);
-			// TODO View and History POST API CALL
-        });
+	const isPlaying = status.playing;
 
-        audioPlayer.onEnd(() => {
-            setIsPlaying(false);
-            setProgress(0);
-			deQueue();
-        });
-    }, []);
-
-    // Load song when current changes
-    useEffect(() => {
-        if (current && current !== audioPlayer.getCurrentSong()) {
-			setDuration(0);
-			setPosition(0);
-            audioPlayer.loadSong(current, user?.token);
-        } else {
-			const stopAndUnload = async () => {
-				await audioPlayer.pause();
-				await audioPlayer.unload();
-				setIsPlaying(false);
-				setPosition(0);
-				setDuration(0);
-				setProgress(0);
-			};
-			
-			stopAndUnload();
+	useEffect(() => {
+		if (current?.url && current.url !== currentSongUrl.current) {
+			player.replace(current.url);
+			hasAutoPlayed.current = false;
+			currentSongUrl.current = current.url;
 		}
-    }, [current]);
+	}, [current?.url]);
 
+	// Autoplay when audio is loaded (only once per song)
+	useEffect(() => {
+		if (status.isLoaded && !hasAutoPlayed.current && current?.url === currentSongUrl.current) {
+			player.play();
+			hasAutoPlayed.current = true;
+		}
+	}, [status.isLoaded, status.playing]);
 
+	useEffect(()=>{
+		player.loop = isLooped;
+	}, [isLooped])
 
-    const handlePlayPause = async () => {
-        if (!current) return;
+	const togglePlayback = () => {
+		if (isPlaying) {
+			player.pause();
+		} else {
+			player.play();
+		}
+	};
 
-        if (isPlaying) {
-            await audioPlayer.pause();
-        } else {
-            await audioPlayer.play();
+	useEffect(() => {
+        if (player.currentStatus.didJustFinish && !isLooped) {
+            deQueue();
+            if (queue.length > 0) {
+                hasAutoPlayed.current = false;
+            }
         }
-    };
-
-	const onSeek = async(value: number) => {
-		await audioPlayer.seek(value)
-	}
+    }, [player.currentStatus.didJustFinish, isLooped, queue.length]);
+	
 
     if (!current) return null;
 
@@ -111,10 +110,10 @@ export const Player = ({ bottom }: Props) => {
 						style={{
 							backgroundColor: current.album.color,
 						}}
-						onPress={() => setIsSheetOpen(true)}
+						onPress={() => setIsOpen(true)}
 					>
 						<Progress
-							value={progress}
+							value={status.isLoaded ? (status.currentTime / status.duration) * 100 : 0}
 							variant='danger'
 							size='sm'
 						/>
@@ -141,7 +140,7 @@ export const Player = ({ bottom }: Props) => {
 							</View>
 							<TouchableOpacity
 								activeOpacity={0.7}
-								onPress={handlePlayPause}
+								onPress={togglePlayback}
 							>
 								<Image source={isPlaying ? PauseIcon : PlayIcon} style={{ width: 22, height: 22 }} />
 							</TouchableOpacity>
@@ -149,16 +148,14 @@ export const Player = ({ bottom }: Props) => {
 					</Pressable>
 				</View>
 			<Sheet
-				isOpen={isSheetOpen}
-				onClose={() => setIsSheetOpen(false)}
 				data={current}
-				duration={duration}
-				position={position}
+				isOpen={isOpen}
+				position={player.currentTime}
 				isPlaying={isPlaying}
 				isSubscribed={settings?.subscription.isActive}
-				handlePlayPause={handlePlayPause}
-				onSeek={onSeek}
-				setPosition={setPosition}
+				onClose={() => setIsOpen(false)}
+				handlePlayPause={togglePlayback}
+				onSeek={(number)=>player.seekTo(number)}
 			/>
 		</>
     )

@@ -158,3 +158,10 @@ export type SettingsResponse = {
     showRecommendations: boolean;
     privateSession: boolean;
 }
+
+export type Lyrics = {
+    id: string;
+    songId: string;
+    lyrics: { lyrics : any[] };
+    synced: boolean;
+}

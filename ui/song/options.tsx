@@ -1,7 +1,6 @@
 import { View, Text } from 'react-native';
 import { useEffect, useMemo, useRef } from 'react';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
-import { SongResponse } from '@/types/response.types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useOptions } from '@/hooks/use-options';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -15,7 +14,7 @@ export const Options = () => {
 
     const insets = useSafeAreaInsets();
     const sheetRef = useRef<BottomSheet>(null);
-    const snapPoints = useMemo(() => ['70%'], []);
+    const snapPoints = useMemo(() => ['70%'], ['100%']);
     const { data, closeOptions } = useOptions();
     const { enQueue, priorityEnqueue } = useQueue();
 
