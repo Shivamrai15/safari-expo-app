@@ -41,6 +41,7 @@ interface Props {
     onClose: () => void;
     handlePlayPause: () => void;
     onSeek: (value: number) => void;
+    isOffline: boolean;
 }
 
 const { height: screenHeight } = Dimensions.get('window');
@@ -54,6 +55,7 @@ export const Sheet = ({
     onSeek,
     onClose,
     handlePlayPause,
+    isOffline
 }: Props) => {
     
     const safeAreaHeight = screenHeight;
@@ -125,10 +127,9 @@ export const Sheet = ({
                                             {data.name}
                                         </Text>
                                         <View className='flex flex-row items-center gap-x-4 justify-center'>
-                                            <LikeButton
-                                                songId={data.id}
-                                                label={false}
-                                            />
+                                            {
+                                                !isOffline && <LikeButton songId={data.id} label={false} />
+                                            }
                                             <TouchableOpacity
                                                 className='h-7 aspect-square'
                                                 activeOpacity={0.7}
@@ -239,28 +240,32 @@ export const Sheet = ({
                         </LinearGradient>
                     </ImageBackground>
                 </View>
-                <View
-                    style={{
-                        minHeight: safeAreaHeight,
-                        width: '100%',
-                        backgroundColor: '#111111',
-                        padding: 24
-                    }}
+                {
+                    !isOffline && (
+                        <View
+                            style={{
+                                minHeight: safeAreaHeight,
+                                width: '100%',
+                                backgroundColor: '#111111',
+                                padding: 24
+                            }}
 
-                >
-                    <View 
-                        className='rounded-3xl bg-neutral-800 relative overflow-hidden'
-                        style={{
-                            height : 600
-                        }}
-                    >
-                        <Lyrics
-                            songId={data.id}
-                            position={position}
-                            onSeek={onSeek}
-                        />
-                    </View>
-                </View>
+                        >
+                            <View 
+                                className='rounded-3xl bg-neutral-800 relative overflow-hidden'
+                                style={{
+                                    height : 600
+                                }}
+                            >
+                                <Lyrics
+                                    songId={data.id}
+                                    position={position}
+                                    onSeek={onSeek}
+                                />
+                            </View>
+                        </View>
+                    )
+                }
             </BottomSheetScrollView>
         </BottomSheetModal>
     );

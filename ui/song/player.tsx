@@ -17,9 +17,10 @@ import usePlayerSettings from '@/hooks/use-player-settings';
 
 interface Props {
 	bottom : number;
+	isOffline : boolean;
 }
 
-export const Player = ({ bottom }: Props) => {
+export const Player = ({ bottom, isOffline }: Props) => {
 
 	const { current, queue, deQueue } = useQueue();
 	const { settings } = useSettings();
@@ -97,7 +98,7 @@ export const Player = ({ bottom }: Props) => {
 				<View
 					style={{
 						position: 'absolute',
-						bottom: 72 + bottom,
+						bottom: isOffline ? (20 + bottom) : (72 + bottom),
 						left: 0,
 						right: 0,
 						zIndex: 80,
@@ -156,6 +157,7 @@ export const Player = ({ bottom }: Props) => {
 				onClose={() => setIsOpen(false)}
 				handlePlayPause={togglePlayback}
 				onSeek={(number)=>player.seekTo(number)}
+				isOffline={isOffline}
 			/>
 		</>
     )

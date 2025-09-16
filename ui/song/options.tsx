@@ -31,8 +31,8 @@ export const Options = () => {
     
     // Check if song is already downloaded or downloading
     const downloadedSong = data ? getSongById(data.id) : null;
-    const isAlreadyDownloaded = downloadedSong?.isDownloaded || false;
-    const isCurrentlyDownloading = downloadedSong?.isDownloading || false;
+    const isAlreadyDownloaded = downloadedSong?.download.isDownloaded || false;
+    const isCurrentlyDownloading = downloadedSong?.download.isDownloading || false;
 
     useEffect(()=>{
         if (data && sheetRef.current) {
@@ -74,7 +74,7 @@ export const Options = () => {
         }
         
         if (isCurrentlyDownloading || isDownloading) {
-            const progress = downloadedSong?.downloadProgress || downloadProgress;
+            const progress = downloadedSong?.download.downloadProgress || downloadProgress;
             return {
                 text: `Downloading... ${Math.round(progress)}%`,
                 disabled: false,

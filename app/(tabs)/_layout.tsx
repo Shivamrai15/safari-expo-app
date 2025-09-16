@@ -1,4 +1,4 @@
-import { Tabs } from 'expo-router';
+import { Tabs, usePathname } from 'expo-router';
 import { Image } from 'expo-image';
 import { HomeIcon,
 	HomeOutlineIcon,
@@ -18,15 +18,21 @@ import { Player } from '@/ui/song/player';
 
 const Layout = () => {
 
-	const { isLoggedIn, user } = useAuth();
+	const pathname = usePathname();
 	const insets = useSafeAreaInsets();
+
 	const { current } = useQueue();
+	const { isLoggedIn, user } = useAuth();
+
 
 	return (
 		<>
 			{
 				current && (
-					<Player bottom={insets.bottom} />
+					<Player
+						bottom={insets.bottom}
+						isOffline={pathname === "/downloads"}
+					/>
 				)
 			}
 			<Tabs
@@ -192,6 +198,13 @@ const Layout = () => {
 				/>
 				<Tabs.Screen 
 					name="history" 
+					options={{
+						tabBarIcon : ()=>null,
+						href : null
+					}}
+				/>
+				<Tabs.Screen 
+					name="downloads" 
 					options={{
 						tabBarIcon : ()=>null,
 						href : null

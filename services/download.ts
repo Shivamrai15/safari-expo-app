@@ -49,9 +49,11 @@ export class DownloadManager {
             if (!existingSong) {
                 const downloadSong: DownloadedSong = {
                     ...song,
-                    isDownloading: true,
-                    downloadProgress: 0,
-                    isDownloaded: false,
+                    download: {
+                        isDownloading: true,
+                        downloadProgress: 0,
+                        isDownloaded: false,
+                    }
                 };
                 setSong(downloadSong);
             } else {
@@ -68,9 +70,9 @@ export class DownloadManager {
 
             const localPath = `${downloadsDir}/${fileName}`;
             
-            // Download in background without blocking UI
-            const success = await this.downloadM3U8FileBackground(
-                song.url, 
+            // Download both M3U8 and image in background
+            const success = await this.downloadSongAndImageBackground(
+                song, 
                 localPath, 
                 song.id,
                 abortController.signal
@@ -93,6 +95,112 @@ export class DownloadManager {
         } finally {
             this.activeDownloads.delete(song.id);
             this.downloadCallbacks.delete(song.id);
+        }
+    }
+
+    private async downloadSongAndImageBackground(
+        song: SongResponse,
+        localPath: string,
+        songId: string,
+        signal: AbortSignal
+    ): Promise<boolean> {
+        const { updateSongProgress } = useDownloads.getState();
+
+        try {
+            // Check for cancellation
+            if (signal.aborted) return false;
+
+            // Step 1: Download song image first (quick)
+            const imageLocalPath = await this.downloadImageBackground(
+                song.image,
+                songId,
+                signal
+            );
+
+            if (signal.aborted) return false;
+
+            // Update song with local image path
+            if (imageLocalPath) {
+                const { updateSongImage } = useDownloads.getState();
+                updateSongImage(songId, imageLocalPath);
+            }
+
+            // Step 2: Download M3U8 and segments
+            const audioSuccess = await this.downloadM3U8FileBackground(
+                song.url, 
+                localPath, 
+                songId,
+                signal
+            );
+
+            return audioSuccess;
+
+        } catch (error: any) {
+            if (error.name === 'AbortError' || signal.aborted) {
+                console.log(`Download cancelled for song ${songId}`);
+                return false;
+            }
+            console.error("Error in downloadSongAndImageBackground:", error);
+            throw error;
+        }
+    }
+
+    private async downloadImageBackground(
+        imageUrl: string,
+        songId: string,
+        signal: AbortSignal
+    ): Promise<string | null> {
+        try {
+            if (!imageUrl || signal.aborted) return null;
+
+            const downloadsDir = await this.ensureDownloadsDirectory();
+            
+            // Get image file extension from URL
+            const imageExtension = this.getImageExtension(imageUrl);
+            const imageFileName = `${songId}_image.${imageExtension}`;
+            const imageLocalPath = `${downloadsDir}/${imageFileName}`;
+
+            // Check if image already exists
+            const imageInfo = await FileSystem.getInfoAsync(imageLocalPath);
+            if (imageInfo.exists) {
+                console.log(`Image already exists for song ${songId}`);
+                return imageLocalPath;
+            }
+
+            // Download the image
+            const downloadResult = await FileSystem.downloadAsync(imageUrl, imageLocalPath);
+            
+            if (downloadResult.status === 200) {
+                console.log(`Downloaded image for song ${songId}`);
+                return imageLocalPath;
+            } else {
+                console.error(`Failed to download image: ${downloadResult.status}`);
+                return null;
+            }
+
+        } catch (error: any) {
+            console.error(`Failed to download image for song ${songId}:`, error.message);
+            return null;
+        }
+    }
+
+    private getImageExtension(imageUrl: string): string {
+        try {
+            // Extract extension from URL
+            const urlParts = imageUrl.split('?')[0].split('/');
+            const fileName = urlParts[urlParts.length - 1];
+            const extension = fileName.split('.').pop()?.toLowerCase();
+            
+            // Common image extensions
+            const validExtensions = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+            if (extension && validExtensions.includes(extension)) {
+                return extension;
+            }
+            
+            // Default to jpg if no valid extension found
+            return 'jpg';
+        } catch (error) {
+            return 'jpg';
         }
     }
 
@@ -136,8 +244,9 @@ export class DownloadManager {
                 });
             }
 
-            const totalFiles = segmentUrls.length + 1;
-            let completedFiles = 1;
+            // Total files: M3U8 + segments + image (image already downloaded, so start at 2/total)
+            const totalFiles = segmentUrls.length + 2; // +1 for M3U8, +1 for image
+            let completedFiles = 2; // Image and M3U8 parsing completed
             updateSongProgress(songId, Math.round((completedFiles / totalFiles) * 100));
 
             // Download segments in background with batching
@@ -147,7 +256,7 @@ export class DownloadManager {
                 songId,
                 signal,
                 (progress) => {
-                    completedFiles = 1 + progress.completed;
+                    completedFiles = 2 + progress.completed; // 2 = image + M3U8 parsing
                     const progressPercent = Math.round((completedFiles / totalFiles) * 100);
                     updateSongProgress(songId, progressPercent);
 
@@ -185,7 +294,7 @@ export class DownloadManager {
                 return false;
             }
             console.error("Error in downloadM3U8FileBackground:", error);
-            throw error; // Re-throw to be handled by the calling function
+            throw error;
         }
     }
 
@@ -379,20 +488,35 @@ export class DownloadManager {
     public async deleteDownload(songId: string): Promise<boolean> {
         const { getSongById, removeSong } = useDownloads.getState();
         const song = getSongById(songId);
-        if (!song?.localPath) return false;
+        if (!song?.download.localPath) return false;
 
         try {
             // Delete the M3U8 file
-            const fileInfo = await FileSystem.getInfoAsync(song.localPath);
+            const fileInfo = await FileSystem.getInfoAsync(song.download.localPath);
             if (fileInfo.exists) {
-                await FileSystem.deleteAsync(song.localPath, { idempotent: true });
+                await FileSystem.deleteAsync(song.download.localPath, { idempotent: true });
             }
 
             // Delete the segments directory
-            const segmentsDir = song.localPath.replace(".m3u8", "") + "_segments";
+            const segmentsDir = song.download.localPath.replace(".m3u8", "") + "_segments";
             const segmentsDirInfo = await FileSystem.getInfoAsync(segmentsDir);
             if (segmentsDirInfo.exists) {
                 await FileSystem.deleteAsync(segmentsDir, { idempotent: true });
+            }
+
+            // Delete the image file
+            const downloadsDir = await this.ensureDownloadsDirectory();
+            const imageExtensions = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+            
+            for (const ext of imageExtensions) {
+                const imageFileName = `${songId}_image.${ext}`;
+                const imageLocalPath = `${downloadsDir}/${imageFileName}`;
+                const imageInfo = await FileSystem.getInfoAsync(imageLocalPath);
+                if (imageInfo.exists) {
+                    await FileSystem.deleteAsync(imageLocalPath, { idempotent: true });
+                    console.log(`Deleted image: ${imageLocalPath}`);
+                    break;
+                }
             }
 
             removeSong(songId);
@@ -405,12 +529,21 @@ export class DownloadManager {
 
     public getLocalPath(songId: string): string | null {
         const { getSongById } = useDownloads.getState();
-        return getSongById(songId)?.localPath || null;
+        return getSongById(songId)?.download.localPath || null;
+    }
+
+    public getLocalImagePath(songId: string): string | null {
+        const { getSongById } = useDownloads.getState();
+        const song = getSongById(songId);
+        if (!song?.download.isDownloaded) return null;
+
+        // Return local image path if available
+        return song.download.localImagePath || null;
     }
 
     public isDownloaded(songId: string): boolean {
         const { getSongById } = useDownloads.getState();
-        return getSongById(songId)?.isDownloaded || false;
+        return getSongById(songId)?.download.isDownloaded || false;
     }
 
     public isDownloading(songId: string): boolean {
@@ -419,7 +552,7 @@ export class DownloadManager {
 
     public getDownloadProgress(songId: string): number {
         const { getSongById } = useDownloads.getState();
-        return getSongById(songId)?.downloadProgress || 0;
+        return getSongById(songId)?.download.downloadProgress || 0;
     }
 
     public getAllDownloads(): DownloadedSong[] {

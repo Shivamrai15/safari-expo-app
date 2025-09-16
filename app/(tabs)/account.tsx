@@ -38,7 +38,7 @@ const Account = () => {
         },
         {
             name : "Downloads",
-            path : "/downloads",
+            path : "/(tabs)/downloads",
             icon : DownloadIcon,
             height: 24,
             width: 24

@@ -5,6 +5,7 @@ import "./global.css"
 import { Options } from "@/ui/song/options";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { NetworkProvider } from "@/providers/network.provider";
 
 
 const queryClient = new QueryClient();
@@ -14,8 +15,10 @@ export default function RootLayout() {
         <QueryClientProvider client={queryClient}>
             <GestureHandlerRootView style={{ flex: 1 }}>
                 <BottomSheetModalProvider>
-                    <Stack screenOptions={{ headerShown: false, contentStyle: {backgroundColor: "#000"} }} />
-                    <Options />
+                    <NetworkProvider>
+                        <Stack screenOptions={{ headerShown: false, contentStyle: {backgroundColor: "#000"} }} />
+                        <Options />
+                    </NetworkProvider>
                 </BottomSheetModalProvider>
             </GestureHandlerRootView>
         </QueryClientProvider>
