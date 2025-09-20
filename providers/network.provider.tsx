@@ -13,7 +13,7 @@ interface Props {
 export const NetworkProvider = ({ children }: Props) => {
 
     const pathname = usePathname();
-    const [isConnected, setIsConnected] = useState<boolean | null>(null);
+    const [isConnected, setIsConnected] = useState<boolean | null>(true);
 
 
     useEffect(()=>{

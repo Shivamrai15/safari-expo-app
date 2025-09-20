@@ -10,7 +10,7 @@ interface Props {
 export const BioCard = ({ image, description }: Props) => {
     return (
         <Pressable 
-            className="mx-4 p-4 rounded-lg bg-neutral-800 shadow-xl mt-10"
+            className="mx-4 p-4 rounded-3xl bg-neutral-800 shadow-xl mt-10"
         >
             <View className="size-28 rounded-full overflow-hidden relative">
                 <Image

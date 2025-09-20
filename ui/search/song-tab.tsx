@@ -27,7 +27,7 @@ export const SongTab = ({ currentTab, query }: Props) => {
             });
             return data.data as SongSearchResponse | undefined;
         }
-    })
+    });
 
     if (isPending) {
         return (

@@ -98,7 +98,7 @@ export const Player = ({ bottom, isOffline }: Props) => {
 				<View
 					style={{
 						position: 'absolute',
-						bottom: isOffline ? (20 + bottom) : (72 + bottom),
+						bottom: 72 + bottom,
 						left: 0,
 						right: 0,
 						zIndex: 80,

@@ -183,6 +183,13 @@ const Layout = () => {
 					}}
 				/>
 				<Tabs.Screen 
+					name="playlist-songs/[playlistId]" 
+					options={{
+						tabBarIcon : ()=>null,
+						href : null
+					}}
+				/>
+				<Tabs.Screen 
 					name="account/profile" 
 					options={{
 						tabBarIcon : ()=>null,

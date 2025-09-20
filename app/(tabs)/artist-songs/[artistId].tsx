@@ -2,6 +2,7 @@ import { Error } from "@/components/error";
 import Loader from "@/components/loader";
 import { useAuth } from "@/hooks/use-auth";
 import { fetcher } from "@/lib/fetcher";
+import { NetworkProvider } from "@/providers/network.provider";
 import { ArtistProfileResponse } from "@/types/response.types";
 import { Songs } from "@/ui/artist/songs";
 import Entypo from "@expo/vector-icons/Entypo";
@@ -51,32 +52,34 @@ const ArtistSongs = () => {
     }
 
     return (
-        <SafeAreaView
-            className="flex-1 bg-background"
-        >
-            <ScrollView className="w-full flex-1 px-4 py-10" onScroll={handleScroll} scrollEventThrottle={16} >
-                <View className="flex flex-row gap-x-6 items-center">
-                    <View className="size-28 rounded-full overflow-hidden relative">
-                        <Image
-                            source={{
-                                uri : data.image
-                            }}
-                            style={{ width : "100%", height : "100%" }}
-                        />
-                    </View>
-                    <View className="flex-1 flex flex-col gap-y-3">
-                        <Text className="text-white text-2xl font-bold">{data.name}</Text>
-                        <View className="flex flex-row gap-x-2">
-                            <Text className="text-zinc-300 font-medium">{data._count.songs} Songs</Text>
-                            <Entypo name="dot-single" size={24} color="#d4d4d8" />
-                            <Text className="text-zinc-300 font-medium">{data._count.followers} Followers</Text>
+        <NetworkProvider>
+            <SafeAreaView
+                className="flex-1 bg-background"
+            >
+                <ScrollView className="w-full flex-1 px-4 py-10" onScroll={handleScroll} scrollEventThrottle={16} >
+                    <View className="flex flex-row gap-x-6 items-center">
+                        <View className="size-28 rounded-full overflow-hidden relative">
+                            <Image
+                                source={{
+                                    uri : data.image
+                                }}
+                                style={{ width : "100%", height : "100%" }}
+                            />
+                        </View>
+                        <View className="flex-1 flex flex-col gap-y-3">
+                            <Text className="text-white text-2xl font-bold">{data.name}</Text>
+                            <View className="flex flex-row gap-x-2">
+                                <Text className="text-zinc-300 font-medium">{data._count.songs} Songs</Text>
+                                <Entypo name="dot-single" size={24} color="#d4d4d8" />
+                                <Text className="text-zinc-300 font-medium">{data._count.followers} Followers</Text>
+                            </View>
                         </View>
                     </View>
-                </View>
-                <Songs isAtEnd={atEnd} artistId={data.id} />
-                <View className="h-40" />
-            </ScrollView>
-        </SafeAreaView>
+                    <Songs isAtEnd={atEnd} artistId={data.id} />
+                    <View className="h-40" />
+                </ScrollView>
+            </SafeAreaView>
+        </NetworkProvider>
     )
 }
 

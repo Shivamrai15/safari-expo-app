@@ -3,6 +3,8 @@ import { Href, router } from 'expo-router';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { DownloadIcon, HistoryIcon, PlaylistRecoverIcon, ReceiptIcon, UserIcon } from '@/constants/icons';
+import { NetworkProvider } from '@/providers/network.provider';
+import { Button } from '@/components/button';
 
 
 const Account = () => {
@@ -46,30 +48,44 @@ const Account = () => {
     ]
 
     return (
-        <SafeAreaView className="bg-background flex-1">
-            <ScrollView className='flex-1 p-6'>
-                <Text className="text-white text-2xl font-bold">Settings</Text>
-                <View className="w-full mt-10 flex flex-col gap-y-6">
-                    {
-                        routes.map((route) => (
-                            <TouchableOpacity
-                                key={route.name}
-                                onPress={() => router.push(route.path)}
-                                className='flex flex-row gap-x-4'
-                                activeOpacity={0.7}
-                            >
-                                <Image
-                                    source={route.icon}
-                                    style={{ width: route.width, height: route.height}}
-                                />
-                                <Text className="text-white font-medium text-lg">{route.name}</Text>
-                            </TouchableOpacity>
-                        ))
-                    }
-                </View>
-                
-            </ScrollView>
-        </SafeAreaView>
+        <NetworkProvider>
+            <SafeAreaView className="bg-background flex-1">
+                <ScrollView className='flex-1 p-6'>
+                    <Text className="text-white text-2xl font-bold">Settings</Text>
+                    <View className="w-full mt-10 flex flex-col gap-y-6">
+                        {
+                            routes.map((route) => (
+                                <TouchableOpacity
+                                    key={route.name}
+                                    onPress={() => router.push(route.path)}
+                                    className='flex flex-row gap-x-4'
+                                    activeOpacity={0.7}
+                                >
+                                    <Image
+                                        source={route.icon}
+                                        style={{ width: route.width, height: route.height}}
+                                    />
+                                    <Text className="text-white font-medium text-lg">{route.name}</Text>
+                                </TouchableOpacity>
+                            ))
+                        }
+                    </View>
+                    <Button
+                        className='h-14 rounded-full'
+                        onPress={()=>router.push({
+                            pathname : "/[playlistId]",
+                            params : {
+                                playlistId : "new"
+                            }
+                        })}
+                    >
+                        <Text className='font-semibold text-lg'>
+                            Add songs to this Playlist
+                        </Text>
+                    </Button>
+                </ScrollView>
+            </SafeAreaView>
+        </NetworkProvider>
     );
 }
 

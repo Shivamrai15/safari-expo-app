@@ -165,3 +165,18 @@ export type Lyrics = {
     lyrics: { lyrics : any[] };
     synced: boolean;
 }
+
+export type PlaylistResponse = PlayList & {
+     _count: {
+        songs: number;
+    };
+}
+
+export type PlaylistSongResponse = {
+    id: string;
+    songId: string;
+    playlistId: string;
+    createdAt: Date;
+    updatedAt: Date;
+    song: SongResponse;
+}

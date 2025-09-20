@@ -6,7 +6,8 @@ interface UseSongQueryProps {
     paramKey: string
     paramValue : string
     queryKey: string
-    token?: string
+    token?: string,
+    persist?: boolean
 }
 
 export const useInfinite = ({
@@ -14,7 +15,8 @@ export const useInfinite = ({
     paramKey,
     paramValue,
     queryKey,
-    token
+    token,
+    persist
 }: UseSongQueryProps) => {
 
     const fetchSongs = async ({ pageParam = undefined }) => {
@@ -47,13 +49,14 @@ export const useInfinite = ({
         isFetchingNextPage,
         status,
         error,
-        isLoading
+        isLoading,
     } = useInfiniteQuery({
         initialPageParam: undefined,
         queryKey: [queryKey, paramKey, paramValue],
         queryFn: fetchSongs,
         getNextPageParam: (lastPage) => lastPage?.nextCursor,
         refetchInterval: false,
+        meta: { persist: persist },
     });
 
     return {

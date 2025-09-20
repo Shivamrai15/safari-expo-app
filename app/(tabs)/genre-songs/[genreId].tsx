@@ -19,6 +19,7 @@ import { useInfinite } from "@/hooks/use-infinite";
 import Feather from "@expo/vector-icons/Feather";
 import { SongItem } from "@/ui/song/item";
 import { PUBLIC_BASE_URL } from "@/constants/api.config";
+import { NetworkProvider } from "@/providers/network.provider";
 
 const GenreSongs = () => {
     const { user } = useAuth();
@@ -67,52 +68,55 @@ const GenreSongs = () => {
     }
     
     return (
-        <SafeAreaView className="bg-background flex-1">
-            <ScrollView
-                onScroll={handleScroll}
-                scrollEventThrottle={16}
-            >
-                <Header
-                    id={data.id}
-                    type="genre"
-                    name={data.name}
-                    songCount={data._count.metadata}
-                    image={data.image}
-                />
-                <View className="w-full flex flex-col gap-y-6 px-6">
-                    <View className="w-full flex flex-row items-center justify-between gap-4">
-                        <View className="flex flex-row items-center gap-4 font-semibold text-lg">
-                            <Text className="w-14 text-white text-xl font-bold text-center">#</Text>
-                            <Text className="text-white text-xl font-semibold">Title</Text>
+        <NetworkProvider>
+            <SafeAreaView className="bg-background flex-1">
+                <ScrollView
+                    onScroll={handleScroll}
+                    scrollEventThrottle={16}
+                >
+                    <Header
+                        id={data.id}
+                        type="genre"
+                        name={data.name}
+                        songCount={data._count.metadata}
+                        image={data.image}
+                        color={data.color}
+                    />
+                    <View className="w-full flex flex-col gap-y-6 px-6">
+                        <View className="w-full flex flex-row items-center justify-between gap-4">
+                            <View className="flex flex-row items-center gap-4 font-semibold text-lg">
+                                <Text className="w-14 text-white text-xl font-bold text-center">#</Text>
+                                <Text className="text-white text-xl font-semibold">Title</Text>
+                            </View>
+                            <View className="flex items-center w-14 justify-center">
+                                <Feather name="clock" size={20} color="white" />
+                            </View>
                         </View>
-                        <View className="flex items-center w-14 justify-center">
-                            <Feather name="clock" size={20} color="white" />
-                        </View>
-                    </View>
-                    <View className="bg-zinc-600 h-0.5 w-full rounded-full"/>
-                    <View className='flex flex-col gap-y-5'>
-                        {
-                            songData?.pages.map((group, i)=>(
-                                    <Fragment key={i} >
-                                        {
-                                            group.items.map((song: SongResponse) => (
-                                                <SongItem key={song.id} data={song} />
-                                            ))
-                                        }
-                                    </Fragment>
-                                ))
+                        <View className="bg-zinc-600 h-0.5 w-full rounded-full"/>
+                        <View className='flex flex-col gap-y-5'>
+                            {
+                                songData?.pages.map((group, i)=>(
+                                        <Fragment key={i} >
+                                            {
+                                                group.items.map((song: SongResponse) => (
+                                                    <SongItem key={song.id} data={song} />
+                                                ))
+                                            }
+                                        </Fragment>
+                                    ))
 
-                        }
-                        {
-                            isFetchingNextPage && (<View className='w-full h-6'>
-                                <Loader />
-                            </View>)
-                        }
+                            }
+                            {
+                                isFetchingNextPage && (<View className='w-full h-6'>
+                                    <Loader />
+                                </View>)
+                            }
+                        </View>
                     </View>
-                </View>
-                <View className="h-40" />
-            </ScrollView>
-        </SafeAreaView>
+                    <View className="h-40" />
+                </ScrollView>
+            </SafeAreaView>
+        </NetworkProvider>
     )
 }
 

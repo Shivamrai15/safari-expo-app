@@ -10,6 +10,7 @@ import { LikedSongTracksResponse } from '@/types/response.types';
 import Loader from '@/components/loader';
 import { Error } from '@/components/error';
 import Feather from '@expo/vector-icons/Feather';
+import { NetworkProvider } from '@/providers/network.provider';
 
 const LikedSongs = () => {
 
@@ -24,7 +25,8 @@ const LikedSongs = () => {
             });
             return data.data as LikedSongTracksResponse[];
         },
-        queryKey: ["liked-songs"]
+        queryKey: ["liked-songs"],
+        meta: { persist: false },
     });
 
     if (isPending) {
@@ -38,41 +40,43 @@ const LikedSongs = () => {
     const songs = data.map(item => item.song);
 
     return (
-        <SafeAreaView className="flex-1 bg-background">
-            <ScrollView className="flex flex-col gap-y-10">
-                <LinearGradient
-                    colors={['#111111', '#87141b']}
-                    locations={[0.8, 1.0]}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 0, y: 1 }}
-                    style={{ height: "100%", width: "100%" }}
-                >
-                    <Header
-                        totalSongs={songs.length}
-                        songs={songs}
-                    />
-                    <View className="w-full flex flex-col gap-y-6 px-6">
-                        <View className="w-full flex flex-row items-center justify-between gap-4">
-                            <View className="flex flex-row items-center gap-4 font-semibold text-lg">
-                                <Text className="w-14 text-white text-xl font-bold text-center">#</Text>
-                                <Text className="text-white text-xl font-semibold">Title</Text>
+        <NetworkProvider>
+            <SafeAreaView className="flex-1 bg-background">
+                <ScrollView className="flex flex-col gap-y-10">
+                    <LinearGradient
+                        colors={['#111111', '#87141b']}
+                        locations={[0.8, 1.0]}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 0, y: 1 }}
+                        style={{ height: "100%", width: "100%" }}
+                    >
+                        <Header
+                            totalSongs={songs.length}
+                            songs={songs}
+                        />
+                        <View className="w-full flex flex-col gap-y-6 px-6">
+                            <View className="w-full flex flex-row items-center justify-between gap-4">
+                                <View className="flex flex-row items-center gap-4 font-semibold text-lg">
+                                    <Text className="w-14 text-white text-xl font-bold text-center">#</Text>
+                                    <Text className="text-white text-xl font-semibold">Title</Text>
+                                </View>
+                                <View className="flex items-center w-14 justify-center">
+                                    <Feather name="clock" size={20} color="white" />
+                                </View>
                             </View>
-                            <View className="flex items-center w-14 justify-center">
-                                <Feather name="clock" size={20} color="white" />
+                            <View className="bg-zinc-600 h-0.5 w-full rounded-full"/>
+                            <View className='flex flex-col gap-y-5'>
+                                {songs.map(song => (
+                                    <SongItem key={song.id} data={song} />
+                                ))}
                             </View>
                         </View>
-                        <View className="bg-zinc-600 h-0.5 w-full rounded-full"/>
-                        <View className='flex flex-col gap-y-5'>
-                            {songs.map(song => (
-                                <SongItem key={song.id} data={song} />
-                            ))}
-                        </View>
-                    </View>
-                    
-                </LinearGradient>
-                <View className="h-40" />
-            </ScrollView>
-        </SafeAreaView>
+                        
+                    </LinearGradient>
+                    <View className="h-40" />
+                </ScrollView>
+            </SafeAreaView>
+        </NetworkProvider>
     )
 }
 

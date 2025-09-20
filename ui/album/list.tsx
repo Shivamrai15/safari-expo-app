@@ -21,7 +21,7 @@ export const List = ({ data }: Props) => {
                     </View>
                 </View>
                 <View className="bg-zinc-600 h-0.5 w-full rounded-full"/>
-                <View className="flex flex-col gap-y-5">
+                <View className="flex flex-col gap-y-6">
                     {
                         data.map((item, index) => (
                             <Item key={item.id} song={item} index={index} />

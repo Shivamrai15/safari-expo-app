@@ -11,6 +11,7 @@ import { AlbumLabel } from "@/ui/album/label";
 import { fetcher } from "@/lib/fetcher";
 import { Error } from "@/components/error";
 import { useAuth } from "@/hooks/use-auth";
+import { NetworkProvider } from "@/providers/network.provider";
 
 
 const AlbumPage = () => {
@@ -39,26 +40,28 @@ const AlbumPage = () => {
     }
 
     return (
-        <SafeAreaView className="flex-1 bg-background">
-            <ScrollView className="w-full h-full">
-                <LinearGradient
-                    colors={['#111111', `${data.color}5a`]}
-                    locations={[0.8, 1.0]}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 0, y: 1 }}
-                    style={{ height: "100%", width: "100%" }}
-                >
-                    <Header data={data} />
-                    <List data={data.songs} />
-                    {
-                        data?.label && (
-                            <AlbumLabel label={data.label} releaseDate={data.release} />
-                        )
-                    }
-                </LinearGradient>
-                <View className="h-40" />
-            </ScrollView>
-        </SafeAreaView>
+        <NetworkProvider>
+            <SafeAreaView className="flex-1 bg-background">
+                <ScrollView className="w-full h-full flex-1">
+                    <LinearGradient
+                        colors={['#111111', `${data.color}5a`]}
+                        locations={[0.8, 1.0]}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 0, y: 1 }}
+                        style={{ height: "100%", width: "100%", flex: 1 }}
+                    >
+                        <Header data={data} />
+                        <List data={data.songs} />
+                        {
+                            data?.label && (
+                                <AlbumLabel label={data.label} releaseDate={data.release} />
+                            )
+                        }
+                    <View className="h-40" />
+                    </LinearGradient>
+                </ScrollView>
+            </SafeAreaView>
+        </NetworkProvider>
     )
 }
 

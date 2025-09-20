@@ -1,20 +1,20 @@
 import { Image } from 'expo-image';
 import { View, Text } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+
 import { ShuffleButton } from '../song/shuffle-button';
-import { MoodPlayButton } from './mood-play-button';
-import { GenrePlayButton } from './genre-play-button';
+import { PlayButton } from './play-button';
+
 
 interface Props {
+    name: string;
+    image?: string;
+    songCount: number;
     id : string;
-    type : "mood" | "genre";
-    name : string;
-    songCount : number;
-    image : string;
-    color : string;
+    color?: string;
 }
 
-export const Header = ({ id, type, name, songCount, image, color }: Props) => {
+export const Header = ({ name, image, songCount, id, color="#242424" }: Props) => {
     return (
         <LinearGradient
             colors={[color, '#111111']}
@@ -29,7 +29,7 @@ export const Header = ({ id, type, name, songCount, image, color }: Props) => {
                 <View className="flex flex-col items-center">
                     <View className="relative shrink-0 aspect-square h-44 w-44 overflow-hidden rounded-lg">
                         <Image
-                            source={{ uri: image }}
+                            source={image ? { uri: image } : require("@/assets/images/playlist.png")}
                             style={{
                                 width: '100%',
                                 height: '100%',
@@ -47,11 +47,9 @@ export const Header = ({ id, type, name, songCount, image, color }: Props) => {
                             </Text>
                         </View>
                         <View className="flex flex-row justify-center items-center gap-6 pt-2">
-                            {
-                                type === "mood" ?
-                                <MoodPlayButton id={id} />
-                                : <GenrePlayButton id={id} />
-                            }
+                            <PlayButton
+                                playlistId={id}
+                            />
                             <ShuffleButton />
                             {/* 
                                 TODO :

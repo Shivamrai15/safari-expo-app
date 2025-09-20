@@ -1,5 +1,6 @@
 import { Button } from '@/components/button';
 import { cn } from '@/lib/utils';
+import { NetworkProvider } from '@/providers/network.provider';
 import { Genre } from '@/ui/browse/genre';
 import { Moods } from '@/ui/browse/moods';
 import { useState } from 'react';
@@ -20,55 +21,57 @@ const Browse = () => {
     };
 
     return (
-        <SafeAreaView className="bg-background flex-1">
-            <ScrollView
-                className='flex-1'
-                stickyHeaderIndices={[0]}
-                onScroll={handleScroll}
-                scrollEventThrottle={16}
-            >
-                <View className='flex flex-row items-center gap-x-4 p-4 bg-background'>
-                    <Button 
-                        variant={activeTab === "genre" ? "primary" : "secondary"}
-                        className="rounded-full px-4 h-10"
-                        onPress={()=>setActiveTab("genre")}
-                    >
-                        <Text
-                            className={cn(
-                                "font-semibold",
-                                activeTab === "genre" ? "text-zinc-900" : "text-zinc-300"
-                            )}
+        <NetworkProvider>
+            <SafeAreaView className="bg-background flex-1">
+                <ScrollView
+                    className='flex-1'
+                    stickyHeaderIndices={[0]}
+                    onScroll={handleScroll}
+                    scrollEventThrottle={16}
+                >
+                    <View className='flex flex-row items-center gap-x-4 p-4 bg-background'>
+                        <Button 
+                            variant={activeTab === "genre" ? "primary" : "secondary"}
+                            className="rounded-full px-4 h-10"
+                            onPress={()=>setActiveTab("genre")}
                         >
-                            Genre
-                        </Text>
-                    </Button>
-                    <Button
-                        variant={activeTab === "mood" ? "primary" : "secondary"}
-                        className="rounded-full px-4 h-10"
-                        onPress={()=>setActiveTab("mood")}
-                    >
-                        <Text
-                            className={cn(
-                                "font-semibold",
-                                activeTab === "mood" ? "text-zinc-900" : "text-zinc-300"
-                            )}
+                            <Text
+                                className={cn(
+                                    "font-semibold",
+                                    activeTab === "genre" ? "text-zinc-900" : "text-zinc-300"
+                                )}
+                            >
+                                Genre
+                            </Text>
+                        </Button>
+                        <Button
+                            variant={activeTab === "mood" ? "primary" : "secondary"}
+                            className="rounded-full px-4 h-10"
+                            onPress={()=>setActiveTab("mood")}
                         >
-                            Moods
-                        </Text>
-                    </Button>
-                </View>
-                <View className='mt-10 px-4'>
-                    {
-                        activeTab === "genre" ? (
-                            <Genre />
-                        ) : (
-                            <Moods isAtEnd={atEnd} />
-                        )
-                    }
-                </View>
-                <View className='h-20' />
-            </ScrollView>
-        </SafeAreaView>
+                            <Text
+                                className={cn(
+                                    "font-semibold",
+                                    activeTab === "mood" ? "text-zinc-900" : "text-zinc-300"
+                                )}
+                            >
+                                Moods
+                            </Text>
+                        </Button>
+                    </View>
+                    <View className='mt-10 px-4'>
+                        {
+                            activeTab === "genre" ? (
+                                <Genre />
+                            ) : (
+                                <Moods isAtEnd={atEnd} />
+                            )
+                        }
+                    </View>
+                    <View className='h-20' />
+                </ScrollView>
+            </SafeAreaView>
+        </NetworkProvider>
     );
 }
 

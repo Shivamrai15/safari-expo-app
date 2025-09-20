@@ -10,6 +10,7 @@ import { differenceBetweenHistory, historyPartition } from '@/lib/utils';
 import { SongItem } from '@/ui/song/item';
 import { PROTECTED_BASE_URL } from '@/constants/api.config';
 import { useAuth } from '@/hooks/use-auth';
+import { NetworkProvider } from '@/providers/network.provider';
 
 
 
@@ -30,7 +31,8 @@ const History = () => {
         paramKey : "" ,
         paramValue : "",
         queryKey:"user-history",
-        token : user?.token
+        token : user?.token,
+        persist : false
     });
 
     useEffect(()=>{
@@ -52,46 +54,48 @@ const History = () => {
     }
 
     return (
-        <SafeAreaView className='flex-1 bg-background'>
-            <ScrollView className='flex-1 p-4' onScroll={handleScroll} scrollEventThrottle={16} >
-                <Text className='text-white text-2xl font-bold'>Your History</Text>
-                <View className='flex flex-col mt-10 gap-y-6'>
+        <NetworkProvider>
+            <SafeAreaView className='flex-1 bg-background'>
+                <ScrollView className='flex-1 p-4' onScroll={handleScroll} scrollEventThrottle={16} >
+                    <Text className='text-white text-2xl font-bold'>Your History</Text>
+                    <View className='flex flex-col mt-10 gap-y-6'>
+                        {
+                            data?.pages.map((group, i)=>(
+                                <Fragment key={i} >
+                                    {
+                                        group.items.map((history : HistoryItem, idx : number ) => (
+                                            <Fragment key={history.id}>
+                                                {
+                                                    idx===0 && i===0 && ( isSameDay(new Date(history.createdAt), new Date()) ? 
+                                                        (<Label label="Today" />):
+                                                        (<Label label={differenceBetweenHistory(new Date(), new Date(history.createdAt))} />)
+                                                    )
+                                                }
+                                                <View className='w-full flex flex-col gap-y-0.5'>
+                                                    <Text className='text-sm text-zinc-400'>
+                                                        { format(new Date(history.createdAt), "hh:mm a")}
+                                                    </Text>
+                                                    <SongItem data={history.song} />
+                                                </View>
+                                                {
+                                                    <Label label={historyPartition(data?.pages, i, group.items, idx)} />
+                                                }
+                                            </Fragment>
+                                        ))
+                                    }
+                                </Fragment>
+                            ))
+                        }
+                    </View>
                     {
-                        data?.pages.map((group, i)=>(
-                            <Fragment key={i} >
-                                {
-                                    group.items.map((history : HistoryItem, idx : number ) => (
-                                        <Fragment key={history.id}>
-                                            {
-                                                idx===0 && i===0 && ( isSameDay(new Date(history.createdAt), new Date()) ? 
-                                                    (<Label label="Today" />):
-                                                    (<Label label={differenceBetweenHistory(new Date(), new Date(history.createdAt))} />)
-                                                )
-                                            }
-                                            <View className='w-full flex flex-col gap-y-0.5'>
-                                                <Text className='text-sm text-zinc-400'>
-                                                    { format(new Date(history.createdAt), "hh:mm a")}
-                                                </Text>
-                                                <SongItem data={history.song} />
-                                            </View>
-                                            {
-                                                <Label label={historyPartition(data?.pages, i, group.items, idx)} />
-                                            }
-                                        </Fragment>
-                                    ))
-                                }
-                            </Fragment>
-                        ))
+                        isFetchingNextPage && (<View className='w-full h-6'>
+                            <Loader />
+                        </View>)
                     }
-                </View>
-                {
-                    isFetchingNextPage && (<View className='w-full h-6'>
-                        <Loader />
-                    </View>)
-                }
-                <View className='h-40' />
-            </ScrollView>
-        </SafeAreaView>
+                    <View className='h-40' />
+                </ScrollView>
+            </SafeAreaView>
+        </NetworkProvider>
     )
 }
 
