@@ -9,9 +9,9 @@ import {
     Text,
     View
 } from 'react-native';
-import { Button } from '@/components/button';
-import { Input } from '@/components/input';
-import GoogleOauth from '@/ui/auth/google-oauth';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import GoogleOauth from '@/components/auth/google-oauth';
 import { AUTH_BASE_URL } from '@/constants/api.config';
 
 const SignUp = () => {

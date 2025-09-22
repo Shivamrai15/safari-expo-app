@@ -11,13 +11,13 @@ import {
 import { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/button';
+import { Button } from '@/components/ui/button';
 import { SearchIcon } from '@/constants/icons';
 import { Tab } from '@/types/response.types';
-import { AllTab } from '@/ui/search/all-tab';
-import { AlbumTab } from '@/ui/search/album-tab';
-import { ArtistTab } from '@/ui/search/artist-tab';
-import { SongTab } from '@/ui/search/song-tab';
+import { AllTab } from '@/components/search/all-tab';
+import { AlbumTab } from '@/components/search/album-tab';
+import { ArtistTab } from '@/components/search/artist-tab';
+import { SongTab } from '@/components/search/song-tab';
 import { NetworkProvider } from '@/providers/network.provider';
 
 

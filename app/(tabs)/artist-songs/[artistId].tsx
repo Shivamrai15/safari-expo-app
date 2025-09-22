@@ -1,18 +1,23 @@
-import { Error } from "@/components/error";
-import Loader from "@/components/loader";
+import { Image } from "expo-image";
+import { useEffect, useState } from "react";
+import { useLocalSearchParams } from "expo-router";
+import {
+    Text,
+    View,
+    ScrollView,
+    NativeScrollEvent,
+    NativeSyntheticEvent,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import Loader from "@/components/ui/loader";
+import { Error } from "@/components/ui/error";
 import { useAuth } from "@/hooks/use-auth";
 import { fetcher } from "@/lib/fetcher";
 import { NetworkProvider } from "@/providers/network.provider";
 import { ArtistProfileResponse } from "@/types/response.types";
-import { Songs } from "@/ui/artist/songs";
+import { Songs } from "@/components/artist/songs";
 import Entypo from "@expo/vector-icons/Entypo";
 import { useQuery } from "@tanstack/react-query";
-import { Image } from "expo-image";
-import { useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
-import { NativeScrollEvent, NativeSyntheticEvent, View } from "react-native";
-import { ScrollView, Text } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 
 const ArtistSongs = () => {

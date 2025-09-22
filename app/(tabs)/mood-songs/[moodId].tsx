@@ -1,23 +1,23 @@
 import { Fragment, useEffect, useState } from "react";
 import {
+    View,
+    Text,
+    ScrollView,
     NativeScrollEvent,
     NativeSyntheticEvent,
-    ScrollView,
-    Text,
-    View
 } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useQuery } from "@tanstack/react-query";
-import { Error } from "@/components/error";
-import Loader from "@/components/loader";
+import { Error } from "@/components/ui/error";
+import Loader from "@/components/ui/loader";
 import { useAuth } from "@/hooks/use-auth";
 import { fetcher } from "@/lib/fetcher";
 import { MoodResponse, SongResponse } from "@/types/response.types";
-import { Header } from "@/ui/browse/header";
+import { Header } from "@/components/browse/header";
 import { useInfinite } from "@/hooks/use-infinite";
 import Feather from "@expo/vector-icons/Feather";
-import { SongItem } from "@/ui/song/item";
+import { SongItem } from "@/components/song/item";
 import { PUBLIC_BASE_URL } from "@/constants/api.config";
 import { NetworkProvider } from "@/providers/network.provider";
 

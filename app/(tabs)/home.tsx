@@ -6,13 +6,13 @@ import { useQueries } from "@tanstack/react-query";
 
 import { useAuth } from "@/hooks/use-auth";
 import { fetcher } from "@/lib/fetcher";
-import { Error } from "@/components/error";
-import Loader from "@/components/loader";
-import { AlbumCarousel } from "@/ui/carousel/album";
-import { TrendingSongs } from "@/ui/carousel/trending-songs";
-import { Button } from "@/components/button";
-import { ListenAgainCarousel } from "@/ui/carousel/listen-again";
-import { ArtistCarousel } from "@/ui/carousel/artist";
+import { Error } from "@/components/ui/error";
+import Loader from "@/components/ui/loader";
+import { AlbumCarousel } from "@/components/carousel/album";
+import { TrendingSongs } from "@/components/carousel/trending-songs";
+import { Button } from "@/components/ui/button";
+import { ListenAgainCarousel } from "@/components/carousel/listen-again";
+import { ArtistCarousel } from "@/components/carousel/artist";
 import { NetworkProvider } from "@/providers/network.provider";
 
 const Home = () => {
@@ -106,7 +106,7 @@ const Home = () => {
                     <View className="flex flex-row items-center gap-x-6 mt-16">
                         <Image
                             source={ user?.user?.image ? { uri: user?.user.image } : require('@/assets/images/user.png') }
-                            style={{ height: 72, width: 72, borderRadius: "100%" }}
+                            style={{ height: 72, width: 72 }}
                         />
                         <View className="flex flex-col gap-y-0.5">
                             <Text className="text-xl font-bold text-zinc-400">{user?.user.name}</Text>

@@ -3,7 +3,7 @@ import { ImageBackground } from 'expo-image';
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import WelcomeImage from '@/assets/images/welcome.avif';
-import { Button } from '@/components/button';
+import { Button } from '@/components/ui/button';
 import { router } from 'expo-router';
 
 const Welcome = () => {

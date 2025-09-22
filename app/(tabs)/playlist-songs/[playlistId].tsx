@@ -13,15 +13,15 @@ import { useAuth } from '@/hooks/use-auth';
 import { useQuery } from '@tanstack/react-query';
 import { fetcher } from '@/lib/fetcher';
 import { NetworkProvider } from '@/providers/network.provider';
-import Loader from '@/components/loader';
-import { Error } from '@/components/error';
+import Loader from '@/components/ui/loader';
+import { Error } from '@/components/ui/error';
 import { PlaylistResponse, PlaylistSongResponse } from '@/types/response.types';
-import { Header } from '@/ui/playlist/header';
+import { Header } from '@/components/playlist/header';
 import Feather from '@expo/vector-icons/Feather';
 import { PROTECTED_BASE_URL } from '@/constants/api.config';
 import { useInfinite } from '@/hooks/use-infinite';
-import { SongItem } from '@/ui/song/item';
-import { Button } from '@/components/button';
+import { SongItem } from '@/components/song/item';
+import { Button } from '@/components/ui/button';
 
 
 const PlaylistSongs = () => {
@@ -125,6 +125,7 @@ const PlaylistSongs = () => {
                                             }
                                         })}
                                         variant='secondary'
+                                        disabled
                                     >
                                         <Text className='font-semibold text-white'>
                                             Add songs to this Playlist

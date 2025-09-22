@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { SearchList } from '@/ui/playlist/search-list';
+import { SearchList } from '@/components/playlist/search-list';
 import { SearchIcon } from '@/constants/icons';
 
 const PlaylistSearch = () => {

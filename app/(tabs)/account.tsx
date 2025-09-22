@@ -4,7 +4,6 @@ import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { DownloadIcon, HistoryIcon, PlaylistRecoverIcon, ReceiptIcon, UserIcon } from '@/constants/icons';
 import { NetworkProvider } from '@/providers/network.provider';
-import { Button } from '@/components/button';
 
 
 const Account = () => {
@@ -12,7 +11,7 @@ const Account = () => {
     const routes : { path: Href, name: string, icon: any, height: number, width: number }[] = [
         {
             name : "Your profile",
-            path : "/",
+            path : "/(tabs)/account/profile",
             icon : UserIcon,
             height: 24,
             width: 24
@@ -70,19 +69,6 @@ const Account = () => {
                             ))
                         }
                     </View>
-                    <Button
-                        className='h-14 rounded-full'
-                        onPress={()=>router.push({
-                            pathname : "/[playlistId]",
-                            params : {
-                                playlistId : "new"
-                            }
-                        })}
-                    >
-                        <Text className='font-semibold text-lg'>
-                            Add songs to this Playlist
-                        </Text>
-                    </Button>
                 </ScrollView>
             </SafeAreaView>
         </NetworkProvider>

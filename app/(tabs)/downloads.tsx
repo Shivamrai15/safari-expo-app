@@ -2,10 +2,10 @@ import { Redirect } from 'expo-router';
 import { Text, ScrollView, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Button } from '@/components/button';
+import { Button } from '@/components/ui/button';
 import { useDownloads } from '@/hooks/use-downloads';
 import { useSettings } from '@/hooks/use-settings';
-import { OfflineItem } from '@/ui/song/offline-item';
+import { OfflineItem } from '@/components/song/offline-item';
 import { NetworkProvider } from '@/providers/network.provider';
 
 

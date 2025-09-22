@@ -1,21 +1,21 @@
-import { Button } from "@/components/button";
-import { Error } from "@/components/error";
-import Loader from "@/components/loader";
+import { router, useLocalSearchParams } from "expo-router";
+import { ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Button } from "@/components/ui/button";
+import { Error } from "@/components/ui/error";
+import Loader from "@/components/ui/loader";
 import { useAuth } from "@/hooks/use-auth";
 import { fetcher } from "@/lib/fetcher";
 import { NetworkProvider } from "@/providers/network.provider";
 import { Album, ArtistResponse } from "@/types/response.types";
-import { BioCard } from "@/ui/artist/bio";
-import { Header } from "@/ui/artist/header";
-import { PlayButton } from "@/ui/artist/play-button";
-import { SubscribeButton } from "@/ui/artist/subscribe-button";
-import { AlbumCarousel } from "@/ui/carousel/album";
-import { SongItem } from "@/ui/song/item";
-import { ShuffleButton } from "@/ui/song/shuffle-button";
+import { BioCard } from "@/components/artist/bio";
+import { Header } from "@/components/artist/header";
+import { PlayButton } from "@/components/artist/play-button";
+import { SubscribeButton } from "@/components/artist/subscribe-button";
+import { AlbumCarousel } from "@/components/carousel/album";
+import { SongItem } from "@/components/song/item";
+import { ShuffleButton } from "@/components/song/shuffle-button";
 import { useQueries } from "@tanstack/react-query";
-import { router, useLocalSearchParams } from "expo-router";
-import { ScrollView, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 
 const ArtistPage = () => {

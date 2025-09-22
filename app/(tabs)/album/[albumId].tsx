@@ -4,12 +4,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Loader from "@/components/loader";
-import { Header } from "@/ui/album/header";
-import { List } from "@/ui/album/list";
-import { AlbumLabel } from "@/ui/album/label";
+import Loader from "@/components/ui/loader";
+import { Header } from "@/components/album/header";
+import { List } from "@/components/album/list";
+import { AlbumLabel } from "@/components/album/label";
 import { fetcher } from "@/lib/fetcher";
-import { Error } from "@/components/error";
+import { Error } from "@/components/ui/error";
 import { useAuth } from "@/hooks/use-auth";
 import { NetworkProvider } from "@/providers/network.provider";
 

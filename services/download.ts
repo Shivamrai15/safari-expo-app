@@ -1,6 +1,6 @@
-import * as FileSystem from "expo-file-system";
-import { useDownloads, DownloadedSong } from "@/hooks/use-downloads";
+import { DownloadedSong, useDownloads } from "@/hooks/use-downloads";
 import { SongResponse } from "@/types/response.types";
+import { Directory, File, Paths } from "expo-file-system";
 
 interface DownloadProgress {
     totalBytes: number;
@@ -68,7 +68,7 @@ export class DownloadManager {
                 "_"
             )}.m3u8`;
 
-            const localPath = `${downloadsDir}/${fileName}`;
+            const localPath = new File(downloadsDir, fileName).uri;
             
             // Download both M3U8 and image in background
             const success = await this.downloadSongAndImageBackground(
@@ -158,23 +158,22 @@ export class DownloadManager {
             // Get image file extension from URL
             const imageExtension = this.getImageExtension(imageUrl);
             const imageFileName = `${songId}_image.${imageExtension}`;
-            const imageLocalPath = `${downloadsDir}/${imageFileName}`;
+            const imageFile = new File(downloadsDir, imageFileName);
 
             // Check if image already exists
-            const imageInfo = await FileSystem.getInfoAsync(imageLocalPath);
-            if (imageInfo.exists) {
+            if (imageFile.exists) {
                 console.log(`Image already exists for song ${songId}`);
-                return imageLocalPath;
+                return imageFile.uri;
             }
 
             // Download the image
-            const downloadResult = await FileSystem.downloadAsync(imageUrl, imageLocalPath);
+            const downloadedImageFile = await File.downloadFileAsync(imageUrl, imageFile);
             
-            if (downloadResult.status === 200) {
+            if (downloadedImageFile.exists) {
                 console.log(`Downloaded image for song ${songId}`);
-                return imageLocalPath;
+                return downloadedImageFile.uri;
             } else {
-                console.error(`Failed to download image: ${downloadResult.status}`);
+                console.error(`Failed to download image`);
                 return null;
             }
 
@@ -234,14 +233,12 @@ export class DownloadManager {
             }
 
             const songDir = localPath.replace(".m3u8", "");
-            const segmentsDir = `${songDir}_segments`;
+            const segmentsDirName = `${songDir}_segments`;
+            const segmentsDir = new Directory(segmentsDirName);
 
             // Ensure directory exists
-            const dirInfo = await FileSystem.getInfoAsync(segmentsDir);
-            if (!dirInfo.exists) {
-                await FileSystem.makeDirectoryAsync(segmentsDir, {
-                    intermediates: true,
-                });
+            if (!segmentsDir.exists) {
+                segmentsDir.create({ intermediates: true });
             }
 
             // Total files: M3U8 + segments + image (image already downloaded, so start at 2/total)
@@ -280,10 +277,11 @@ export class DownloadManager {
             const localM3U8Content = this.createLocalM3U8(
                 playlistContent,
                 downloadedSegments,
-                (segmentFileName) => `${segmentsDir.split("/").pop()}/${segmentFileName}`
+                (segmentFileName) => `${segmentsDir.name}/${segmentFileName}`
             );
 
-            await FileSystem.writeAsStringAsync(localPath, localM3U8Content);
+            const m3u8File = new File(localPath);
+            m3u8File.write(localM3U8Content);
             updateSongProgress(songId, 100);
 
             return true;
@@ -300,7 +298,7 @@ export class DownloadManager {
 
     private async downloadSegmentsBackground(
         segmentUrls: string[],
-        segmentsDir: string,
+        segmentsDir: Directory,
         songId: string,
         signal: AbortSignal,
         onProgress: (progress: { completed: number; total: number }) => void
@@ -319,22 +317,21 @@ export class DownloadManager {
             const batchPromises = batch.map(async (segmentUrl, batchIndex) => {
                 const globalIndex = i + batchIndex;
                 const segmentFileName = this.getSegmentFileName(segmentUrl, globalIndex);
-                const segmentLocalPath = `${segmentsDir}/${segmentFileName}`;
+                const segmentFile = new File(segmentsDir, segmentFileName);
 
                 try {
                     // Check if file already exists
-                    const fileInfo = await FileSystem.getInfoAsync(segmentLocalPath);
-                    if (fileInfo.exists) {
+                    if (segmentFile.exists) {
                         return segmentFileName;
                     }
 
-                    // Use downloadAsync which runs in background
-                    const downloadResult = await FileSystem.downloadAsync(segmentUrl, segmentLocalPath);
+                    // Use downloadFileAsync which runs in background
+                    const downloadedFile = await File.downloadFileAsync(segmentUrl, segmentFile);
                     
-                    if (downloadResult.status === 200) {
+                    if (downloadedFile.exists) {
                         return segmentFileName;
                     } else {
-                        console.error(`Failed to download segment: ${downloadResult.status}`);
+                        console.error(`Failed to download segment`);
                         return null;
                     }
                 } catch (err: any) {
@@ -456,13 +453,12 @@ export class DownloadManager {
         return newLines.join("\n");
     }
 
-    private async ensureDownloadsDirectory(): Promise<string> {
-        const downloadsDir = `${FileSystem.documentDirectory}downloads`;
+    private async ensureDownloadsDirectory(): Promise<Directory> {
+        const downloadsDir = new Directory(Paths.document, "downloads");
         
         try {
-            const dirInfo = await FileSystem.getInfoAsync(downloadsDir);
-            if (!dirInfo.exists) {
-                await FileSystem.makeDirectoryAsync(downloadsDir, { intermediates: true });
+            if (!downloadsDir.exists) {
+                downloadsDir.create({ intermediates: true });
             }
         } catch (error) {
             console.error("Error creating downloads directory:", error);
@@ -492,16 +488,16 @@ export class DownloadManager {
 
         try {
             // Delete the M3U8 file
-            const fileInfo = await FileSystem.getInfoAsync(song.download.localPath);
-            if (fileInfo.exists) {
-                await FileSystem.deleteAsync(song.download.localPath, { idempotent: true });
+            const m3u8File = new File(song.download.localPath);
+            if (m3u8File.exists) {
+                m3u8File.delete();
             }
 
             // Delete the segments directory
-            const segmentsDir = song.download.localPath.replace(".m3u8", "") + "_segments";
-            const segmentsDirInfo = await FileSystem.getInfoAsync(segmentsDir);
-            if (segmentsDirInfo.exists) {
-                await FileSystem.deleteAsync(segmentsDir, { idempotent: true });
+            const segmentsDirPath = song.download.localPath.replace(".m3u8", "") + "_segments";
+            const segmentsDir = new Directory(segmentsDirPath);
+            if (segmentsDir.exists) {
+                segmentsDir.delete();
             }
 
             // Delete the image file
@@ -510,11 +506,10 @@ export class DownloadManager {
             
             for (const ext of imageExtensions) {
                 const imageFileName = `${songId}_image.${ext}`;
-                const imageLocalPath = `${downloadsDir}/${imageFileName}`;
-                const imageInfo = await FileSystem.getInfoAsync(imageLocalPath);
-                if (imageInfo.exists) {
-                    await FileSystem.deleteAsync(imageLocalPath, { idempotent: true });
-                    console.log(`Deleted image: ${imageLocalPath}`);
+                const imageFile = new File(downloadsDir, imageFileName);
+                if (imageFile.exists) {
+                    imageFile.delete();
+                    console.log(`Deleted image: ${imageFile.uri}`);
                     break;
                 }
             }

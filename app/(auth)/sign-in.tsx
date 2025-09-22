@@ -8,9 +8,9 @@ import {
     ScrollView,
     KeyboardAvoidingView,
 } from 'react-native';
-import { Button } from '@/components/button';
-import { Input } from '@/components/input';
-import GoogleOauth from '@/ui/auth/google-oauth';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import GoogleOauth from '@/components/auth/google-oauth';
 import { useMutation } from '@tanstack/react-query';
 import { AUTH_BASE_URL } from '@/constants/api.config';
 import { User } from '@/types/auth.types';
@@ -33,7 +33,7 @@ const SignIn = () => {
         onSuccess(data : User) {
             alert("User logged in successfully!");
             setUser(data);
-            router.replace("/(tabs)/home")
+            router.replace("/(tabs)/home");
         },
         onError(error) {
             if (axios.isAxiosError(error)) {
@@ -72,7 +72,7 @@ const SignIn = () => {
                             <Text className='text-white text-lg font-semibold'>Continue</Text>
                         </Button>
                         <Link href='/(auth)/sign-up'>
-                            <Text className='text-white font-medium'>Don't have an account? Sign Up</Text>
+                            <Text className='text-white font-medium'>Don&apos;t have an account? Sign Up</Text>
                         </Link>
                     </View>
                     <View className='relative'>

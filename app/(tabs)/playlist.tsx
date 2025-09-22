@@ -1,15 +1,15 @@
-import { Error } from '@/components/error';
-import Loader from '@/components/loader';
+import { router } from 'expo-router';
+import { Error } from '@/components/ui/error';
+import Loader from '@/components/ui/loader';
 import { useAuth } from '@/hooks/use-auth';
 import { fetcher } from '@/lib/fetcher';
 import { NetworkProvider } from '@/providers/network.provider';
 import { Artist, PlayList } from '@/types/response.types';
-import { Card } from '@/ui/artist/card';
+import { Card } from '@/components/artist/card';
 import { Image } from 'expo-image';
 import { useQueries } from '@tanstack/react-query';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 
 const Playlist = () => {

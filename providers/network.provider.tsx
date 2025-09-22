@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NetInfo from "@react-native-community/netinfo";
 
-import { Button } from '@/components/button';
+import { Button } from '@/components/ui/button';
 
 interface Props {
     children: React.ReactNode;

@@ -1,14 +1,14 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { View, Text, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Header } from '@/ui/liked/header';
-import { SongItem } from '@/ui/song/item';
+import { Header } from '@/components/liked/header';
+import { SongItem } from '@/components/song/item';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/use-auth';
 import { fetcher } from '@/lib/fetcher';
 import { LikedSongTracksResponse } from '@/types/response.types';
-import Loader from '@/components/loader';
-import { Error } from '@/components/error';
+import Loader from '@/components/ui/loader';
+import { Error } from '@/components/ui/error';
 import Feather from '@expo/vector-icons/Feather';
 import { NetworkProvider } from '@/providers/network.provider';
 

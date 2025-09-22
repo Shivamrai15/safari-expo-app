@@ -1,13 +1,13 @@
 import { View, Text, ScrollView, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useInfinite } from '@/hooks/use-infinite';
-import Loader from '@/components/loader';
-import { Error } from '@/components/error';
+import Loader from '@/components/ui/loader';
+import { Error } from '@/components/ui/error';
 import { format , isSameDay} from "date-fns";
 import { Fragment, useEffect, useState } from 'react';
 import { HistoryItem } from '@/types/response.types';
 import { differenceBetweenHistory, historyPartition } from '@/lib/utils';
-import { SongItem } from '@/ui/song/item';
+import { SongItem } from '@/components/song/item';
 import { PROTECTED_BASE_URL } from '@/constants/api.config';
 import { useAuth } from '@/hooks/use-auth';
 import { NetworkProvider } from '@/providers/network.provider';

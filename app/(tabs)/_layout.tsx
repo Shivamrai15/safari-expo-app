@@ -13,7 +13,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQueue } from '@/hooks/use-queue';
-import { Player } from '@/ui/song/player';
+import { Player } from '@/components/song/player';
 
 
 const Layout = () => {

@@ -1,8 +1,8 @@
-import { Button } from '@/components/button';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { NetworkProvider } from '@/providers/network.provider';
-import { Genre } from '@/ui/browse/genre';
-import { Moods } from '@/ui/browse/moods';
+import { Genre } from '@/components/browse/genre';
+import { Moods } from '@/components/browse/moods';
 import { useState } from 'react';
 import { NativeScrollEvent, NativeSyntheticEvent, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
