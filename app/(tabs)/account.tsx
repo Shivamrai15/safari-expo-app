@@ -18,7 +18,7 @@ const Account = () => {
         },
         {
             name : "Delete history",
-            path : "/",
+            path : "/(tabs)/account/delete-history",
             icon : HistoryIcon,
             height: 24,
             width: 24

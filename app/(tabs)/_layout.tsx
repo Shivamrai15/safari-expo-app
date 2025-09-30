@@ -197,6 +197,13 @@ const Layout = () => {
 					}}
 				/>
 				<Tabs.Screen 
+					name="account/delete-history" 
+					options={{
+						tabBarIcon : ()=>null,
+						href : null
+					}}
+				/>
+				<Tabs.Screen 
 					name="liked-songs" 
 					options={{
 						tabBarIcon : ()=>null,

@@ -9,8 +9,8 @@ import {
     TouchableOpacity,
     View
 } from 'react-native';
-import { Image, ImageBackground } from 'expo-image';
-import { BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import { Image } from 'expo-image';
+import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Album, Song } from '@/types/response.types';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -30,7 +30,8 @@ import {
 } from '@/constants/icons';
 import { useQueue } from '@/hooks/use-queue';
 import usePlayerSettings from '@/hooks/use-player-settings';
-import { Lyrics } from './lyrics';
+import Entypo from '@expo/vector-icons/Entypo';
+
 
 interface Props {
     data : Song & { album: Album };
@@ -44,8 +45,6 @@ interface Props {
     isOffline: boolean;
 }
 
-const { height: screenHeight } = Dimensions.get('window');
-
 export const Sheet = ({
     data,
     isOpen,
@@ -57,8 +56,6 @@ export const Sheet = ({
     handlePlayPause,
     isOffline
 }: Props) => {
-    
-    const safeAreaHeight = screenHeight;
 
     const insets = useSafeAreaInsets();
     const { pop, deQueue, shuffle } = useQueue();
@@ -74,8 +71,6 @@ export const Sheet = ({
         }
     }, [isOpen]);
 
-    
-
     return (
         <BottomSheetModal
             ref={bottomSheetModalRef}
@@ -90,183 +85,186 @@ export const Sheet = ({
             topInset={insets.top}
             bottomInset={insets.bottom}
         >
-            <BottomSheetScrollView
-                showsVerticalScrollIndicator={true}
-                contentInsetAdjustmentBehavior="automatic"
-                nestedScrollEnabled={true}
+            <BottomSheetView
+                style={{ flex: 1 }}
             >
-                <View
+                <LinearGradient
+                    colors={[`${data.album.color}5e`, "#111111"]}
                     style={{
-                        height: safeAreaHeight,
-                        width: '100%'
+                        flex : 1,
+                        display : "flex",
+                        flexDirection : "column",
+                        justifyContent : "space-between",
+                        gap : 24
                     }}
                 >
-                    <ImageBackground
-                        source={{
-                            uri: data.image
-                        }}
-                        style={{
-                            height: '100%',
-                            width: '100%',
-                            flex : 1,
-                            
-                        }}
-                    >
-                        <LinearGradient
-                            colors={['transparent', 'rgba(17,17,17,0.5)','#111111']}
-                            locations={[0, 0.6, 0.95]}
-                            style={{ 
-                                height: '100%',
-                                width: '100%',
-                            }}
-                        >
-                            <View className='h-full flex justify-end w-full py-4' style={{ backgroundColor: 'rgba(17,17,17,0.3)'}} >
-                                <View className='flex flex-col gap-y-4 px-2 py-10'>
-                                    <View className='flex flex-row items-center gap-x-4 px-4'>
-                                        <Text className='text-white text-2xl font-bold flex-1' numberOfLines={1} ellipsizeMode='tail'>
-                                            {data.name}
+                    <View className='flex flex-col gap-y-4 flex-1'>
+                        <View className='p-6 flex-row items-center justify-between'>
+                            <TouchableOpacity
+                                activeOpacity={0.7}
+                                onPress={onClose}
+                            >
+                                <Entypo name="chevron-down" size={24} color="white" />
+                            </TouchableOpacity>
+                        </View>
+                        <View className='flex-1 flex flex-col items-center gap-y-6'>
+                            <View className='px-6'>
+                                <View className='w-full aspect-square rounded-2xl overflow-hidden bg-neutral-800'>
+                                    <Image
+                                        source={{ uri: data.image }}
+                                        style={{ width: "100%", height: "100%" }}
+                                        contentFit='cover'
+                                    />
+                                </View>
+                            </View>
+                            <View className='flex flex-col gap-y-4 px-4 py-10'>
+                                <View className='flex flex-row items-center gap-x-4 px-4'>
+                                    <Text className='text-white text-2xl font-bold flex-1' numberOfLines={1} ellipsizeMode='tail'>
+                                        {data.name}
+                                    </Text>
+                                    <View className='flex flex-row items-center gap-x-4 justify-center'>
+                                        {
+                                            !isOffline && <LikeButton songId={data.id} label={false} />
+                                        }
+                                        <TouchableOpacity
+                                            className='h-7 aspect-square'
+                                            activeOpacity={0.7}
+                                            onPress={shuffle}
+                                        >
+                                            <Image
+                                                source={ShuffleIcon}
+                                                style={{ width: "100%", height: "100%" }}
+                                                contentFit='contain'
+                                            />
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                                <View className='flex flex-col gap-y-2'>
+                                    <Slider
+                                        step={1}
+                                        minimumValue={0}
+                                        tapToSeek={true}
+                                        value={position}
+                                        onSlidingComplete={onSeek}
+                                        maximumValue={data.duration}
+                                        style={{ padding: 0, margin: 0, width: '100%' }}
+                                        minimumTrackTintColor="#ef4444"
+                                        maximumTrackTintColor="#D3D3D3"
+                                        thumbTintColor="transparent"
+                                        disabled={!isSubscribed}
+                                    />
+                                    <View className='flex flex-row items-center justify-between px-4'>
+                                        <Text className='text-zinc-300 text-sm'>
+                                            {albumDuration(Math.floor(position))}
                                         </Text>
-                                        <View className='flex flex-row items-center gap-x-4 justify-center'>
-                                            {
-                                                !isOffline && <LikeButton songId={data.id} label={false} />
-                                            }
-                                            <TouchableOpacity
-                                                className='h-7 aspect-square'
-                                                activeOpacity={0.7}
-                                                onPress={shuffle}
-                                            >
-                                                <Image
-                                                    source={ShuffleIcon}
-                                                    style={{ width: "100%", height: "100%" }}
-                                                    contentFit='contain'
-                                                />
-                                            </TouchableOpacity>
-                                        </View>
+                                        <Text className='text-zinc-300 text-sm'>
+                                            {albumDuration(data.duration)}
+                                        </Text>
                                     </View>
-                                    <View className='flex flex-col gap-y-2'>
-                                        <Slider
-                                            step={1}
-                                            minimumValue={0}
-                                            tapToSeek={true}
-                                            value={position}
-                                            onSlidingComplete={onSeek}
-                                            maximumValue={data.duration}
-                                            style={{ padding: 0, margin: 0, width: '100%' }}
-                                            minimumTrackTintColor="#ef4444"
-                                            maximumTrackTintColor="#D3D3D3"
-                                            thumbTintColor="transparent"
+                                </View>
+                                <View className='flex flex-row items-center w-full px-4'>
+                                    <View className='w-1/5 h-16 flex items-start justify-center'>
+                                        <TouchableOpacity
+                                            className='h-7 aspect-square'
+                                            activeOpacity={0.7}
                                             disabled={!isSubscribed}
-                                        />
-                                        <View className='flex flex-row items-center justify-between px-4'>
-                                            <Text className='text-zinc-300 text-sm'>
-                                                {albumDuration(Math.floor(position))}
-                                            </Text>
-                                            <Text className='text-zinc-300 text-sm'>
-                                                {albumDuration(data.duration)}
-                                            </Text>
-                                        </View>
+                                            onPress={() => setAiShuffled(!isAiShuffled)}
+                                        >
+                                            <Image
+                                                source={isAiShuffled ? AiShuffleActiveIcon : AiShuffleIcon}
+                                                style={{ width: "100%", height: "100%" }}
+                                                contentFit='contain'
+                                            />
+                                        </TouchableOpacity>
                                     </View>
-                                    <View className='flex flex-row items-center w-full px-4'>
-                                        <View className='w-1/5 h-16 flex items-start justify-center'>
-                                            <TouchableOpacity
-                                                className='h-7 aspect-square'
-                                                activeOpacity={0.7}
-                                                disabled={!isSubscribed}
-                                                onPress={() => setAiShuffled(!isAiShuffled)}
-                                            >
-                                                <Image
-                                                    source={isAiShuffled ? AiShuffleActiveIcon : AiShuffleIcon}
-                                                    style={{ width: "100%", height: "100%" }}
-                                                    contentFit='contain'
-                                                />
-                                            </TouchableOpacity>
-                                        </View>
-                                        <View className='w-1/5 h-16 flex items-start justify-center'>
-                                            <TouchableOpacity
-                                                className='h-10 aspect-square'
-                                                onPress={pop}
-                                                activeOpacity={0.7}
-                                                disabled={!isSubscribed}
-                                            >
-                                                <Image
-                                                    source={BackwardStepIcon}
-                                                    style={{ width: "100%", height: "100%" }}
-                                                    contentFit='contain'
-                                                />
-                                            </TouchableOpacity>
-                                        </View>
-                                        <View className='w-1/5 h-16 flex items-center justify-center'>
-                                            <TouchableOpacity
-                                                className='h-full aspect-square'
-                                                activeOpacity={0.7}
-                                                onPress={handlePlayPause}
-                                            >
-                                                <Image
-                                                    source={isPlaying ? PauseCircleIcon : PlayCircleIcon}
-                                                    style={{ width: "100%", height: "100%" }}
-                                                    contentFit='contain'
-                                                />
-                                            </TouchableOpacity>
-                                        </View>
-                                        <View className='w-1/5 h-16 flex items-end justify-center'>
-                                            <TouchableOpacity
-                                                className='h-10 aspect-square'
-                                                activeOpacity={0.7}
-                                                onPress={deQueue}
-                                            >
-                                                <Image
-                                                    source={ForwardStepIcon}
-                                                    style={{ width: "100%", height: "100%" }}
-                                                    contentFit='contain'
-                                                />
-                                            </TouchableOpacity>
-                                        </View>
-                                        <View className='w-1/5 h-16 flex items-end justify-center'>
-                                            <TouchableOpacity
-                                                className='h-7 aspect-square'
-                                                activeOpacity={0.7}
-                                                onPress={() => setLooped(!isLooped)}
-                                            >
-                                                <Image
-                                                    source={isLooped ? RepeatOneIcon : RepeatIcon}
-                                                    style={{ width: "100%", height: "100%" }}
-                                                    contentFit='contain'
-                                                />
-                                            </TouchableOpacity>
-                                        </View>
+                                    <View className='w-1/5 h-16 flex items-start justify-center'>
+                                        <TouchableOpacity
+                                            className='h-10 aspect-square'
+                                            onPress={pop}
+                                            activeOpacity={0.7}
+                                            disabled={!isSubscribed}
+                                        >
+                                            <Image
+                                                source={BackwardStepIcon}
+                                                style={{ width: "100%", height: "100%" }}
+                                                contentFit='contain'
+                                            />
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View className='w-1/5 h-16 flex items-center justify-center'>
+                                        <TouchableOpacity
+                                            className='h-full aspect-square'
+                                            activeOpacity={0.7}
+                                            onPress={handlePlayPause}
+                                        >
+                                            <Image
+                                                source={!isPlaying ? PlayCircleIcon : PauseCircleIcon}
+                                                style={{ width: "100%", height: "100%" }}
+                                                contentFit='contain'
+                                            />
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View className='w-1/5 h-16 flex items-end justify-center'>
+                                        <TouchableOpacity
+                                            className='h-10 aspect-square'
+                                            activeOpacity={0.7}
+                                            onPress={deQueue}
+                                        >
+                                            <Image
+                                                source={ForwardStepIcon}
+                                                style={{ width: "100%", height: "100%" }}
+                                                contentFit='contain'
+                                            />
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View className='w-1/5 h-16 flex items-end justify-center'>
+                                        <TouchableOpacity
+                                            className='h-7 aspect-square'
+                                            activeOpacity={0.7}
+                                            onPress={() => setLooped(!isLooped)}
+                                        >
+                                            <Image
+                                                source={isLooped ? RepeatOneIcon : RepeatIcon}
+                                                style={{ width: "100%", height: "100%" }}
+                                                contentFit='contain'
+                                            />
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
                             </View>
-                        </LinearGradient>
-                    </ImageBackground>
-                </View>
-                {
-                    !isOffline && (
-                        <View
-                            style={{
-                                minHeight: safeAreaHeight,
-                                width: '100%',
-                                backgroundColor: '#111111',
-                                padding: 24
-                            }}
-
-                        >
-                            <View 
-                                className='rounded-3xl bg-neutral-800 relative overflow-hidden'
-                                style={{
-                                    height : 600
-                                }}
-                            >
-                                <Lyrics
-                                    songId={data.id}
-                                    position={position}
-                                    onSeek={onSeek}
-                                />
+                        </View>
+                        <View className='p-6 flex flex-row items-center'>
+                            <View className='w-1/3 flex items-center justify-center'>
+                                <TouchableOpacity
+                                    activeOpacity={0.7}
+                                >
+                                    <Text className='text-zinc-300 font-semibold text-lg'>
+                                        UP NEXT
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View className='w-1/3 flex items-center justify-center'>
+                                <TouchableOpacity
+                                    activeOpacity={0.7}
+                                >
+                                    <Text className='text-zinc-300 font-semibold text-lg'>
+                                        LYRICS
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View className='w-1/3 flex items-center justify-center'>
+                                <TouchableOpacity
+                                    activeOpacity={0.7}
+                                >
+                                    <Text className='text-zinc-300 font-semibold text-lg'>
+                                        RELATED
+                                    </Text>
+                                </TouchableOpacity>
                             </View>
                         </View>
-                    )
-                }
-            </BottomSheetScrollView>
+                    </View>
+                </LinearGradient>
+            </BottomSheetView>
         </BottomSheetModal>
     );
 }
