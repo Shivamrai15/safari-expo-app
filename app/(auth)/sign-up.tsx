@@ -3,8 +3,6 @@ import { Link } from 'expo-router';
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import {
-    KeyboardAvoidingView,
-    Platform,
     ScrollView,
     Text,
     View
@@ -13,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import GoogleOauth from '@/components/auth/google-oauth';
 import { AUTH_BASE_URL } from '@/constants/api.config';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const SignUp = () => {
 
@@ -38,8 +37,7 @@ const SignUp = () => {
     });
 
     return (
-        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
-            <ScrollView className='size-full bg-neutral-900' keyboardShouldPersistTaps='handled'>
+            <SafeAreaView className='size-full bg-background'>
                 <View className='my-20 p-6 flex flex-col gap-y-12'>
                     <View className='flex flex-col'>
                         <Text className='text-white text-3xl font-extrabold'>Create Your</Text>
@@ -84,8 +82,7 @@ const SignUp = () => {
                     </View>
                     <GoogleOauth />
                 </View>
-            </ScrollView>
-        </KeyboardAvoidingView>
+        </SafeAreaView>
     )
 }
 

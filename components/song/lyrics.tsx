@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { fetcher } from '@/lib/fetcher';
 import { useAuth } from '@/hooks/use-auth';
 import { Lyrics as LyricsType } from '@/types/response.types';
-import Loader from '@/components/ui/loader';
+import { SecondaryLoader } from '@/components/ui/loader';
 import axios from 'axios';
 import { SyncedLyrics } from './synced-lyrics';
 
@@ -36,7 +36,7 @@ export const Lyrics = ({ songId, position, onSeek }: Props) => {
     
     if (lyrics.isPending) {
         return (
-            <Loader className='bg-transparent' />
+            <SecondaryLoader className='bg-transparent' />
         )
     }
 

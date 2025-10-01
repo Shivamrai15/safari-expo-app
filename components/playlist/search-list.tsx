@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useDebounce } from '@/hooks/use-debounce';
 import { useQuery } from '@tanstack/react-query';
 import { fetcher } from '@/lib/fetcher';
-import Loader from '@/components/ui/loader';
+import { PrimaryLoader } from '@/components/ui/loader';
 import { Image } from 'expo-image';
 import { PlusIcon } from '@/constants/icons';
 import { cn } from '@/lib/utils';
@@ -34,7 +34,7 @@ export const SearchList = ({  query, toggleSelect, selectedSongId }: Props) => {
 
     if (isPending) {
         return (
-            <Loader className='bg-transparent' />
+            <PrimaryLoader className='bg-transparent' />
         )
     }
 

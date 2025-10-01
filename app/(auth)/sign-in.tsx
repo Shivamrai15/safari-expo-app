@@ -4,9 +4,7 @@ import { useState } from 'react';
 import { 
     View,
     Text,
-    Platform,
-    ScrollView,
-    KeyboardAvoidingView,
+    Modal,
 } from 'react-native';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,6 +13,8 @@ import { useMutation } from '@tanstack/react-query';
 import { AUTH_BASE_URL } from '@/constants/api.config';
 import { User } from '@/types/auth.types';
 import { useAuth } from '@/hooks/use-auth';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { SecondaryLoader } from '@/components/ui/loader';
 
 const SignIn = () => {
 
@@ -43,8 +43,7 @@ const SignIn = () => {
     });
 
     return (
-        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
-            <ScrollView className='size-full bg-neutral-900' keyboardShouldPersistTaps='handled'>
+            <SafeAreaView className='size-full bg-background'>
                 <View className='my-20 p-6 flex flex-col gap-y-12'>
                     <View className='flex flex-col'>
                         <Text className='text-white text-3xl font-extrabold'>Login to your</Text>
@@ -83,8 +82,12 @@ const SignIn = () => {
                     </View>
                     <GoogleOauth />
                 </View>
-            </ScrollView>
-        </KeyboardAvoidingView>
+                <Modal transparent={true} visible={isPending} animationType="fade">
+                    <View className='flex-1 items-center justify-center p-6 bg-background'>
+                        <SecondaryLoader/>
+                    </View>
+                </Modal>
+        </SafeAreaView>
     )
 }
 

@@ -32,7 +32,6 @@ import { useQueue } from '@/hooks/use-queue';
 import usePlayerSettings from '@/hooks/use-player-settings';
 import Entypo from '@expo/vector-icons/Entypo';
 
-
 interface Props {
     data : Song & { album: Album };
     isOpen: boolean;

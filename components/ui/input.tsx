@@ -24,7 +24,7 @@ export const Input = ({ placeholder, value, onChange, label, secureTextEntry, ke
                 secureTextEntry={secureTextEntry}
                 keyboardType={keyboardType}
                 className={cn(
-                    "bg-transparent rounded-md border px-3 py-2 h-12 text-zinc-100 border-zinc-400 font-medium",
+                    "bg-transparent rounded-xl border px-3 py-2 h-12 text-zinc-100 border-zinc-400 font-medium",
                     className
                 )}
             />

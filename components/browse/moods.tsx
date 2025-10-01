@@ -2,7 +2,7 @@ import { router } from 'expo-router';
 import { Fragment, useEffect } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Error } from '@/components/ui/error';
-import Loader from '@/components/ui/loader';
+import { PrimaryLoader, SecondaryLoader } from '@/components/ui/loader';
 import { PUBLIC_BASE_URL } from '@/constants/api.config';
 import { useAuth } from '@/hooks/use-auth';
 import { useInfinite } from '@/hooks/use-infinite';
@@ -33,7 +33,7 @@ export const Moods = ({ isAtEnd }: Props) => {
 
     if (status === "pending") {
         return  (
-            <Loader />
+            <PrimaryLoader />
         )
     }
 
@@ -72,7 +72,7 @@ export const Moods = ({ isAtEnd }: Props) => {
             }
             {
                 isFetchingNextPage && (<View className='w-full h-6'>
-                    <Loader />
+                    <SecondaryLoader />
                 </View>)
             }
         </View>

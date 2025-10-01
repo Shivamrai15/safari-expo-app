@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { Error } from '@/components/ui/error';
-import Loader from '@/components/ui/loader';
+import { PrimaryLoader } from '@/components/ui/loader';
 import { useAuth } from '@/hooks/use-auth';
 import { fetcher } from '@/lib/fetcher';
 import { NetworkProvider } from '@/providers/network.provider';
@@ -44,7 +44,7 @@ const Playlist = () => {
     });
 
     if (userPlaylists.isPending || userFollowings.isPending) {
-        return <Loader />
+        return <PrimaryLoader />
     }
 
     if (userPlaylists.error || userFollowings.error) {

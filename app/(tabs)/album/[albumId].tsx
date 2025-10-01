@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Loader from "@/components/ui/loader";
+import { PrimaryLoader } from "@/components/ui/loader";
 import { Header } from "@/components/album/header";
 import { List } from "@/components/album/list";
 import { AlbumLabel } from "@/components/album/label";
@@ -32,7 +32,7 @@ const AlbumPage = () => {
 
 
     if (isPending) {
-        return <Loader />;
+        return <PrimaryLoader />;
     }
 
     if (!data || error) {

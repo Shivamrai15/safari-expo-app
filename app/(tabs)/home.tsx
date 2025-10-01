@@ -7,7 +7,7 @@ import { useQueries } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/use-auth";
 import { fetcher } from "@/lib/fetcher";
 import { Error } from "@/components/ui/error";
-import Loader from "@/components/ui/loader";
+import { PrimaryLoader } from "@/components/ui/loader";
 import { AlbumCarousel } from "@/components/carousel/album";
 import { TrendingSongs } from "@/components/carousel/trending-songs";
 import { Button } from "@/components/ui/button";
@@ -79,7 +79,7 @@ const Home = () => {
     });
 
     if (trendingSongs.isLoading || recommendedAlbums.isLoading || newAlbums.isLoading || listenAgainSongs.isLoading || favoriteArtists.isLoading) {
-        return <Loader />;
+        return <PrimaryLoader />;
     }
 
     if (trendingSongs.error || recommendedAlbums.error || newAlbums.error || listenAgainSongs.error || favoriteArtists.error) {

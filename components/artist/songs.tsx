@@ -1,6 +1,6 @@
 import { FlatList, View } from 'react-native'
 import { useInfinite } from '@/hooks/use-infinite';
-import Loader from '@/components/ui/loader';
+import { PrimaryLoader, SecondaryLoader } from '@/components/ui/loader';
 import { Fragment, useEffect } from 'react';
 import { SongItem } from '../song/item';
 import { SongResponse } from '@/types/response.types';
@@ -20,7 +20,7 @@ export const Songs = ({ artistId, isAtEnd }: Props) => {
         url : `${PUBLIC_BASE_URL}/api/v2/artist/${artistId}/songs`,
         paramKey: "",
         paramValue : "",
-        queryKey: "artist-songs",
+        queryKey: `artist-songs-${artistId}`,
         token : user?.token
     });
 
@@ -34,7 +34,7 @@ export const Songs = ({ artistId, isAtEnd }: Props) => {
     if (status === "pending") {
         return (
             <View className='mt-10 w-full h-10'>
-                <Loader />
+                <PrimaryLoader />
             </View>
         )
     }
@@ -60,7 +60,7 @@ export const Songs = ({ artistId, isAtEnd }: Props) => {
             }
             {
                 isFetchingNextPage && (<View className='w-full h-6'>
-                    <Loader />
+                    <SecondaryLoader />
                 </View>)
             }
         </View>

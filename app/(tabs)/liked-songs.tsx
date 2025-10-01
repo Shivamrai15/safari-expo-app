@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/use-auth';
 import { fetcher } from '@/lib/fetcher';
 import { LikedSongTracksResponse } from '@/types/response.types';
-import Loader from '@/components/ui/loader';
+import { PrimaryLoader } from '@/components/ui/loader';
 import { Error } from '@/components/ui/error';
 import Feather from '@expo/vector-icons/Feather';
 import { NetworkProvider } from '@/providers/network.provider';
@@ -30,7 +30,7 @@ const LikedSongs = () => {
     });
 
     if (isPending) {
-        return <Loader />
+        return <PrimaryLoader />
     }
 
     if (error || !data){

@@ -3,7 +3,7 @@ import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Button } from "@/components/ui/button";
 import { Error } from "@/components/ui/error";
-import Loader from "@/components/ui/loader";
+import { PrimaryLoader } from "@/components/ui/loader";
 import { useAuth } from "@/hooks/use-auth";
 import { fetcher } from "@/lib/fetcher";
 import { NetworkProvider } from "@/providers/network.provider";
@@ -52,7 +52,7 @@ const ArtistPage = () => {
 
     if (artist.isLoading || discography.isLoading) {
         return (
-            <Loader />
+            <PrimaryLoader />
         )
     };
 

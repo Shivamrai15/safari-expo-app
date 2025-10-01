@@ -10,7 +10,7 @@ import { useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useQuery } from "@tanstack/react-query";
 import { Error } from "@/components/ui/error";
-import Loader from "@/components/ui/loader";
+import { PrimaryLoader, SecondaryLoader } from "@/components/ui/loader";
 import { useAuth } from "@/hooks/use-auth";
 import { fetcher } from "@/lib/fetcher";
 import { MoodResponse, SongResponse } from "@/types/response.types";
@@ -60,7 +60,7 @@ const GenreSongs = () => {
     }, [atEnd, hasNextPage]);
 
     if (isPending || status === "pending") {
-        return <Loader />
+        return <PrimaryLoader />
     }
 
     if (error || !data || status === "error") {
@@ -108,7 +108,7 @@ const GenreSongs = () => {
                             }
                             {
                                 isFetchingNextPage && (<View className='w-full h-6'>
-                                    <Loader />
+                                    <SecondaryLoader />
                                 </View>)
                             }
                         </View>

@@ -13,7 +13,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useQuery } from '@tanstack/react-query';
 import { fetcher } from '@/lib/fetcher';
 import { NetworkProvider } from '@/providers/network.provider';
-import Loader from '@/components/ui/loader';
+import { PrimaryLoader, SecondaryLoader } from '@/components/ui/loader';
 import { Error } from '@/components/ui/error';
 import { PlaylistResponse, PlaylistSongResponse } from '@/types/response.types';
 import { Header } from '@/components/playlist/header';
@@ -65,7 +65,7 @@ const PlaylistSongs = () => {
     }, [atEnd, hasNextPage]);
 
     if (isPending || status === "pending") {
-        return (<Loader/>)
+        return (<PrimaryLoader />)
     }
 
     if (error || !data || status === "error") {
@@ -111,7 +111,7 @@ const PlaylistSongs = () => {
                         }
                         {
                             isFetchingNextPage ? (<View className='w-full h-6'>
-                                <Loader />
+                                <SecondaryLoader />
                             </View>) : (
                                 <View
                                     className='w-full items-center justify-center flex pt-8'

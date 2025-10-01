@@ -9,7 +9,7 @@ import {
     NativeSyntheticEvent,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Loader from "@/components/ui/loader";
+import { PrimaryLoader } from "@/components/ui/loader";
 import { Error } from "@/components/ui/error";
 import { useAuth } from "@/hooks/use-auth";
 import { fetcher } from "@/lib/fetcher";
@@ -46,7 +46,7 @@ const ArtistSongs = () => {
 
     if (isPending) {
         return (
-            <Loader />
+            <PrimaryLoader />
         )
     }
 

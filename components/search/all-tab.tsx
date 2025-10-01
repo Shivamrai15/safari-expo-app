@@ -3,7 +3,7 @@ import { AllSearchResponse, Tab } from '@/types/response.types';
 import { useQuery } from '@tanstack/react-query';
 import { useDebounce } from '@/hooks/use-debounce';
 import { fetcher } from '@/lib/fetcher';
-import Loader from '@/components/ui/loader';
+import { SecondaryLoader } from '@/components/ui/loader';
 import { useAuth } from '@/hooks/use-auth';
 import { SongItem } from '../song/item';
 import { AlbumCarousel } from '../carousel/album';
@@ -34,7 +34,7 @@ export const AllTab = ({ currentTab, query }: Props) => {
 
     if (isPending) {
         return (
-            <Loader />
+            <SecondaryLoader />
         )
     }
 

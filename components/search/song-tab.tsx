@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useDebounce } from '@/hooks/use-debounce';
 import { useQuery } from '@tanstack/react-query';
 import { fetcher } from '@/lib/fetcher';
-import Loader from '@/components/ui/loader';
+import { SecondaryLoader } from '@/components/ui/loader';
 import { SongItem } from '../song/item';
 
 interface Props {
@@ -31,7 +31,7 @@ export const SongTab = ({ currentTab, query }: Props) => {
 
     if (isPending) {
         return (
-            <Loader />
+            <SecondaryLoader />
         )
     }
 

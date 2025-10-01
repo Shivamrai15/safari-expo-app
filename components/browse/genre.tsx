@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Error } from '@/components/ui/error';
 import { useAuth } from '@/hooks/use-auth';
 import { fetcher } from '@/lib/fetcher';
-import Loader from '@/components/ui/loader';
+import { PrimaryLoader } from '@/components/ui/loader';
 import { GenreResponse } from '@/types/response.types';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
@@ -25,7 +25,7 @@ export const Genre = () => {
     });
 
     if (isPending) {
-        return <Loader />;
+        return <PrimaryLoader />;
     }
     
     if (error || !data) {

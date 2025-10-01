@@ -1,5 +1,5 @@
 import { Error } from '@/components/ui/error';
-import Loader from '@/components/ui/loader';
+import { PrimaryLoader, SecondaryLoader } from '@/components/ui/loader';
 import { useAuth } from '@/hooks/use-auth';
 import { useInfinite } from '@/hooks/use-infinite';
 import Feather from '@expo/vector-icons/Feather';
@@ -34,7 +34,7 @@ export function Songs({ url, queryKey, isAtEnd }: Props) {
     }, [isAtEnd, hasNextPage]);
 
     if (status === "pending") {
-        return <Loader />;
+        return <PrimaryLoader />;
     }
 
     if (status === "error") {
@@ -68,7 +68,7 @@ export function Songs({ url, queryKey, isAtEnd }: Props) {
                 }
                 {
                     isFetchingNextPage && (<View className='w-full h-6'>
-                        <Loader />
+                        <SecondaryLoader />
                     </View>)
                 }
             </View>

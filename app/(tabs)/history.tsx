@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useInfinite } from '@/hooks/use-infinite';
-import Loader from '@/components/ui/loader';
+import { PrimaryLoader, SecondaryLoader } from '@/components/ui/loader';
 import { Error } from '@/components/ui/error';
 import { format , isSameDay} from "date-fns";
 import { Fragment, useEffect, useState } from 'react';
@@ -43,7 +43,7 @@ const History = () => {
 
     if (status === "pending") {
         return (
-            <Loader />
+            <PrimaryLoader />
         )
     }
 
@@ -89,7 +89,7 @@ const History = () => {
                     </View>
                     {
                         isFetchingNextPage && (<View className='w-full h-6'>
-                            <Loader />
+                            <SecondaryLoader />
                         </View>)
                     }
                     <View className='h-40' />
