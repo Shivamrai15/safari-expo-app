@@ -6,6 +6,7 @@ import { Lyrics as LyricsType } from '@/types/response.types';
 import { SecondaryLoader } from '@/components/ui/loader';
 import axios from 'axios';
 import { SyncedLyrics } from './synced-lyrics';
+import { UnsyncedLyrics } from './non-synced-lyrics';
 
 
 interface Props {
@@ -64,10 +65,9 @@ export const Lyrics = ({ songId, position, onSeek }: Props) => {
         )
     }
 
-
     return (
-        <View>
-            <Text>Lyrics</Text>
-        </View>
+        <UnsyncedLyrics
+            lyrics={lyrics.data.lyrics.lyrics}
+        />
     )
 }

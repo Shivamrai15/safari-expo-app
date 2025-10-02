@@ -8,8 +8,8 @@ const Index = () => {
     useSettingsSync(user?.token)
 
     if (isLoggedIn) {
-        // return <Redirect href="/(tabs)/home" />;
-        return <Redirect href="/(tabs)/account/delete-history" />;
+        return <Redirect href="/(tabs)/home" />;
+        // return <Redirect href="/(tabs)/account/delete-history" />;
     }
     
     return (

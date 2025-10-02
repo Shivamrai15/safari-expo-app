@@ -13,10 +13,10 @@ export const PrimaryLoader = ({ className }: Props) => {
             className
         )}>
             <LottieView
-                source={require("@/assets/lottie/Cosmos.json")}
+                source={require("@/assets/lottie/Loading Spinner (Dots).json")}
                 autoPlay
                 loop
-                style={{ width: 100, height: 100 }}
+                style={{ width: 150, height: 150 }}
             />
         </SafeAreaView>
     )
