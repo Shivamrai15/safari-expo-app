@@ -1,4 +1,5 @@
 
+import { UpNext } from '@/components/song/up-next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 

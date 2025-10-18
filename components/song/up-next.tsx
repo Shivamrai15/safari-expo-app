@@ -1,51 +1,60 @@
+import { useQueue } from '@/hooks/use-queue';
+import { useState } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
 import DraggableFlatList, {
-  RenderItemParams,
+    RenderItemParams,
+    ScaleDecorator,
 } from "react-native-draggable-flatlist";
-import { View, Text, TouchableOpacity } from 'react-native'
-import { albumDuration, cn } from "@/lib/utils";
-import { Image } from "expo-image";
-import { useQueue } from "@/hooks/use-queue";
 
 
 export const UpNext = () => {
+    const { replace, queue } = useQueue();
 
-    const { queue, shiftToTopOfQueue, replace } = useQueue();
-
-    const handleDragEnd = ({ data, from, to }: any) => {
-        if (from === 0 || to === 0) return;
-        replace(data[to].id, from, to);
+    const handleDragEnd = ({ data: newData, from, to }: any) => {
+        console.log("Drag ended from index", from, "to index", to);
+        // replace(newData);
     };
 
-    const renderItem = ({ item, drag, isActive, getIndex }: RenderItemParams<any>) => {
-        const index = getIndex();
+    const renderItem = ({ item, drag, isActive, getIndex }: RenderItemParams<string>) => {
         return (
-            <TouchableOpacity 
-                className="w-full flex flex-row items-center justify-between gap-x-4"
-                activeOpacity={0.7}
-                onLongPress={drag}
-                onPress={()=>shiftToTopOfQueue(item.id)}
-            >
-                <Image
-                    source={{ uri: item.image }}
-                    style={{ width: 48, height: 48, borderRadius: 8 }}
-                    contentFit="contain"
-                />
-                <View className="flex-1 flex flex-col gap-y-0.5">
-                    <Text className="text-white font-semibold" numberOfLines={1} ellipsizeMode="tail" >{item.name}</Text>
-                    <Text className="text-neutral-300 font-medium text-sm" numberOfLines={1} ellipsizeMode="tail" >{item.album.name}</Text>
+            <ScaleDecorator>
+                <View
+                    style={{
+                        backgroundColor: isActive ? '#e0e0e0' : 'white',
+                        opacity: isActive ? 0.8 : 1,
+                        padding: 16,
+                        marginBottom: 8,
+                        marginHorizontal: 8,
+                        borderRadius: 8,
+                    }}
+                >
+                    <TouchableOpacity
+                        onLongPress={drag}
+                        disabled={isActive}
+                        delayLongPress={150}
+                        style={{ width: '100%' }}
+                    >
+                        <Text className="text-black font-medium">
+                            {item}
+                        </Text>
+                    </TouchableOpacity>
                 </View>
-                <Text className="font-medium w-12 text-white" >{albumDuration(item.duration)}</Text>
-            </TouchableOpacity>
+            </ScaleDecorator>
         )
-        
     }
 
     return (
-        <DraggableFlatList
-            data={queue}
-            keyExtractor={(item) => item.id}
-            renderItem={renderItem}
-            onDragEnd={handleDragEnd}
-        />
+        <View style={{ flex: 1 }}>
+            <DraggableFlatList
+                data={[]}
+                keyExtractor={(item, index) => `${item}-${index}`}
+                renderItem={renderItem}
+                onDragEnd={handleDragEnd}
+                activationDistance={10}
+                dragItemOverflow={true}
+                containerStyle={{ flex: 1 }}
+                simultaneousHandlers={[]}
+            />
+        </View>
     )
 }

@@ -1,6 +1,9 @@
-import { ThumbActiveIcon, ThumbIcon } from '@/constants/icons';
 import { Image } from 'expo-image';
+import { useAuth } from '@/hooks/use-auth';
 import { Text, TouchableOpacity, View } from 'react-native';
+import { ThumbActiveIcon, ThumbIcon } from '@/constants/icons';
+import { useToggleLikedSong } from '@/hooks/use-liked-songs';
+
 
 interface Props {
     songId : string;
@@ -8,14 +11,21 @@ interface Props {
 }
 
 export const LikeButton = ({ songId, label }: Props) => {
+
+    const { user } = useAuth();
+
+    const  { isLiked, toggleLike, isLoading } = useToggleLikedSong(user?.token);
+
     return (
         <TouchableOpacity
             className='h-10 flex flex-row items-center '
             activeOpacity={0.7}
+            disabled={!user || isLoading}
+            onPress={() => toggleLike(songId)}
         >
             <View className='h-7 aspect-square'>
                 <Image
-                    source={ThumbIcon}
+                    source={isLiked(songId) ? ThumbActiveIcon : ThumbIcon}
                     style={{ width: "100%", height: "100%" }}
                     contentFit='contain'
                 />

@@ -14,7 +14,7 @@ interface Props {
 
 export const TopResultCard = ({ data }: Props) => {
     return (
-        <View className="w-full rounded-xl overflow-hidden bg-neutral-900">
+        <View className="w-full rounded-xl overflow-hidden bg-neutral-800">
             <View className="flex flex-row gap-x-5 items-center p-3">
                 <View className="h-32 w-32 overflow-hidden relative rounded-lg">
                     <Image

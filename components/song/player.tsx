@@ -6,10 +6,10 @@ import {
 } from 'react-native';
 import { Image } from 'expo-image';
 import { useQueue } from '@/hooks/use-queue';
+import { useEffect, useRef, useState } from 'react';
 import { Progress } from '@/components/ui/progress';
 import { PauseIcon, PlayIcon } from '@/constants/icons';
 import { useAudioPlayer, useAudioPlayerStatus, setAudioModeAsync } from 'expo-audio';
-import { useEffect, useRef, useState } from 'react';
 import { Sheet } from './sheet';
 import { useSettings } from '@/hooks/use-settings';
 import usePlayerSettings from '@/hooks/use-player-settings';
@@ -22,9 +22,9 @@ interface Props {
 
 export const Player = ({ bottom, isOffline }: Props) => {
 
-	const { current, queue, deQueue } = useQueue();
 	const { settings } = useSettings();
-	const [isOpen, setIsOpen] = useState(false);
+	const { current, queue, deQueue } = useQueue();
+	const [ isOpen, setIsOpen ] = useState(false);
 	const { isLooped } = usePlayerSettings();
 	
 	const player = useAudioPlayer(current?.url || '');
@@ -41,7 +41,8 @@ export const Player = ({ bottom, isOffline }: Props) => {
 					shouldPlayInBackground: true,
 					interruptionMode : "doNotMix",
 					interruptionModeAndroid : "doNotMix",
-					shouldRouteThroughEarpiece : false
+					shouldRouteThroughEarpiece : false,
+					playsInSilentMode: true,
 				});
 			} catch (error) {
 				console.error('Failed to configure audio session:', error);

@@ -34,7 +34,7 @@ import {
     View
 } from 'react-native';
 import PagerView from 'react-native-pager-view';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Lyrics } from './lyrics';
 import { RelatedSongs } from './related';
 import { UpNext } from './up-next';
@@ -307,82 +307,84 @@ export const Sheet = ({
                         transparent={true}
                         onRequestClose={() => setFeaturesOpened(false)}
                     >
-                        <View
-                            style={{
-                                backgroundColor : data.album.color
-                            }}
-                        >
-                            <View className='py-2 flex flex-row items-center relative'>
-                                <View className='h-12 w-1/3 flex items-center justify-center'>
-                                    <TouchableOpacity
-                                        activeOpacity={0.7}
-                                        onPress={() => {
-                                            setFeatureNumber(0);
+                        <SafeAreaView className='flex-1'>
+                            <View
+                                style={{
+                                    backgroundColor : data.album.color
+                                }}
+                            >
+                                <View className='py-2 flex flex-row items-center relative'>
+                                    <View className='h-12 w-1/3 flex items-center justify-center'>
+                                        <TouchableOpacity
+                                            activeOpacity={0.7}
+                                            onPress={() => {
+                                                setFeatureNumber(0);
+                                            }}
+                                            className='h-full w-full flex items-center justify-center'
+                                        >
+                                            <Text className='text-zinc-300 font-semibold text-lg'>
+                                                UP NEXT
+                                            </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View className='h-12 w-1/3 flex items-center justify-center'>
+                                        <TouchableOpacity
+                                            activeOpacity={0.7}
+                                            onPress={() => {
+                                                setFeatureNumber(1);
+                                            }}
+                                            className='h-full w-full flex items-center justify-center'
+                                        >
+                                            <Text className='text-zinc-300 font-semibold text-lg'>
+                                                LYRICS
+                                            </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View className='h-12 w-1/3 flex items-center justify-center'>
+                                        <TouchableOpacity
+                                            activeOpacity={0.7}
+                                            onPress={() => {
+                                                setFeatureNumber(2);
+                                            }}
+                                            className='h-full w-full flex items-center justify-center'
+                                        >
+                                            <Text className='text-zinc-300 font-semibold text-lg'>
+                                                RELATED
+                                            </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    <Animated.View
+                                        className='absolute w-1/3 h-1 rounded-lg bg-white bottom-0'
+                                        style={{
+                                            transform: [{ translateX }],
                                         }}
-                                        className='h-full w-full flex items-center justify-center'
-                                    >
-                                        <Text className='text-zinc-300 font-semibold text-lg'>
-                                            UP NEXT
-                                        </Text>
-                                    </TouchableOpacity>
+                                    />
                                 </View>
-                                <View className='h-12 w-1/3 flex items-center justify-center'>
-                                    <TouchableOpacity
-                                        activeOpacity={0.7}
-                                        onPress={() => {
-                                            setFeatureNumber(1);
-                                        }}
-                                        className='h-full w-full flex items-center justify-center'
-                                    >
-                                        <Text className='text-zinc-300 font-semibold text-lg'>
-                                            LYRICS
-                                        </Text>
-                                    </TouchableOpacity>
+                            </View>
+                            <PagerView
+                                ref={pagerRef}
+                                style={{
+                                    flex : 1,
+                                    backgroundColor : data.album.color,
+                                }}
+                                initialPage={featureNumber}
+                                onPageSelected={e=>setFeatureNumber(e.nativeEvent.position)}
+                            >
+                                <View key="1" className='flex-1 p-6'>
+                                    <UpNext />
                                 </View>
-                                <View className='h-12 w-1/3 flex items-center justify-center'>
-                                    <TouchableOpacity
-                                        activeOpacity={0.7}
-                                        onPress={() => {
-                                            setFeatureNumber(2);
-                                        }}
-                                        className='h-full w-full flex items-center justify-center'
-                                    >
-                                        <Text className='text-zinc-300 font-semibold text-lg'>
-                                            RELATED
-                                        </Text>
-                                    </TouchableOpacity>
+                                <View key="2" className='flex-1'>
+                                    <Lyrics
+                                        songId={data.id}
+                                        position={position}
+                                        onSeek={onSeek}
+                                    />
                                 </View>
-                                <Animated.View
-                                    className='absolute w-1/3 h-1 rounded-lg bg-white bottom-0'
-                                    style={{
-                                        transform: [{ translateX }],
-                                    }}
-                                />
-                            </View>
-                        </View>
-                        <PagerView
-                            ref={pagerRef}
-                            style={{
-                                flex : 1,
-                                backgroundColor : data.album.color,
-                            }}
-                            initialPage={featureNumber}
-                            onPageSelected={e=>setFeatureNumber(e.nativeEvent.position)}
-                        >
-                            <View key="1" className='flex-1 p-6'>
-                                <UpNext />
-                            </View>
-                            <View key="2" className='flex-1'>
-                                <Lyrics
-                                    songId={data.id}
-                                    position={position}
-                                    onSeek={onSeek}
-                                />
-                            </View>
-                            <View key="3" className='flex-1 p-6'>
-                                <RelatedSongs songId={data.id} />
-                            </View>
-                        </PagerView>
+                                <View key="3" className='flex-1 p-6'>
+                                    <RelatedSongs songId={data.id} />
+                                </View>
+                            </PagerView>
+                        </SafeAreaView>
                     </Modal>
                 )
             }

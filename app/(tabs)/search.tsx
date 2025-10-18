@@ -39,11 +39,11 @@ const Search = () => {
             <SafeAreaView className="bg-background flex-1">
                 <KeyboardAvoidingView className='flex-1' behavior={Platform.OS === "ios" ? "padding" : "height"}>
                     <ScrollView
-                        className='flex-1 p-4'
+                        className='flex-1 px-4'
                         keyboardShouldPersistTaps='handled'
                         stickyHeaderIndices={[0]}
                     >
-                        <View className='flex flex-col gap-y-4 bg-background'>
+                        <View className='flex flex-col gap-y-4 bg-background pt-4'>
                             <View className='flex flex-row items-center bg-neutral-800 rounded-full px-4 py-3'>
                                 <Image
                                     source={SearchIcon}
