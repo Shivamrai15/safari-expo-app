@@ -72,9 +72,9 @@ const ArtistPage = () => {
                         thumbnail={artist.data.thumbnail}
                     />
                     <View className="flex flex-row gap-x-4 p-4 items-center" >
-                        <PlayButton />
+                        <PlayButton id={artist.data.id} />
                         <ShuffleButton />
-                        <SubscribeButton />
+                        <SubscribeButton artist={artist.data} />
                     </View>
                     <View className="mt-10 flex flex-col gap-y-6 px-4">
                         <Text className="text-white font-bold text-2xl">Popular</Text>
