@@ -1,8 +1,9 @@
 import { create } from "zustand";
-import { useEffect } from "react";
+import { use, useEffect, useMemo } from "react";
 import { fetcher } from "@/lib/fetcher";
 import { useMutation } from "@tanstack/react-query";
-import { Artist } from "@/types/response.types";
+import { Album, Artist, Song } from "@/types/response.types";
+import { useQueue } from "./use-queue";
 
 interface useFollowingProps {
     followings : Artist[];
@@ -96,6 +97,7 @@ export const useUnfollowArtist = (artist: Artist, token?: string) => {
 };
 
 
+
 export const useArtist = (artist: Artist, token?: string) => {
     const { followings } = useFollowing();
     const followMutation = useFollowArtist(artist, token);
@@ -122,5 +124,115 @@ export const useArtist = (artist: Artist, token?: string) => {
         isLoading,
         toggleSubscription,
         error: followMutation.error || unfollowMutation.error
+    };
+};
+
+
+interface ArtistStackProps {
+    list: (Song & { album: Album })[];
+    listId: string;
+    setList: (songs: (Song & { album: Album })[]) => void;
+    clearList: () => void;
+    setListId: (id: string) => void;
+}
+
+export const useArtistStorage = create<ArtistStackProps>((set, get) => ({
+    list: [],
+    listId: "",
+    setList: (songs) => {
+        // Validate input
+        if (!Array.isArray(songs)) {
+            console.error('setList: Expected an array of songs, received:', songs);
+            return;
+        }
+
+        const currentStack = get().list;
+        const uniqueSongs = songs.filter(
+            song => !currentStack.some(sSong => sSong.id === song.id)
+        );
+        set({ list: [...currentStack, ...uniqueSongs] });
+    },
+    clearList: () => set({ list: [], listId: "" }),
+    setListId: (id) => set({ listId: id })
+}));
+
+
+export const useArtistSongs = (artistId: string, token?: string) => {
+    const { list, listId, setList, clearList, setListId } = useArtistStorage();
+    const { current, clear, priorityEnqueue } = useQueue();
+
+    const mutation = useMutation({
+        mutationFn: async () => {
+            if (!token) {
+                throw new Error('Authentication token is required');
+            }
+
+            const response = await fetcher({
+                prefix: "PROTECTED_BASE_URL",
+                suffix: `api/v2/artist/${artistId}/songs`,
+                token: token
+            });
+
+            const songsData = response?.data || response;
+            
+            if (!Array.isArray(songsData)) {
+                console.error('Invalid artist songs response:', response);
+                return [];
+            }
+
+            return songsData as (Song & { album: Album })[];
+        },
+        mutationKey: ['artist-songs', artistId],
+        onSuccess: (data) => {
+            if (Array.isArray(data) && data.length > 0) {
+                clear();
+                clearList();
+                priorityEnqueue(data);
+                setList(data);
+                setListId(artistId);
+            }
+        },
+        onError: (error) => {
+            console.error('Error fetching artist songs:', error);
+        }
+    });
+
+    const isCurrentArtist = useMemo(() => {
+
+        if (listId !== artistId) {
+            return false;
+        }
+
+        if (list.length === 0 || !current) {
+            return false;
+        }
+
+        return list.some(song => song.id === current.id);
+    }, [listId, artistId, list.length, current?.id]);
+
+    const hasSongs = list.length > 0 && listId === artistId;
+
+    const playArtistSongs = async (shuffle: boolean = false) => {
+        try {
+            if (listId !== artistId || list.length === 0) {
+                await mutation.mutateAsync();
+            }
+        } catch (error) {
+            console.error('Error playing artist songs:', error);
+            throw error;
+        }
+    };
+
+    return {
+        songs: list,
+        hasSongs,
+        
+        isCurrentArtist,
+        isLoadingSongs: mutation.isPending,
+        
+        playArtistSongs,
+        refetchSongs: mutation.mutate,
+        error: mutation.error,
+        mutation
     };
 };

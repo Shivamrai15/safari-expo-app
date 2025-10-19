@@ -13,6 +13,7 @@ import { useAudioPlayer, useAudioPlayerStatus, setAudioModeAsync } from 'expo-au
 import { Sheet } from './sheet';
 import { useSettings } from '@/hooks/use-settings';
 import usePlayerSettings from '@/hooks/use-player-settings';
+import { usePlayer } from '@/hooks/use-player';
 
 
 interface Props {
@@ -26,6 +27,7 @@ export const Player = ({ bottom, isOffline }: Props) => {
 	const { current, queue, deQueue } = useQueue();
 	const [ isOpen, setIsOpen ] = useState(false);
 	const { isLooped } = usePlayerSettings();
+	const { setIsPlaying, setSongId } = usePlayer();
 	
 	const player = useAudioPlayer(current?.url || '');
 	const status = useAudioPlayerStatus(player);
@@ -48,7 +50,6 @@ export const Player = ({ bottom, isOffline }: Props) => {
 				console.error('Failed to configure audio session:', error);
 			}
 		};
-		
 		configureAudio();
 	}, []);
 
@@ -57,8 +58,10 @@ export const Player = ({ bottom, isOffline }: Props) => {
 	useEffect(() => {
 		if (current?.url && current.url !== currentSongUrl.current) {
 			player.replace(current.url);
+			setSongId(current.id);
 			hasAutoPlayed.current = false;
 			currentSongUrl.current = current.url;
+			setIsPlaying(true);
 		}
 	}, [current?.url]);
 
@@ -77,8 +80,10 @@ export const Player = ({ bottom, isOffline }: Props) => {
 	const togglePlayback = () => {
 		if (isPlaying) {
 			player.pause();
+			setIsPlaying(false);
 		} else {
 			player.play();
+			setIsPlaying(true);
 		}
 	};
 

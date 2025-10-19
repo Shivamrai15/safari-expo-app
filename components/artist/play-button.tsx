@@ -4,6 +4,7 @@ import { PauseDarkIcon, PlayDarkIcon } from "@/constants/icons";
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/hooks/use-auth";
 import { usePlayer } from "@/hooks/use-player";
+import { useArtistSongs } from "@/hooks/use-artist";
 
 interface Props {
     id : string;
@@ -14,6 +15,7 @@ export const PlayButton = ({ id, className }: Props) => {
 
     const { user } = useAuth();
     const { isPlaying } = usePlayer();
+    const { isCurrentArtist, isLoadingSongs, playArtistSongs } = useArtistSongs(id, user?.token);
 
     return (
         <Button
@@ -21,8 +23,8 @@ export const PlayButton = ({ id, className }: Props) => {
                 "rounded-full size-12",
                 className
             )}
-            // disabled={(isCurrentArtist && isPlaying) || isLoadingSongs}
-            // onPress={() => playArtistSongs()}
+            disabled={(isCurrentArtist && isPlaying) || isLoadingSongs}
+            onPress={() => playArtistSongs()}
         >
             <Image source={isPlaying ? PauseDarkIcon : PlayDarkIcon} style={{ width: 22, height: 22 }} />
         </Button>
