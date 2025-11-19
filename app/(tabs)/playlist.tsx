@@ -1,4 +1,9 @@
+import { useState } from 'react';
 import { router } from 'expo-router';
+import { Image } from 'expo-image';
+import { useQueries } from '@tanstack/react-query';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Error } from '@/components/ui/error';
 import { PrimaryLoader } from '@/components/ui/loader';
 import { useAuth } from '@/hooks/use-auth';
@@ -6,15 +11,15 @@ import { fetcher } from '@/lib/fetcher';
 import { NetworkProvider } from '@/providers/network.provider';
 import { Artist, PlayList } from '@/types/response.types';
 import { Card } from '@/components/artist/card';
-import { Image } from 'expo-image';
-import { useQueries } from '@tanstack/react-query';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { CreatePlaylistModal } from '@/components/modals/create-playlist.modal';
 
 
 const Playlist = () => {
 
     const { user } = useAuth();
+
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const onCloseModal = () => setIsModalVisible(false);
 
     const [ userPlaylists, userFollowings ] = useQueries({
         queries : [
@@ -55,7 +60,7 @@ const Playlist = () => {
 
     return (
         <NetworkProvider>
-            <SafeAreaView className="flex-1 bg-background">
+            <SafeAreaView className="flex-1 bg-background jus">
                 <ScrollView className="p-6 pb-10 flex flex-col gap-y-10">
                     <View className='flex flex-col gap-y-6'>
                         <View className='flex flex-row justify-between items-center'>
@@ -63,7 +68,23 @@ const Playlist = () => {
                         </View>
                         <View className='w-full flex-col justify-between gap-y-4 flex-wrap'>
                             <TouchableOpacity
-                                className='w-full flex flex-row items-center bg-neutral-800 rounded-3xl p-2 gap-x-4'
+                                activeOpacity={0.7}
+                                className='w-full flex flex-row items-center bg-neutral-900 rounded-3xl p-2 gap-x-4'
+                                onPress={()=>setIsModalVisible(true)}
+                            >
+                                 <View className='size-14 bg-neutral-800 rounded-2xl overflow-hidden flex items-center justify-center relative'>
+                                    <Image
+                                        source={require("@/assets/icons/note.png")}
+                                        style={{ width: 24, height: 24 }}
+                                    />
+                                </View>
+                                <View className='flex flex-col'>
+                                    <Text className='text-white font-semibold text-lg'>Create New</Text>
+                                    <Text className='text-neutral-400 text-sm'>Build a playlist with songs</Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                className='w-full flex flex-row items-center bg-neutral-900 rounded-3xl p-2 gap-x-4'
                                 activeOpacity={0.7}
                                 onPress={()=>router.push("/(tabs)/liked-songs")}
                             >
@@ -81,7 +102,7 @@ const Playlist = () => {
                             {
                                 userPlaylists.data.map((playlist: PlayList & { _count: {songs: number }})=> (
                                     <TouchableOpacity
-                                        className='w-full flex flex-row items-center bg-neutral-800 rounded-3xl p-2 gap-x-4'
+                                        className='w-full flex flex-row items-center bg-neutral-900 rounded-3xl p-2 gap-x-4'
                                         activeOpacity={0.7}
                                         key={playlist.id}
                                         onPress={()=>router.push({
@@ -120,6 +141,11 @@ const Playlist = () => {
                     </View>
                     <View className="h-40" />
                 </ScrollView>
+                <CreatePlaylistModal
+                    isModalVisible={isModalVisible}
+                    onCloseModal={onCloseModal}
+                    totalPlaylists={userPlaylists.data.length}
+                />
             </SafeAreaView>
         </NetworkProvider>
     );

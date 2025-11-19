@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import {
@@ -80,7 +80,17 @@ const SignUp = () => {
                             Or
                         </Text>
                     </View>
-                    <GoogleOauth />
+                    <View className='flex flex-col gap-y-2'>
+                        <Button
+                            variant='secondary'
+                            onPress={()=>router.push("/(auth)/passwordless")}
+                        >
+                            <Text className='text-white font-semibold'>
+                                Passwordless Sign In
+                            </Text>
+                        </Button>
+                        <GoogleOauth />
+                    </View>
                 </View>
         </SafeAreaView>
     )

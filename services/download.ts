@@ -281,7 +281,9 @@ export class DownloadManager {
             );
 
             const m3u8File = new File(localPath);
-            m3u8File.write(localM3U8Content);
+            m3u8File.write(localM3U8Content, {
+                encoding: "utf8",
+            });
             updateSongProgress(songId, 100);
 
             return true;

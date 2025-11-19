@@ -1,4 +1,4 @@
-import {Pressable, Text, View } from 'react-native';
+import {Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { SongSearchResponse } from '@/types/response.types';
 import { useAuth } from '@/hooks/use-auth';
 import { useDebounce } from '@/hooks/use-debounce';
@@ -13,9 +13,10 @@ interface Props {
     query : string;
     toggleSelect : (id: string) => void;
     selectedSongId : string[];
+    existingSongIds : string[];
 }
 
-export const SearchList = ({  query, toggleSelect, selectedSongId }: Props) => {
+export const SearchList = ({  query, toggleSelect, selectedSongId, existingSongIds }: Props) => {
 
     const { user } = useAuth();
     const debouncedQuery = useDebounce(query, 300);
@@ -50,10 +51,20 @@ export const SearchList = ({  query, toggleSelect, selectedSongId }: Props) => {
 
     return (
         <View className='mt-10 w-full'>
-            <View className='flex flex-col gap-y-5'>
+            <View className='flex flex-col gap-y-2'>
                 {
                     data.songs.map((song)=>(
-                        <View className="w-full flex flex-row items-center justify-between gap-x-4" key={song.id}>
+                        <TouchableOpacity
+                            key={song.id}
+                            onPress={() => toggleSelect(song.id)}
+                            disabled={existingSongIds.includes(song.id)}
+                            className={cn(
+                                "w-full flex flex-row items-center justify-between gap-x-4 p-3 rounded-2xl pr-4",
+                                selectedSongId.includes(song.id) && "bg-[#1b1b1b]",
+                                existingSongIds.includes(song.id) && "opacity-50"
+                            )}
+                            activeOpacity={0.7}
+                        >
                             <Image
                                 source={{ uri: song.image }}
                                 style={{ width: 48, height: 48, borderRadius: 8 }}
@@ -63,8 +74,7 @@ export const SearchList = ({  query, toggleSelect, selectedSongId }: Props) => {
                                 <Text className="text-white font-semibold" numberOfLines={1} ellipsizeMode="tail" >{song.name}</Text>
                                 <Text className="text-neutral-300 font-medium text-sm" numberOfLines={1} ellipsizeMode="tail" >{song.album.name}</Text>
                             </View>
-                            <Pressable
-                                onPress={() => toggleSelect(song.id)}
+                            <View
                                 className={cn(
                                     "transition-transform duration-500",
                                     selectedSongId.includes(song.id) ? "rotate-45" : "rotate-0"
@@ -75,8 +85,8 @@ export const SearchList = ({  query, toggleSelect, selectedSongId }: Props) => {
                                     style={{ width: 24, height: 24 }}
                                     contentFit="contain"
                                 />
-                            </Pressable>
-                        </View>
+                            </View>
+                        </TouchableOpacity>
                     ))
                 }
             </View>

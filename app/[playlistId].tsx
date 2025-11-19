@@ -1,18 +1,40 @@
 import { useState } from 'react';
-import { View, ScrollView, TextInput } from 'react-native';
+import { View, ScrollView, TextInput, Text } from 'react-native';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import axios from 'axios';
 import { SearchList } from '@/components/playlist/search-list';
 import { SearchIcon } from '@/constants/icons';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { fetcher } from '@/lib/fetcher';
+import { useAuth } from '@/hooks/use-auth';
+import { PrimaryLoader } from '@/components/ui/loader';
+import { Error } from '@/components/ui/error';
+import { Button } from '@/components/ui/button';
+import { PROTECTED_BASE_URL } from '@/constants/api.config';
 
 const PlaylistSearch = () => {
 
     const { playlistId } = useLocalSearchParams();
     const [ query, setQuery ] = useState("");
+    const queryClient = useQueryClient();
+    const { user } = useAuth();
     const [ selectedSongId, setSelectedSongId ] = useState<string[]>([]);
+
+    const { data: existingSongIds, isPending, error } = useQuery({
+        queryFn : async()=>{
+            const data = await fetcher({
+                prefix : "PROTECTED_BASE_URL",
+                suffix : `api/v2/playlist/${playlistId}/existing-songs`,
+                token : user?.token
+            });
+            return data.data as string[];
+        },
+        queryKey : ['playlist-existing-songs', playlistId]
+    })
 
     const toggleSelect = (id: string) => {
         if (selectedSongId.includes(id)) {
@@ -22,10 +44,49 @@ const PlaylistSearch = () => {
         }
     }
 
+    const { mutate, isPending: isMutating } = useMutation({
+        mutationFn : async()=>{
+            await axios.post(
+                `${PROTECTED_BASE_URL}/api/v2/playlist/songs`,
+                {
+                    playlistId : playlistId as string,
+                    songIds : selectedSongId
+                },
+                {
+                    headers : {
+                        Authorization : `Bearer ${user?.token}`,
+                        'Content-Type' : 'application/json'
+                    }
+                }    
+            )
+        },
+        onSuccess : async()=>{
+            setSelectedSongId([]);
+            await Promise.all([
+                queryClient.invalidateQueries({ queryKey: ['playlist-existing-songs', playlistId] }),
+                queryClient.invalidateQueries({ queryKey: ['user-playlists'] }),
+                queryClient.invalidateQueries({ queryKey: ['playlist', playlistId] })
+            ]);
+        },
+        onError : ( error ) => {
+            console.error("Error adding songs to playlist:", error);
+        }
+    });
+
+    if (isPending) {
+        return (
+            <PrimaryLoader />
+        )
+    }
+
+    if (error) {
+        return <Error />;
+    }
+
     return (
         <SafeAreaView className='flex-1 bg-background'>
             <LinearGradient
-                colors={['#012d36', 'transparent']}
+                colors={['#320707', 'transparent']}
                 start={{ x: 1, y: 0 }}
                 end={{ x: 0, y: 1 }}
                 locations={[0, 0.3]}
@@ -65,11 +126,25 @@ const PlaylistSearch = () => {
                     <View className='px-6'>
                         {
                             query && 
-                            <SearchList
-                                query={query}
-                                toggleSelect={toggleSelect}
-                                selectedSongId={selectedSongId}
-                            />
+                            <>
+                                <View className='flex flex-row items-center gap-x-4'>
+                                    <Button
+                                        className='rounded-full'
+                                        disabled={selectedSongId.length === 0 || isMutating}
+                                        onPress={mutate}
+                                    >
+                                        <Text className='font-bold'>
+                                            Add {selectedSongId.length} {selectedSongId.length === 1 ? "song" : "songs"}
+                                        </Text>
+                                    </Button>
+                                </View>
+                                <SearchList
+                                    query={query}
+                                    toggleSelect={toggleSelect}
+                                    existingSongIds={existingSongIds??[]}
+                                    selectedSongId={selectedSongId}
+                                />
+                            </>
                         }
                     </View>
                 </ScrollView>

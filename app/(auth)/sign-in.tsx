@@ -80,7 +80,17 @@ const SignIn = () => {
                             Or
                         </Text>
                     </View>
-                    <GoogleOauth />
+                    <View className='flex flex-col gap-y-2'>
+                        <Button
+                            variant='secondary'
+                            onPress={()=>router.push("/(auth)/passwordless")}
+                        >
+                            <Text className='text-white font-semibold'>
+                                Passwordless Sign In
+                            </Text>
+                        </Button>
+                        <GoogleOauth />
+                    </View>
                 </View>
                 <Modal transparent={true} visible={isPending} animationType="fade">
                     <View className='flex-1 items-center justify-center p-6 bg-background'>

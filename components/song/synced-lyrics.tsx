@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
-import { View, Text, ScrollView, Pressable } from 'react-native';
 import { cn } from "@/lib/utils";
+import { useEffect, useRef, useState } from "react";
+import { Pressable, ScrollView, Text, View } from 'react-native';
 
 interface Props {
     position: number;
@@ -13,7 +13,9 @@ interface Props {
 
 export const SyncedLyrics = ({ position, onSeek, lyrics }: Props) => {
     const [currentLineIndex, setCurrentLineIndex] = useState<number>(-1);
+    const [containerHeight, setContainerHeight] = useState<number>(0);
     const lyricsContainerRef = useRef<ScrollView | null>(null);
+    const lineHeight = 70;
 
     useEffect(() => {
         if (lyrics.length > 0 && position >= 0) {
@@ -22,29 +24,50 @@ export const SyncedLyrics = ({ position, onSeek, lyrics }: Props) => {
             if (nextLineIndex !== currentLineIndex && nextLineIndex >= 0) {
                 setCurrentLineIndex(nextLineIndex);
 
-                if (lyricsContainerRef.current && nextLineIndex >= 0) {
-                    const lineHeight = 70;
-                    const scrollOffset = Math.max(0, (nextLineIndex - 2) * lineHeight);
+                if (lyricsContainerRef.current && containerHeight > 0) {
+
+                    const linePosition = nextLineIndex * lineHeight;
+                    const screenMiddle = containerHeight / 2;
                     
-                    setTimeout(() => {
-                        lyricsContainerRef.current?.scrollTo({
-                            y: scrollOffset,
-                            animated: true
-                        });
-                    }, 100);
+                    if (linePosition > screenMiddle) {
+                        const scrollOffset = linePosition - screenMiddle + (lineHeight / 2);
+                        
+                        setTimeout(() => {
+                            lyricsContainerRef.current?.scrollTo({
+                                y: scrollOffset,
+                                animated: true
+                            });
+                        }, 100);
+                    } else {
+                        setTimeout(() => {
+                            lyricsContainerRef.current?.scrollTo({
+                                y: 0,
+                                animated: true
+                            });
+                        }, 100);
+                    }
                 }
             }
         }
-    }, [lyrics, position]);
+    }, [lyrics, position, currentLineIndex, containerHeight]);
 
     return (
-        <View className="flex-1 p-6 relative">
+        <View 
+            className="flex-1 p-6 relative"
+            onLayout={(event) => {
+                const { height } = event.nativeEvent.layout;
+                setContainerHeight(height);
+            }}
+        >
             <ScrollView
                 ref={lyricsContainerRef}
                 style={{ flex: 1 }}
                 showsVerticalScrollIndicator={false}
                 bounces={true}
                 decelerationRate="normal"
+                contentContainerStyle={{
+                    paddingBottom: containerHeight / 2,
+                }}
             >
                 {lyrics.map((line, index) => (
                     <Pressable

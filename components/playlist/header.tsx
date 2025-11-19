@@ -4,6 +4,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import { ShuffleButton } from '../song/shuffle-button';
 import { PlayButton } from './play-button';
+import { Button } from '../ui/button';
+import { router } from 'expo-router';
 
 
 interface Props {
@@ -46,15 +48,43 @@ export const Header = ({ name, image, songCount, id, color="#242424" }: Props) =
                                 {songCount} Songs
                             </Text>
                         </View>
-                        <View className="flex flex-row justify-center items-center gap-6 pt-2">
+                        <View className="flex flex-row justify-center items-center gap-4 pt-2">
                             <PlayButton
                                 playlistId={id}
                             />
                             <ShuffleButton />
-                            {/* 
-                                TODO :
-                                3. Options Button
-                            */}
+                            <Button
+                                className='h-12 rounded-full w-fit px-4'
+                                onPress={() => router.push({
+                                    pathname : "/[playlistId]",
+                                    params : {
+                                        playlistId : id as string
+                                    }
+                                })}
+                                variant='secondary'
+                            >
+                                <Image
+                                    source={require('@/assets/icons/add-circle.png')}
+                                    style={{ width: 20, height: 20 }}
+                                    contentFit='contain'
+                                />
+                                <Text className='font-semibold text-white'>
+                                    Add
+                                </Text>
+                            </Button>
+                            <Button
+                                className='h-12 rounded-full w-fit px-4'
+                                variant='secondary'
+                            >
+                                <Image
+                                    source={require('@/assets/icons/pen-clip.png')}
+                                    style={{ width: 14, height: 14 }}
+                                    contentFit='contain'
+                                />
+                                <Text className='font-semibold text-white'>
+                                    Edit
+                                </Text>
+                            </Button>
                         </View>
                     </View>
                 </View>

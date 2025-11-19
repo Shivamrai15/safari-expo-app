@@ -21,7 +21,6 @@ import Feather from '@expo/vector-icons/Feather';
 import { PROTECTED_BASE_URL } from '@/constants/api.config';
 import { useInfinite } from '@/hooks/use-infinite';
 import { SongItem } from '@/components/song/item';
-import { Button } from '@/components/ui/button';
 
 
 const PlaylistSongs = () => {
@@ -110,29 +109,9 @@ const PlaylistSongs = () => {
                                 ))
                         }
                         {
-                            isFetchingNextPage ? (<View className='w-full h-6'>
+                            isFetchingNextPage && (<View className='w-full h-6'>
                                 <SecondaryLoader />
-                            </View>) : (
-                                <View
-                                    className='w-full items-center justify-center flex pt-8'
-                                >
-                                    <Button
-                                        className='h-14 rounded-full w-fit px-4'
-                                        onPress={() => router.push({
-                                            pathname : "/[playlistId]",
-                                            params : {
-                                                playlistId : playlistId as string
-                                            }
-                                        })}
-                                        variant='secondary'
-                                        disabled
-                                    >
-                                        <Text className='font-semibold text-white'>
-                                            Add songs to this Playlist
-                                        </Text>
-                                    </Button>
-                                </View>
-                            )
+                            </View>) 
                         }
                     </View>
                     <View className='h-40'/>
