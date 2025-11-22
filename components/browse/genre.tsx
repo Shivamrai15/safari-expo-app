@@ -17,7 +17,7 @@ export const Genre = () => {
             const data = await fetcher({
                 prefix : "PUBLIC_BASE_URL",
                 suffix : "api/v2/genre",
-                token : user?.token
+                token : user?.tokens.accessToken
             });
             return data.data as GenreResponse[] | undefined;
         },

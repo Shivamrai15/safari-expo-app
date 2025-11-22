@@ -31,7 +31,7 @@ const History = () => {
         paramKey : "" ,
         paramValue : "",
         queryKey:"user-history",
-        token : user?.token,
+        token : user?.tokens.accessToken,
         persist : false
     });
 

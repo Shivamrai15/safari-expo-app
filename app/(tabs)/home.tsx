@@ -25,7 +25,7 @@ const Home = () => {
                     const data = await fetcher({
                         prefix : "PUBLIC_BASE_URL",
                         suffix : "api/v2/song/trending",
-                        token : user?.token
+                        token : user?.tokens.accessToken
                     });
                     return data.items;
                 },
@@ -36,7 +36,7 @@ const Home = () => {
                     const data = await fetcher({
                         prefix : "PUBLIC_BASE_URL",
                         suffix : "api/v2/album/recommended",
-                        token : user?.token
+                        token : user?.tokens.accessToken
                     });
                     return data.data;
                 },
@@ -47,7 +47,7 @@ const Home = () => {
                     const data = await fetcher({
                         prefix : "PUBLIC_BASE_URL",
                         suffix : "api/v2/album/new",
-                        token : user?.token
+                        token : user?.tokens.accessToken
                     });
                     return data.data;
                 },
@@ -58,7 +58,7 @@ const Home = () => {
                     const data = await fetcher({
                         prefix : "PROTECTED_BASE_URL",
                         suffix : "api/v2/song/listen-again",
-                        token : user?.token
+                        token : user?.tokens.accessToken
                     });
                     return data.data;
                 },
@@ -69,7 +69,7 @@ const Home = () => {
                     const data = await fetcher({
                         prefix : "PROTECTED_BASE_URL",
                         suffix : "api/v2/artist/favorites",
-                        token : user?.token
+                        token : user?.tokens.accessToken
                     });
                     return data.data;
                 },
@@ -104,10 +104,12 @@ const Home = () => {
                         </Button>
                     </View>
                     <View className="flex flex-row items-center gap-x-6 mt-16">
-                        <Image
-                            source={ user?.user?.image ? { uri: user?.user.image } : require('@/assets/images/user.png') }
-                            style={{ height: 72, width: 72 }}
-                        />
+                        <View className="size-24 rounded-full overflow-hidden relative">
+                            <Image
+                                source={ user?.user?.image ? { uri: user?.user.image } : require('@/assets/images/user.png') }
+                                style={{ height: "100%", width: "100%" }}
+                            />
+                        </View>
                         <View className="flex flex-col gap-y-0.5">
                             <Text className="text-xl font-bold text-zinc-400">{user?.user.name}</Text>
                             <Text className="text-3xl text-white font-extrabold">Listen Again</Text>

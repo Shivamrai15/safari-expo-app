@@ -20,7 +20,7 @@ export const RelatedSongs = ({ songId }: Props) => {
             const data = await fetcher({
                 prefix : "PUBLIC_BASE_URL",
                 suffix : `api/v2/song/${songId}/related`,
-                token : user?.token
+                token : user?.tokens.accessToken
             });
             return data.data as SongResponse[];
         },

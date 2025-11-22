@@ -129,15 +129,17 @@ const Layout = () => {
 					options={{ 
 						tabBarIcon: () => {
 							return (isLoggedIn && user && user.user?.image !==undefined) ? (
-								<Image
-									source={{
-										uri: user.user?.image as string
-									}}
-									style={{ width: 24, height: 24 }}
-								/>
+								<View className='size-7 rounded-full relative overflow-hidden'>
+									<Image
+										source={{
+											uri: user.user?.image as string
+										}}
+										style={{ height: "100%", width: "100%" }}
+									/>
+								</View>
 							) : (
 								<View
-									className='size-8 flex items-center justify-center rounded-full bg-red-900'
+									className='size-7 flex items-center justify-center rounded-full bg-red-900'
 								>
 									<Text className='text-white font-semibold'>
 										S

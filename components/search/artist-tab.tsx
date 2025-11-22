@@ -23,7 +23,7 @@ export const ArtistTab = ({ currentTab, query }: Props) => {
             const data = await fetcher({
                 prefix : "PUBLIC_BASE_URL",
                 suffix : `api/v2/search/artists?q=${debouncedQuery}`,
-                token : user?.token
+                token : user?.tokens.accessToken
             });
             return data.data as ArtistSearchResponse | undefined;
         }

@@ -11,7 +11,7 @@ interface Props {
 export const SubscribeButton = ({ artist }: Props) => {
 
     const { user } = useAuth();
-    const { isSubscribed, isLoading ,toggleSubscription } = useArtist(artist, user?.token);
+    const { isSubscribed, isLoading ,toggleSubscription } = useArtist(artist, user?.tokens.accessToken);
 
     return (
         <Button

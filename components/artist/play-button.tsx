@@ -15,7 +15,7 @@ export const PlayButton = ({ id, className }: Props) => {
 
     const { user } = useAuth();
     const { isPlaying } = usePlayer();
-    const { isCurrentArtist, isLoadingSongs, playArtistSongs } = useArtistSongs(id, user?.token);
+    const { isCurrentArtist, isLoadingSongs, playArtistSongs } = useArtistSongs(id, user?.tokens.accessToken);
 
     return (
         <Button

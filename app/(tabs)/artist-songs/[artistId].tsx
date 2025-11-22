@@ -37,7 +37,7 @@ const ArtistSongs = () => {
             const data = await fetcher({
                 prefix : "PUBLIC_BASE_URL",
                 suffix : `api/v2/artist/${artistId}/profile`,
-                token : user?.token
+                token : user?.tokens.accessToken
             });
             return data.data as ArtistProfileResponse;
         },

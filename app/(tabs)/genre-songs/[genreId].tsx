@@ -30,7 +30,7 @@ const GenreSongs = () => {
             const data = await fetcher({
                 prefix : "PUBLIC_BASE_URL",
                 suffix : `api/v2/genre/${genreId}`,
-                token : user?.token
+                token : user?.tokens.accessToken
             })
             return data.data as MoodResponse;
         },
@@ -48,7 +48,7 @@ const GenreSongs = () => {
     const { data: songData, status, hasNextPage, isFetchingNextPage, fetchNextPage } = useInfinite({
         url: `${PUBLIC_BASE_URL}/api/v2/genre/${genreId}/songs`,
         queryKey: `genre-songs-${genreId}`,
-        token: user?.token,
+        token: user?.tokens.accessToken,
         paramKey: "",
         paramValue: ""
     });

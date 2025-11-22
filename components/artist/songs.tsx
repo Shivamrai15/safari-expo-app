@@ -21,7 +21,7 @@ export const Songs = ({ artistId, isAtEnd }: Props) => {
         paramKey: "",
         paramValue : "",
         queryKey: `artist-songs-${artistId}`,
-        token : user?.token
+        token : user?.tokens.accessToken
     });
 
     // Move useEffect before any conditional returns

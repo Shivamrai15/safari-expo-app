@@ -21,7 +21,7 @@ export function Songs({ url, queryKey, isAtEnd }: Props) {
     const { data, status, hasNextPage, isFetchingNextPage, fetchNextPage } = useInfinite({
         url,
         queryKey,
-        token : user?.token,
+        token : user?.tokens.accessToken,
         paramKey : "",
         paramValue : ""
     });

@@ -7,9 +7,9 @@ import { useFollowingSync } from '@/hooks/use-artist';
 const Index = () => {
 
     const { isLoggedIn, user } = useAuth();
-    useSettingsSync(user?.token);
-    useLikedSongsSync(user?.token);
-    useFollowingSync(user?.token);
+    useSettingsSync(user?.tokens.accessToken);
+    useLikedSongsSync(user?.tokens.accessToken);
+    useFollowingSync(user?.tokens.accessToken);
 
     if (isLoggedIn) {
         return <Redirect href="/(tabs)/home" />;

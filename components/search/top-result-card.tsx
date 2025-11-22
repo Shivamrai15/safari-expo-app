@@ -110,7 +110,7 @@ export const TopResultCard = ({ data }: Props) => {
                                     </Text>
                                 </View>
                                 <View className="flex flex-row gap-x-6 items-center justify-start">
-                                    <ArtistPlayButton />
+                                    <ArtistPlayButton id={data.id} />
                                     <Button 
                                         className="rounded-full"
                                         onPress={()=>router.push({

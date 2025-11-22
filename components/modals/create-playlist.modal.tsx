@@ -32,7 +32,7 @@ export const CreatePlaylistModal = ({ isModalVisible, onCloseModal, totalPlaylis
                 },
                 {
                     headers : {
-                        Authorization : `Bearer ${user?.token}`
+                        Authorization : `Bearer ${user?.tokens.accessToken}`
                     }
                 }
             );

@@ -28,7 +28,7 @@ const Playlist = () => {
                     const data = await fetcher({
                         prefix : "PROTECTED_BASE_URL",
                         suffix : "api/v2/playlist",
-                        token : user?.token
+                        token : user?.tokens.accessToken
                     });
                     return data.data;
                 },
@@ -39,7 +39,7 @@ const Playlist = () => {
                     const data = await fetcher({
                         prefix : "PROTECTED_BASE_URL",
                         suffix : "api/v2/artist/followings",
-                        token : user?.token
+                        token : user?.tokens.accessToken
                     });
                     return data.data;
                 },

@@ -21,7 +21,7 @@ const LikedSongs = () => {
             const data = await fetcher({
                 prefix : "PROTECTED_BASE_URL",
                 suffix : 'api/v2/song/liked/tracks',
-                token : user?.token
+                token : user?.tokens.accessToken
             });
             return data.data as LikedSongTracksResponse[];
         },

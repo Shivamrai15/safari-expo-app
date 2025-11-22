@@ -32,7 +32,7 @@ const Mood = () => {
             const data = await fetcher({
                 prefix : "PUBLIC_BASE_URL",
                 suffix : `api/v2/mood/${moodId}`,
-                token : user?.token
+                token : user?.tokens.accessToken
             })
             return data.data as MoodResponse;
         },
@@ -50,7 +50,7 @@ const Mood = () => {
     const { data: songData, status, hasNextPage, isFetchingNextPage, fetchNextPage } = useInfinite({
         url: `${PUBLIC_BASE_URL}/api/v2/mood/${moodId}/songs`,
         queryKey: `mood-songs-${moodId}`,
-        token: user?.token,
+        token: user?.tokens.accessToken,
         paramKey: "",
         paramValue: ""
     });

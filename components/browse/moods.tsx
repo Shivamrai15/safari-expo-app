@@ -21,7 +21,7 @@ export const Moods = ({ isAtEnd }: Props) => {
         paramKey : "",
         paramValue : "",
         queryKey : "moods",
-        token : user?.token
+        token : user?.tokens.accessToken
     });
 
     useEffect(()=>{

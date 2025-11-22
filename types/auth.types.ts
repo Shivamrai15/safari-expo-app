@@ -1,5 +1,8 @@
 export type User = {
-    token : string;
+    tokens : {
+        accessToken : string;
+        refreshToken : string;
+    };
     user : {
         id : string;
         email : string;

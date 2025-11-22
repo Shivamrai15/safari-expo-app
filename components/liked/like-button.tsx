@@ -14,7 +14,7 @@ export const LikeButton = ({ songId, label }: Props) => {
 
     const { user } = useAuth();
 
-    const  { isLiked, toggleLike, isLoading } = useToggleLikedSong(user?.token);
+    const  { isLiked, toggleLike, isLoading } = useToggleLikedSong(user?.tokens.accessToken);
 
     return (
         <TouchableOpacity

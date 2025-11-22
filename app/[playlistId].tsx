@@ -29,7 +29,7 @@ const PlaylistSearch = () => {
             const data = await fetcher({
                 prefix : "PROTECTED_BASE_URL",
                 suffix : `api/v2/playlist/${playlistId}/existing-songs`,
-                token : user?.token
+                token : user?.tokens.accessToken
             });
             return data.data as string[];
         },
@@ -54,7 +54,7 @@ const PlaylistSearch = () => {
                 },
                 {
                     headers : {
-                        Authorization : `Bearer ${user?.token}`,
+                        Authorization : `Bearer ${user?.tokens.accessToken}`,
                         'Content-Type' : 'application/json'
                     }
                 }    

@@ -6,7 +6,7 @@ import {
     NativeSyntheticEvent,
 } from 'react-native';
 import { Fragment, useEffect, useState } from 'react';
-import { router, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAuth } from '@/hooks/use-auth';
@@ -34,7 +34,7 @@ const PlaylistSongs = () => {
             const data = await fetcher({
                 prefix : "PROTECTED_BASE_URL",
                 suffix : `api/v2/playlist/${playlistId}`,
-                token : user?.token
+                token : user?.tokens.accessToken
             });
             return data.data as PlaylistResponse;
         },
@@ -52,7 +52,7 @@ const PlaylistSongs = () => {
     const { data: songData, status, hasNextPage, isFetchingNextPage, fetchNextPage } = useInfinite({
         url: `${PROTECTED_BASE_URL}/api/v2/playlist/${playlistId}/songs`,
         queryKey: `playlist-songs-${playlistId}`,
-        token: user?.token,
+        token: user?.tokens.accessToken,
         paramKey: "",
         paramValue: "",
     });

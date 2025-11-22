@@ -27,7 +27,7 @@ export const SearchList = ({  query, toggleSelect, selectedSongId, existingSongI
             const data = await fetcher({
                 prefix : "PUBLIC_BASE_URL",
                 suffix : `api/v2/search/songs?q=${debouncedQuery}`,
-                token : user?.token
+                token : user?.tokens.accessToken
             });
             return data.data as SongSearchResponse | undefined;
         }

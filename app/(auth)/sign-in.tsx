@@ -26,10 +26,9 @@ const SignIn = () => {
 
     const { mutate, isPending } = useMutation({
         mutationFn : async(data: { email: string; password: string; })=> {
-            const response = await axios.post(`${AUTH_BASE_URL}/api/auth/login`, data);
+            const response = await axios.post(`${AUTH_BASE_URL}/api/v2/auth/login`, data);
             return response.data.data;
         },
-        // TODO add toast notifications
         onSuccess(data : User) {
             alert("User logged in successfully!");
             setUser(data);
@@ -42,54 +41,69 @@ const SignIn = () => {
         },
     });
 
+    
+
     return (
             <SafeAreaView className='size-full bg-background'>
-                <View className='my-20 p-6 flex flex-col gap-y-12'>
-                    <View className='flex flex-col'>
-                        <Text className='text-white text-3xl font-extrabold'>Login to your</Text>
-                        <Text className='text-white text-3xl font-extrabold'>Safari Account</Text>
+                <View className='flex-1 px-6 py-12 flex flex-col justify-between'>
+                    <View className='flex flex-col gap-y-10'>
+                        <View className='flex flex-col gap-y-3 mt-8'>
+                            <Text className='text-white text-4xl font-extrabold leading-tight'>Welcome Back</Text>
+                            <Text className='text-zinc-400 text-base'>Sign in to continue your musical journey</Text>
+                        </View>
+                        
+                        <View className='flex flex-col gap-y-8'>
+                            <View className='flex flex-col gap-y-5'>
+                                <Input
+                                    value={form.email}
+                                    onChange={(text) => setForm({ ...form, email: text })}
+                                    label='Email Address'
+                                    keyboardType='email-address'
+                                />
+                                <Input
+                                    label='Password'
+                                    value={form.password}
+                                    onChange={(text) => setForm({ ...form, password: text })}
+                                    keyboardType='default'
+                                    secureTextEntry={true}
+                                />
+                                <Button
+                                    className='bg-red-600 rounded-full h-14 mt-2'
+                                    disabled={isPending}
+                                    onPress={() => mutate(form)}
+                                >
+                                    <Text className='text-white text-base font-bold'>Sign In</Text>
+                                </Button>
+                            </View>
+                            
+                            <View className='flex flex-col gap-y-6'>
+                                <View className='flex flex-row items-center gap-x-4'>
+                                    <View className='flex-1 h-px bg-zinc-800' />
+                                    <Text className='text-zinc-500 text-sm font-medium'>OR CONTINUE WITH</Text>
+                                    <View className='flex-1 h-px bg-zinc-800' />
+                                </View>
+                                
+                                <View className='flex flex-col gap-y-3'>
+                                    <Button
+                                        variant='secondary'
+                                        className='h-12'
+                                        onPress={()=>router.push("/(auth)/passwordless")}
+                                    >
+                                        <Text className='text-white font-bold'>
+                                            Continue without Password
+                                        </Text>
+                                    </Button>
+                                    <GoogleOauth />
+                                </View>
+                            </View>
+                        </View>
                     </View>
-                    <View className='flex flex-col gap-y-6'>
-                        <Input
-                            value={form.email}
-                            onChange={(text) => setForm({ ...form, email: text })}
-                            label='Your Email'
-                            keyboardType='email-address'
-                        />
-                        <Input
-                            label='Your Password'
-                            value={form.password}
-                            onChange={(text) => setForm({ ...form, password: text })}
-                            keyboardType='default'
-                            secureTextEntry={true}
-                        />
-                        <Button
-                            className='bg-red-600 rounded-full'
-                            disabled={isPending}
-                            onPress={() => mutate(form)}
-                        >
-                            <Text className='text-white text-lg font-semibold'>Continue</Text>
-                        </Button>
+                    
+                    <View className='flex flex-row items-center justify-center gap-x-2'>
+                        <Text className='text-zinc-500 text-sm'>Don't have an account?</Text>
                         <Link href='/(auth)/sign-up'>
-                            <Text className='text-white font-medium'>Don&apos;t have an account? Sign Up</Text>
+                            <Text className='text-red-600 text-sm font-bold'>Sign Up</Text>
                         </Link>
-                    </View>
-                    <View className='relative'>
-                        <View className='h-px bg-zinc-700'/>
-                        <Text className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-neutral-900 px-2 text-zinc-300 rounded-sm text-sm font-semibold cursor-default select-none'>
-                            Or
-                        </Text>
-                    </View>
-                    <View className='flex flex-col gap-y-2'>
-                        <Button
-                            variant='secondary'
-                            onPress={()=>router.push("/(auth)/passwordless")}
-                        >
-                            <Text className='text-white font-semibold'>
-                                Passwordless Sign In
-                            </Text>
-                        </Button>
-                        <GoogleOauth />
                     </View>
                 </View>
                 <Modal transparent={true} visible={isPending} animationType="fade">

@@ -30,7 +30,7 @@ const ArtistPage = () => {
                     const data = await fetcher({
                         prefix : "PUBLIC_BASE_URL",
                         suffix : `api/v2/artist/${artistId}`,
-                        token : user?.token
+                        token : user?.tokens.accessToken
                     });
                     return data.data as ArtistResponse;
                 },
@@ -41,7 +41,7 @@ const ArtistPage = () => {
                     const data = await fetcher({
                         prefix : "PUBLIC_BASE_URL",
                         suffix : `api/v2/artist/${artistId}/discography`,
-                        token : user?.token
+                        token : user?.tokens.accessToken
                     });
                     return data.items as Album[];
                 },

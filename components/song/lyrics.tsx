@@ -24,7 +24,7 @@ export const Lyrics = ({ songId, position, onSeek }: Props) => {
             const data = await fetcher({
                 prefix : "PROTECTED_BASE_URL",
                 suffix : `api/v2/song/${songId}/lyrics`,
-                token : user?.token
+                token : user?.tokens.accessToken
             });
             return data.data as LyricsType;
         },
